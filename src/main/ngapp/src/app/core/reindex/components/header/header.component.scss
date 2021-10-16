@@ -1,0 +1,50 @@
+@import "././src/assets/styles/colors";
+@import "././src/assets/styles/material";
+.header{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background: rgba(36, 50, 86, 0.84);
+  padding:10px;
+  position: relative;
+  .menu{
+    flex: 1;
+    button.menu-btn{
+      background: #243256d6;
+      position: relative;
+      box-shadow: 0 0 2px rgba(255,255,255,0.3);
+
+      img{
+        position: absolute;
+        top: 7px;
+        left: 8px;
+      }
+      &:hover{
+        background: #1b2848;
+        box-shadow: 0 0 2px rgba(255,255,255,0.8);
+      }
+
+    }
+
+  }
+  .title{
+    flex: 0 0 55%;
+    h1{
+      position: relative;
+      color: #ffffff;
+      font-size: 25px;
+      //margin: auto;
+    }
+  }
+
+
+}
+
+
+
+
+
+
+

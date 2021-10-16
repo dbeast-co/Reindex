@@ -1,0 +1,22 @@
+
+<div class="dialog" >
+  <div class="dialog__container">
+    <button class="dialog__close" (click)="onCloseDialog()">
+<!--      <img src="../../../../assets/icons/BIG X.png" alt="סגירה">-->
+<!--      <mat-icon aria-hidden="false" aria-label="Example home icon"  >close</mat-icon>-->
+      <img src="assets/icons/close-24px.svg" alt="">
+
+    </button>
+    <h3>Are you sure?</h3>
+    <div class="dialog__content">
+
+
+    </div>
+    <div class="actions">
+      <button mat-raised-button class="yesBtn" (click)="onYes()" >YES</button>
+      <button mat-raised-button class="noBtn" (click)="onNo()">NO</button>
+    </div>
+  </div>
+</div>
+
+

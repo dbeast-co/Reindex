@@ -1,0 +1,17 @@
+<div class="dialog">
+  <div class="dialog__container">
+    <button class="dialog__close" (click)="onCloseDialog()">
+
+      <img src="assets/icons/close-24px.svg" alt="">
+
+    </button>
+    <div class="dialog__content">
+      <div class="messages" *ngFor="let message of selectedFailedTask.failures">
+        <h1>Failure message:</h1>
+        <p>{{message}}</p>
+      </div>
+    </div>
+    <div class="actions">
+    </div>
+  </div>
+</div>

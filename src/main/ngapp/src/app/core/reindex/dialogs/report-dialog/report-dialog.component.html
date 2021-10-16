@@ -1,0 +1,65 @@
+
+<div class="dialog" >
+  <div class="dialog__container">
+    <button class="dialog__close" (click)="onCloseDialog()">
+      <img src="assets/icons/close-24px.svg" alt="">
+    </button>
+    <div class="dialog__content">
+      <div class="report_status">
+        <div class="project_name">
+          <span class="project_name-label">Project: </span>
+          <span class="project_name-value">{{projectReport.project_name}}</span>
+        </div>
+        <div class="status">
+          <span class="status_label">Status:</span>
+          <span class="status_value" [ngClass]="{'danger': projectReport.status=== 'ERROR','success': projectReport.status=== 'PASS','warning': projectReport.status === 'WARNING'}">{{projectReport.status}}</span>
+        </div>
+      </div>
+      <div class="report_table">
+        <table mat-table #table id="sourceIndexListMatSource" class="mat-elevation-z8"
+               *ngIf="projectReportDataSource"
+               [dataSource]="projectReportDataSource">
+          <ng-container matColumnDef="task">
+            <th mat-header-cell *matHeaderCellDef>Task</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{element.task}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let element">
+              <span [ngClass]="{'success': element.status === 'PASS','warning': element.status === 'WARNING','danger': element.status === 'ERROR'}">{{element.status}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="notes">
+            <th mat-header-cell *matHeaderCellDef>Notes</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{element.notes}}</span>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsForReportDialogTable"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsForReportDialogTable;"></tr>
+        </table>
+      </div>
+      <div class="report_message">
+        <p>{{projectReport.user_message}}</p>
+      </div>
+    </div>
+    <div class="actions">
+      <div [ngSwitch]="projectReport.status">
+        <div *ngSwitchCase="'WARNING'">
+          <button mat-raised-button class="yesBtn" (click)="onYesReport()">YES</button>
+          <button mat-raised-button class="noBtn" (click)="onNoReport()">NO</button>
+          <button mat-raised-button class="noBtn" (click)="onRetryReport()">Retry</button>
+        </div>
+        <div *ngSwitchCase="'ERROR'">
+          <button mat-raised-button class="noBtn" (click)="onRetryReport()">Retry</button>
+          <button mat-raised-button class="noBtn" (click)="onNoReport()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

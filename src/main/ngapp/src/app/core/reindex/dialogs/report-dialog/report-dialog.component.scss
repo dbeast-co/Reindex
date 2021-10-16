@@ -1,0 +1,108 @@
+@import "../../dialogs/yes-no-dialog/yes-no-dialog.component";
+@import "../../../../../assets/styles/custom-scroll";
+.dialog__container{
+  max-width: 100%;
+  width: 900px;
+
+  .dialog__content{
+
+    padding: 10px 20px;
+
+    .report_status {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      color: white;
+
+      .project_name{
+
+        .project_name-label{
+          font-size: 20px;
+          margin-right: 10px;
+        }
+        .project_name-value{
+          font-size: 19px;
+        }
+
+      }
+      .status{
+        .status_label{
+          font-size: 20px;
+          margin-right: 10px;
+        }
+        .status_value{
+          border:1px solid #ffffff;
+          padding: 5px 10px;
+          border-radius: 5px;
+          &.success{
+            background: $successBackground;
+          }
+          &.danger{
+            background: $dangerBackground;
+          }
+          &.warning{
+            background: $warnBackground;
+          }
+        }
+
+      }
+    }
+    .report_table{
+      height: 300px;
+      overflow-y: auto;
+    }
+    table.mat-table{
+      width: 100% !important;
+      tr{
+        position: sticky;
+        top: 0;
+
+        td{
+          span {
+            padding: 5px 10px;
+            display: flex;
+            &.success{
+              background: $successBackground;
+            }
+            &.warning{
+              background: $warnBackground;
+            }
+            &.danger{
+              background: $dangerBackground;
+            }
+
+          }
+        }
+      }
+    }
+    .report_message {
+      width: 100%;
+      display: block;
+      white-space: initial;
+      color: #ffffff;
+      font-size: 18px;
+      margin: 2rem 0 2rem;
+      text-align: center;
+    }
+
+  }
+}
+.actions{
+  button.mat-raised-button{
+    margin-right: 7px !important;
+  }
+}
+
+//::-webkit-scrollbar {
+//  width: 6px;
+//}
+//::-webkit-scrollbar-track {
+//  background-color: #CCDAE5;
+//  border-radius: 10px;
+//}
+//::-webkit-scrollbar-thumb {
+//  background-color: #245682 ;
+//  outline: 1px solid #245682 ;
+//  border-radius: 10px;
+//}

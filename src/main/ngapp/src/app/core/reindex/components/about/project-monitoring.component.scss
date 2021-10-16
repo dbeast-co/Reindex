@@ -1,0 +1,122 @@
+@import "../main/main.component";
+
+.container{
+  padding: 30px;
+  position: relative;
+  max-height: 300px;
+  overflow: auto;
+  mat-progress-bar.mat-loader {
+    top: -13px;
+    width: 114%;
+    margin: auto;
+    left: -13px;
+    position: absolute;
+  }
+  h2{
+    text-align: center;
+    width: 100%;
+    color: $whiteColor;
+    margin-bottom: 2rem;
+    font-size: 20px;
+  }
+}
+.mat-table{
+  width: 100%;
+thead{
+  tr{
+    th{
+      position: static !important;
+    }
+  }
+}
+  td.mat-cell.cdk-column-progress.mat-column-progress {
+    width: 200px;
+    padding: 20px 41px 20px 0;
+    position: relative;
+
+    div{
+      span{
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 18px;
+
+
+      }
+    }
+    .status__progress{
+      width: 91px;
+      top: auto;
+
+      mat-progress-bar{
+        top: auto !important;
+        left: 15px;
+      }
+    }
+    /* display: flex; */
+  }
+}
+
+// TODO: check progress bar width in table
+table.mat-table{
+  box-shadow: 10px 10px 10px rgba(0,0,0,0.8);
+
+
+  th{
+    background-color: rgba(39, 39, 39, 0.5);
+    font-size: 16px;
+    border-top: 0.5px solid rgba(255,255,255,0.3);
+    border-left: 0.5px solid rgba(255,255,255,0.3);
+    border-right: 0.5px solid rgba(255,255,255,0.3);
+    padding: 0 10px;
+    position: static !important;
+  }
+  td{
+    border-top: 0.5px solid rgba(255,255,255,0.3);
+    border-left: 0.5px solid rgba(255,255,255,0.3);
+    border-right: 0.5px solid rgba(255,255,255,0.3);
+    padding: 0 10px;
+    span{
+      padding: 5px 10px;
+      &.success{
+        background: $successBackground;
+      }
+      &.new_stopped{
+        background: $greyColor;
+      }
+      &.warn{
+        background: $warnBackground;
+      }
+      &.danger{
+        background: $dangerBackground;
+      }
+    }
+
+  }
+
+
+}
+
+
+
+
+.mat-row:nth-child(even){
+  background-color: rgba(7, 115, 126, 0.5) !important;
+}
+.mat-row:nth-child(odd){
+  background-color: #07737e !important;
+}
+
+@media (max-width:1775px) {
+
+  table.mat-table{
+    td:last-child{
+      width: 190px;
+      button.mat-raised-button{
+        min-width: 23px !important;
+
+      }
+    }
+  }
+
+}

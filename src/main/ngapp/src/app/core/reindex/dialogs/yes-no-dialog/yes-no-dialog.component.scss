@@ -1,0 +1,107 @@
+@import "./src/assets/styles/colors";
+//button.close {
+//  position: absolute;
+//  top: -20px;
+//  right: -18px;
+//  outline: none ;
+//  box-shadow: none;
+//  img.closeIcon {
+//    width: 40px;
+//    height: 40px;
+//  }
+//}
+//.dialog-container{
+//  position: fixed;
+//
+//  h3{
+//    color: #ffffff;
+//    text-align: center;
+//    margin-bottom: 2rem;
+//    margin-top: -0.1rem;
+//  }
+//  .actions{
+//    text-align: end;
+//  }
+//  button.yesBtn.mat-raised-button {
+//    margin-right: 0.3rem;
+//  }
+//  button.noBtn.mat-raised-button {
+//    background: $primaryForLogout;
+//    border: 1px solid $bodyBackground3;
+//    color: $whiteColor;
+//    &:hover{
+//      background: $primaryForLogout;
+//    }
+//  }
+//
+//
+//
+//}
+
+
+.dialog {
+  background-color: rgba(85,85,85,0.4);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+}
+
+.dialog__container {
+  position: absolute;
+  background-color: #152c57;
+  top: 50%;
+  left: 50%;
+  padding: 18px 20px 30px 20px;
+  box-shadow: 0px 2px 5px 0 rgba(0,0,0,0.1);
+  z-index: 99999999;
+  -webkit-transform: translate(0, -50%);
+  transform: translate(-50%, -50%);
+  width: 500px;
+  max-width: 100%;
+
+  h3{
+    margin: 0;
+    font-size: 22px;
+    color: #fff;
+    text-align: center;
+  }
+}
+
+
+
+.dialog__content {
+  padding: 46px 0 48px 119px;
+
+
+}
+.actions {
+  text-align: right;
+  button.yesBtn{
+    //background: #245682;
+    margin-right: 10px;
+  }
+}
+
+
+
+
+
+
+
+
+button.dialog__close {
+  background: transparent;
+  position: absolute;
+  right: -5px;
+  top: -11px;
+  min-width: auto;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  padding: 0;
+}
+
+

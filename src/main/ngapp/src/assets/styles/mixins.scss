@@ -1,0 +1,21 @@
+@mixin flex{
+  display: flex;
+  padding: 0 10px;
+  justify-content: space-between;
+}
+@mixin flex-vertical-center{
+  display: flex;
+  align-items: center;
+}
+@mixin flex-space-between{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+@mixin title-table{
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #fff;
+  font-size: 22px;
+}

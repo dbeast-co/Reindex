@@ -1,0 +1,262 @@
+<div class="container">
+  <div *ngIf="project;else showProgressLoader">
+    <div class="header">
+
+      <div class="project_status">
+        <mat-form-field class="status">
+          <input matInput type="text" value="{{project.status}}" [ngClass]="getProjectStatus()" readonly>
+        </mat-form-field>
+        <div class="status__progress">
+          <mat-progress-bar mode="determinate" class="mat-progress" value="{{project.execution_progress}}"></mat-progress-bar>
+          <span style="color: white">{{project.execution_progress}}%</span></div>
+      </div>
+      <div class="more_info">
+        <div class="total">
+          <label for="">Total tasks:</label>
+          <span>{{project?.total_tasks}}</span>
+        </div>
+        <div class="waiting">
+          <label for="">Waiting tasks:</label>
+          <span>{{project?.waiting_tasks}}</span>
+        </div>
+        <div class="completed">
+          <label for="">Succeeded tasks:</label>
+          <span>{{project?.succeeded_tasks}}</span>
+        </div>
+        <div class="failed">
+          <label for="">Failed tasks:</label>
+          <span>{{project?.failed_tasks}}</span>
+        </div>
+        <br>
+        <br>
+        <div class="estimated_docs">
+          <label for="">Estimated docs:</label>
+          <span>{{project?.estimated_docs}}</span>
+        </div>
+
+        <div class="transferred_docs">
+          <label for="">Transferred docs:</label>
+          <span>{{project?.transferred_docs}}</span>
+        </div>
+
+
+      </div>
+      <button mat-raised-button (click)="onEditSettings()">Edit settings</button>
+    </div>
+
+    <div class="tables">
+      <h3>Index status</h3>
+      <div class="index_status" style="max-height: 297px;overflow-y: auto">
+        <table  mat-table #table id="index_status_table" class="mat-elevation-z8"
+               *ngIf="dataSourceForIndexStatusTable"
+               [dataSource]="dataSourceForIndexStatusTable">
+
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef> Index</th>
+            <td mat-cell *matCellDef="let element" style="pointer-events: none">
+              <span>{{element?.index_name}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="start_time">
+            <th mat-header-cell *matHeaderCellDef>Start time</th>
+            <td mat-cell *matCellDef="let element" style="pointer-events: none">
+              <span>{{element?.start_time}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="end_time">
+            <th mat-header-cell *matHeaderCellDef>End time</th>
+            <td mat-cell *matCellDef="let element" style="pointer-events: none">
+              <span>{{element?.end_time}}</span>
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="tasks_number">
+            <th mat-header-cell *matHeaderCellDef>Tasks number</th>
+            <td mat-cell *matCellDef="let element" style="pointer-events: none">
+              <span>{{element?.tasks_number}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="estimated_docs">
+            <th mat-header-cell *matHeaderCellDef>Estimated docs</th>
+            <td mat-cell *matCellDef="let element" style="pointer-events: none">
+              <span>{{element?.estimated_docs}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="transferred_docs">
+            <th mat-header-cell *matHeaderCellDef>Transferred docs</th>
+            <td mat-cell *matCellDef="let element" style="pointer-events: none">
+              <span>{{element?.transferred_docs}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="succeeded_tasks">
+            <th mat-header-cell *matHeaderCellDef>Succeeded tasks</th>
+            <td mat-cell *matCellDef="let element" style="pointer-events: none">
+              <span>{{element?.succeeded_tasks}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="failed_tasks">
+            <th mat-header-cell *matHeaderCellDef>Failed tasks</th>
+            <td mat-cell *matCellDef="let element" style="pointer-events: none">
+              <span>{{element?.failed_tasks}}</span>
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="progress">
+            <th mat-header-cell *matHeaderCellDef>Progress</th>
+            <td mat-cell *matCellDef="let element" [width]="'150px'" style="pointer-events: none">
+              <div class="status__progress" style="display: flex;align-items: center;justify-content: space-around;">
+                <mat-progress-bar mode="determinate" class="mat-progress"
+                                  value="{{element.execution_progress}}"></mat-progress-bar>
+                <span style="color: white">{{element.execution_progress}}%</span></div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let element" style="padding-right: 0;text-align: center;pointer-events: none" >
+              <span [ngClass]="{'success': element?.index_status === 'SUCCEEDED','warn': element.index_status === 'ON_FLY','danger': element?.index_status === 'FAILED','new_stopped': element.index_status === 'STOPPED' ||element.index_status === 'NEW' }">{{element?.index_status}}</span>
+            </td>
+          </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsForIndexStatusTable"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsForIndexStatusTable;"></tr>
+        </table>
+      </div>
+
+    </div>
+    <div class="tables_wrapper">
+      <div class="on_fly_tasks" >
+        <h3>On fly tasks</h3>
+        <div style="max-height: 297px;overflow-y: auto;box-shadow: 10px 10px 5px rgba(0,0,0,0.9);
+" >
+          <table mat-table #table id="on_fly_tasks_table" class="mat-elevation-z8"
+                 *ngIf="dataSourceForOnFlyTasksTable"
+                 [dataSource]="dataSourceForOnFlyTasksTable">
+
+            <ng-container matColumnDef="index">
+              <th mat-header-cell *matHeaderCellDef> Index</th>
+              <td mat-cell *matCellDef="let element" style="pointer-events: none">
+                <span>{{element?.index}}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="params">
+              <th mat-header-cell *matHeaderCellDef [width]="300">Params</th>
+              <td mat-cell *matCellDef="let element" style="pointer-events: none">
+                <span>{{element?.params}}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="estimated_docs">
+              <th mat-header-cell *matHeaderCellDef>Estimated docs</th>
+              <td mat-cell *matCellDef="let element" style="pointer-events: none">
+                <span>{{element?.estimated_docs}}</span>
+              </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="total_failed_docs">
+              <th mat-header-cell *matHeaderCellDef>Transferred docs</th>
+              <td mat-cell *matCellDef="let element" style="pointer-events: none">
+                <span>{{element?.transferred_docs}}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="progress">
+              <th mat-header-cell *matHeaderCellDef>Progress</th>
+              <td mat-cell *matCellDef="let element" [width]="'150px'" style="pointer-events: none">
+                <div class="status__progress" style="display: flex;align-items: center;justify-content: space-around;">
+                  <mat-progress-bar mode="determinate" class="mat-progress"
+                                    value="{{element.executionProgress}}"></mat-progress-bar>
+                  <span style="color: white">{{element.executionProgress}}%</span></div>
+              </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsForOnFlyTaskTable"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsForOnFlyTaskTable;"></tr>
+          </table>
+        </div>
+      </div>
+      <div class="failed_tasks">
+        <h3>Failed tasks</h3>
+        <div style="height: 297px;overflow-y: auto">
+          <table mat-table #table id="failed_tasks_table" class="mat-elevation-z8"
+                 *ngIf="dataSourceForFailedTasksTable"
+                 [dataSource]="dataSourceForFailedTasksTable">
+
+            <ng-container matColumnDef="index">
+              <th mat-header-cell *matHeaderCellDef> Index</th>
+              <td mat-cell *matCellDef="let element" style="pointer-events: none">
+                <span>{{element?.index}}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="params">
+              <th mat-header-cell *matHeaderCellDef [width]="300">Params</th>
+              <td mat-cell *matCellDef="let element" style="pointer-events: none">
+                <span>{{element?.params}}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="estimated_docs">
+              <th mat-header-cell *matHeaderCellDef>Estimated docs</th>
+              <td mat-cell *matCellDef="let element" style="pointer-events: none">
+                <span>{{element?.estimated_docs}}</span>
+              </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="transferred_docs">
+              <th mat-header-cell *matHeaderCellDef>Transferred docs</th>
+              <td mat-cell *matCellDef="let element" style="pointer-events: none">
+                <span>{{element?.transferred_docs}}</span>
+              </td>
+            </ng-container>
+
+<!--            <ng-container matColumnDef="progress">-->
+<!--              <th mat-header-cell *matHeaderCellDef>Progress</th>-->
+<!--              <td mat-cell *matCellDef="let element" [width]="'150px'">-->
+<!--                <div class="status__progress" style="display: flex;align-items: center;justify-content: space-around;">-->
+<!--                  <mat-progress-bar mode="determinate"-->
+<!--                                    value="{{element.execution_progress}}"></mat-progress-bar>-->
+<!--                  <span style="color: white">{{element.execution_progress}}%</span></div>-->
+<!--              </td>-->
+<!--            </ng-container>-->
+
+            <ng-container matColumnDef="view_failures">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let element" >
+                <button mat-raised-button (click)="onShowFailureMessage(element)">
+                  <img src="assets/icons/visibility-24px.svg" alt="">
+                </button>
+
+              </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsForFailedTasksTable"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsForFailedTasksTable;"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #showProgressLoader>
+    <mat-progress-bar mode='indeterminate' class="mat-loader"></mat-progress-bar>
+
+  </ng-template>
+</div>
+
+<yl-failures-dialog *ngIf="showFailuresDialog"
+                    [selectedFailedTask]="selectedTask"
+                  (isCloseDialog)="onCloseFailuresDialog()"></yl-failures-dialog>

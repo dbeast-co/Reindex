@@ -1,0 +1,3 @@
+host: localhost
+port: 1234
+tasks_api_retries_number: 3

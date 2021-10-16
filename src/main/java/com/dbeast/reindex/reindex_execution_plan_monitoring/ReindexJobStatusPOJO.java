@@ -1,0 +1,64 @@
+package com.dbeast.reindex.reindex_execution_plan_monitoring;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public  class ReindexJobStatusPOJO extends AdvancedStatusPOJO {
+    @JsonProperty("source_index")
+    private String sourceIndex;
+    @JsonProperty("reindex_tasks")
+    private List<ReindexTaskStatusPOJO> reindexTasks = new LinkedList<>();
+
+    public ReindexJobStatusPOJO(final String sourceIndex) {
+        this.sourceIndex = sourceIndex;
+    }
+
+    public ReindexJobStatusPOJO() {
+    }
+
+    public synchronized void  updateTransferredDocsCount() {
+        setTransferredDocs(reindexTasks.stream()
+                .mapToLong(task -> task.getCreated() + task.getUpdated())
+                .sum());
+    }
+
+    public boolean isCurrentIndex(String index) {
+        return sourceIndex.equals(index);
+    }
+
+    public void addReindexTask(final ReindexTaskStatusPOJO reindexTask) {
+        reindexTasks.add(reindexTask);
+    }
+
+    public List<ReindexTaskStatusPOJO> getReindexTasks() {
+        return reindexTasks;
+    }
+
+    public void setReindexTasks(List<ReindexTaskStatusPOJO> reindexTasks) {
+        this.reindexTasks = reindexTasks;
+    }
+
+    public String getSourceIndex() {
+        return sourceIndex;
+    }
+
+    public void setSourceIndex(String sourceIndex) {
+        this.sourceIndex = sourceIndex;
+    }
+
+    public void updateStatus() {
+        setDone(true);
+        List<ReindexTaskStatusPOJO> failedTasks = reindexTasks.stream()
+                .filter(ReindexTaskStatusPOJO::isFailed)
+                .collect(Collectors.toList());
+        if (failedTasks.size() > 0) {
+            setFailed(true);
+        } else {
+            setSucceeded(true);
+        }
+    }
+
+}

@@ -1,0 +1,200 @@
+@import "../main/main.component";
+@import "./src/assets/styles/colors";
+.container{
+  padding: 1rem 2rem ;
+  position: relative;
+  mat-progress-bar.mat-loader{
+    top: -13px;
+    width: 119%;
+    margin: auto;
+    left: -15px;
+    position: absolute;
+  }
+}
+.header{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  .project_status {
+    @include flex-vertical-center;
+    max-width: 900px;
+    width: 100%;
+
+    mat-form-field{
+      input{
+        &.success{
+          background: $successBackground;
+        }
+        &.new_stopped{
+          background: $greyColor;
+        }
+        &.warn{
+          background: $warnBackground;
+        }
+        &.danger{
+          background: $dangerBackground;
+        }
+      }
+
+    }
+    .status__progress{
+      position: relative;
+      width: 53%;
+      span{
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+    mat-progress-bar.mat-progress {
+      max-width: 600px;
+      margin-top: 25px;
+      margin-left: 1rem;
+      top: auto;
+      width: 100%;
+      left: 0;
+      position: relative;
+    }
+  }
+  .more_info{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    color: #ffffff;
+    max-width: 600px;
+    width: 100%;
+    /* border-bottom: 1px solid #ffffff; */
+    /* justify-content: space-between; */
+    padding: 0.5rem 1rem;
+
+    label{
+      margin-right: 0.5rem;
+      margin-left: 1rem;
+    }
+    span{
+
+    }
+
+  }
+}
+
+.mat-table {
+  width: 100%;
+  box-shadow: 10px 10px 10px rgba(0,0,0,0.8);
+
+  .status__progress{
+    .mat-progress-bar.mat-progress{
+      max-width: 100px !important;
+      width: 100% !important;
+      top: auto;
+      left: auto;
+    }
+  }
+}
+.tables{
+  .index_status,.failed_tasks,.on_fly_tasks{
+
+    box-shadow: 10px 10px 5px rgba(0,0,0,0.9);
+  }
+  h3{
+    @include title-table;
+  }
+
+}
+.tables_wrapper{
+  display: flex;
+  margin-top: 2rem;
+  gap: 3rem;
+
+
+  .on_fly_tasks{
+    flex: 1;
+
+
+    .mat-table{
+      max-height: 345px;
+      overflow-y: auto;
+      td{
+        span{
+            //white-space: nowrap;
+
+        }
+      }
+    }
+
+    h3{
+      @include title-table;
+    }
+
+  }
+  .failed_tasks{
+    flex: 1;
+    .mat-table{
+      max-height: 345px;
+      overflow-y: auto;
+      td{
+        span{
+          //white-space: nowrap;
+        }
+      }
+
+    }
+
+    h3{
+      @include title-table;
+    }
+  }
+}
+table.mat-table{
+
+  th{
+    background: #142549;
+    font-size: 16px;
+    /* border-top: 0.5px solid rgba(255, 255, 255, 0.3); */
+    /* border-left: 0.5px solid rgba(255, 255, 255, 0.3); */
+    border-right: 0.5px solid rgba(255, 255, 255, 0.3);
+    padding: 0 10px;
+  }
+  td{
+    border-top: 0.5px solid rgba(255,255,255,0.3);
+    border-left: 0.5px solid rgba(255,255,255,0.3);
+    border-right: 0.5px solid rgba(255,255,255,0.3);
+    padding: 0 10px;
+    span{
+      padding: 5px 10px;
+      &.success{
+        background: $successBackground;
+      }
+      &.new_stopped{
+        background: $greyColor;
+      }
+      &.warn{
+        background: $warnBackground;
+      }
+      &.danger{
+        background: $dangerBackground;
+      }
+    }
+  }
+
+
+}
+
+.mat-row:nth-child(even){
+  background-color: rgba(7, 115, 126, 0.5) !important;
+}
+.mat-row:nth-child(odd){
+  background-color: #07737e !important;
+}
+
+
+@media (max-width: 1800px) {
+  button{
+    min-width: 128px;
+  }
+}
+
+
+

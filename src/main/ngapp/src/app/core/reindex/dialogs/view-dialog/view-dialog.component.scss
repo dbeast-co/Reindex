@@ -1,0 +1,105 @@
+@import "./src/assets/styles/colors";
+
+
+.dialog {
+  background-color: rgba(85, 85, 85, 0.4);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+
+  .dialog__container {
+    position: absolute;
+    background-color: #152c57;
+    top: 50%;
+    left: 50%;
+    padding: 18px 20px 30px 20px;
+    box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.1);
+    z-index: 99999999;
+    -webkit-transform: translate(0, -50%);
+    transform: translate(-50%, -50%);
+    max-width: 1200px;
+
+
+
+    button.dialog__close {
+      background: transparent;
+      position: absolute;
+      right: -5px;
+      top: -16px;
+      min-width: auto;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    h3 {
+      margin-bottom: 2rem;
+      font-size: 22px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .dialog__content {
+      height: 400px;
+      overflow-y: auto;
+      padding-left: 0;
+      margin-bottom: 1rem;
+      padding-right: 4rem;
+      .index_name{
+        //margin-bottom: 2rem;
+        font-size: 22px;
+        text-align: center;
+        width: 84%;
+        margin: 0 0 18px auto;
+
+      }
+      div {
+        color: #ffffff;
+      }
+    }
+
+    .actions {
+      text-align: right;
+      margin-top: 2rem !important;
+
+
+    }
+  }
+}
+
+
+.actions {
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  margin-right: 3rem;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #CCDAE5;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #245682;
+  outline: 1px solid #245682;
+  border-radius: 10px;
+}
+
+::ng-deep.ngx-json-viewer[_ngcontent-c19] {
+  font-family: monospace;
+  font-size: 1em;
+  width: 100%;
+  height: 100%;
+  overflow: inherit !important;
+  position: relative;
+}
+
+::ng-deep.ngx-json-viewer .segment .segment-main .segment-key {
+  color: #ffffff !important;
+}

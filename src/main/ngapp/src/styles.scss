@@ -1,0 +1,8 @@
+/* You can add global styles to this file, and also import other style files */
+@import "assets/styles/colors";
+@import "assets/styles/material";
+@import "assets/styles/normalize";
+@import "assets/styles/reset.local";
+@import '~ngx-toastr/toastr';
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background: $bodyBackground3;}

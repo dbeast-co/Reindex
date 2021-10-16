@@ -1,0 +1,17 @@
+<div class="dialog">
+  <div class="dialog__container">
+    <button class="dialog__close" (click)="onCloseDialog()">
+      <img src="assets/icons/close-24px.svg" alt="">
+    </button>
+    <div class="dialog__content">
+      <div class="index_name">
+        <span *ngIf="indexName">Index: {{indexName}}</span>
+          <span *ngIf="templateName">Template: {{templateName}}</span>
+      </div>
+      <div [innerHTML]="viewJSONResult | prettyJson"></div>
+    </div>
+    <div class="actions">
+      <button mat-raised-button class="yesBtn" (click)="onCloseDialog()">Close</button>
+    </div>
+  </div>
+</div>

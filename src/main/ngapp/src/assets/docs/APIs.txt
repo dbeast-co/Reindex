@@ -1,0 +1,17 @@
+APIs list
+GET /reindexer/reindex_settings/new  - New Project. Return selectedFailedTask object
+GET /reindexer/reindex_settings/get/:id - Get selectedFailedTask by id. Return selectedFailedTask object
+GET /reindexer/reindex_settings/list - Get list of projects.
+format: [{"project_id":"2e44e85a088d4ff6a4254f7618fc9b39","project_name":"test1"}]
+GET /reindexer/reindex_settings/validate/:projectName - Validate is the selectedFailedTask exists. Return true/false
+
+POST /reindexer/reindex_settings/test_cluster - Test Elasticsearch cluster. Return string of status: RED/YELLOW/GREEN
+POST /reindexer/reindex_settings/save - Save selectedFailedTask. Return true/false
+
+DELETE /reindexer/reindex_settings/delete/:id - Delete selectedFailedTask by Id
+
+
+165.22.107.91:1234
+
+java -Dlog4j2.configurationFile=/opt/reindexer/config/log4j2.xml -cp /opt/reindexer/bin/*:/opt/reindexer/lib/* com.bidalab.reindexer.Reindexer
+

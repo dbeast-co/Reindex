@@ -1,0 +1,37 @@
+<div class="header">
+  <div class="menu">
+    <!--    ==================== Menu button============================== -->
+    <button mat-icon-button class="menu-btn" [matMenuTriggerFor]="menu" (menuOpened)="onOpenMenu()" >
+      <img src="assets/icons/material-hamburger.svg" alt="menu">
+    </button>
+    <mat-menu #menu="matMenu">
+      <!--     ===================== NEW Project - Open saved project ============================== -->
+      <a routerLink="project_configuration"  mat-menu-item (click)="onCreateNewProject()">New project</a>
+            <button mat-menu-item [matMenuTriggerFor]="existing_projects">Open saved project</button>
+      <mat-menu #existing_projects>
+
+<!--        <a routerLink="/details" [state]="{ hello: 'world' }">Go</a>-->
+          <a routerLink="project_configuration" [queryParams]="{project_id:project.project_id,event:1}"  #savedProjectsRef mat-menu-item *ngFor="let project of savedProjects"
+                  (click)="onOpenSavedProject(project.project_id)" >{{project.project_name}}</a>
+      </mat-menu>
+
+
+      <!--========================== Projects monitoring ========================-->
+      <a routerLink="project_monitoring" (click)="onProjectsMonitoring()" mat-menu-item >Projects monitoring</a>
+
+    </mat-menu>
+    <!--===========================================================================-->
+  </div>
+  <div class="title">
+    <h1>{{headerTitle}}</h1>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+

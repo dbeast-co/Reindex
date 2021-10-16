@@ -1,0 +1,136 @@
+<div class="container">
+<!--  <h2>Projects monitoring</h2>-->
+  <table mat-table #table id="sourceIndexListMatSource" class="mat-elevation-z8"
+         *ngIf="sourceProjectMonitoring;else showProgressBar"
+         [dataSource]="sourceProjectMonitoring">
+    <ng-container matColumnDef="checkboxIndexPattern">
+<!--      <th mat-header-cell *matHeaderCellDef>-->
+<!--        <mat-checkbox (change)="$event ? masterToggleIndexList() : null"-->
+<!--                      [checked]="selectionIndexList.hasValue() && isAllSelectedIndexList()"-->
+<!--                      [indeterminate]="selectionIndexList.hasValue() && !isAllSelectedIndexList()"-->
+<!--                      *ngIf="showViewButtonInTables">-->
+<!--        </mat-checkbox>-->
+<!--      </th>-->
+<!--      <td mat-cell *matCellDef="let element">-->
+<!--        <mat-checkbox (click)="$event.stopPropagation()"-->
+<!--                      (change)="checkRowOfSourceIndexTable($event,element) ? selectionIndexList.toggle(element) : null"-->
+<!--                      [checked]="selectionIndexList.isSelected(element)" *ngIf="showViewButtonInTables">-->
+<!--        </mat-checkbox>-->
+<!--      </td>-->
+    </ng-container>
+    <ng-container matColumnDef="project_name">
+      <th mat-header-cell *matHeaderCellDef> Project name</th>
+      <td mat-cell *matCellDef="let element">
+        <span style="cursor: default">{{element.project_name}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="start_time">
+      <th mat-header-cell *matHeaderCellDef> Start time</th>
+      <td mat-cell *matCellDef="let element">
+        <span style="cursor: default">{{element.start_time}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="end_time">
+      <th mat-header-cell *matHeaderCellDef> End time</th>
+      <td mat-cell *matCellDef="let element">
+        <span style="cursor: default">{{element.end_time}}</span>
+      </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="tasks_number">
+      <th mat-header-cell *matHeaderCellDef> Tasks number</th>
+      <td mat-cell *matCellDef="let element">
+        <span style="cursor: default">{{element.tasks_number}}</span>
+      </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="estimated_docs">
+      <th mat-header-cell *matHeaderCellDef> Estimated docs</th>
+      <td mat-cell *matCellDef="let element">
+        <span style="cursor: default">{{element.estimated_docs}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="transferred_docs">
+      <th mat-header-cell *matHeaderCellDef> Transferred docs</th>
+      <td mat-cell *matCellDef="let element">
+        <span style="cursor: default">{{element.transferred_docs}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="succeeded_tasks">
+      <th mat-header-cell *matHeaderCellDef> Succeeded tasks</th>
+      <td mat-cell *matCellDef="let element">
+        <span style="cursor: default">{{element.succeeded_tasks}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="failed_tasks">
+      <th mat-header-cell *matHeaderCellDef>Failed tasks</th>
+      <td mat-cell *matCellDef="let element">
+        <span style="cursor: default">{{element.failed_tasks}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="progress" >
+      <th mat-header-cell *matHeaderCellDef>Progress</th>
+      <td mat-cell *matCellDef="let element" class="progress">
+        <div class="status__progress">
+          <mat-progress-bar mode="determinate" [value]="element?.execution_progress"></mat-progress-bar>
+          <span style="color: white;cursor: default">{{element?.execution_progress}}%</span></div>
+      </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let element" >
+        <span [ngClass]="{'success': element.project_status === 'SUCCEEDED','new_stopped':element.project_status === 'NEW'||element.project_status === 'STOPPED' ,'warn':element.project_status=== 'ON_FLY' ,'danger': element.project_status === 'FAILED'}" style="cursor: default">{{element.project_status}}</span>
+      </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="buttons">
+      <th mat-header-cell *matHeaderCellDef >Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-raised-button (click)="onEditProject(element)" matTooltip="Edit project">
+          <img src="assets/icons/edit-white-18dp.svg" alt="">
+        </button>
+        <button mat-raised-button (click)="onDeleteProject(element)" matTooltip="Delete project">
+          <img src="assets/icons/delete-black-18dp.svg" alt="">
+        </button>
+
+        <button mat-raised-button (click)="onMonitoring(element)" matTooltip="Show details">
+          <img src="assets/icons/visibility-24px.svg" alt="">
+        </button>
+      </td>
+    </ng-container>
+
+<!--    <ng-container matColumnDef="viewIndexPattern">-->
+<!--      <th mat-header-cell *matHeaderCellDef></th>-->
+<!--      <td mat-cell *matCellDef="let element">-->
+<!--        <button mat-raised-button class="view_btn" *ngIf="showViewButtonInTables">-->
+<!--          <img src="././assets/icons/visibility-24px.svg"-->
+<!--               matTooltip="Edit">-->
+<!--        </button>-->
+<!--      </td>-->
+<!--    </ng-container>-->
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsForSourceProjectMonitoringTable"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsForSourceProjectMonitoringTable;"></tr>
+  </table>
+  <ng-template #showProgressBar>
+    <mat-progress-bar mode='indeterminate' class="mat-loader"></mat-progress-bar>
+  </ng-template>
+</div>
+
+<yl-yes-no-dialog *ngIf="isShowYesNoDialog"
+                  [savedProject]="selected_project"
+                  (isYesEmit)="onYes($event)"
+                  (isNoEmit)="onNo($event)"
+                  (isCloseDialog)="onClose($event)">
+
+</yl-yes-no-dialog>

@@ -1,0 +1,23 @@
+@import "../report-dialog/report-dialog.component";
+.dialog__container{
+  padding: 0 !important;
+  .dialog__header{
+    background-color: $dangerBackground;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    img{
+      width: 50px;
+    }
+  }
+}
+.dialog__content{
+  padding:50px !important;
+  p{
+    color: #ffffff;
+    text-align: center;
+    font-size: 1.6em;
+    overflow-wrap: break-word;
+  }
+}
+
