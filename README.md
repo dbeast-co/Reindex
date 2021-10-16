@@ -65,10 +65,9 @@ Unpack the reindex.zip file in your local or remote machine
    This could happen, because of  QuickEdit Mode and/or Insert options are checked in the console settings.
    To get to these settings, right-click on the PowerShell/Console-Logo in the top-left of your terminal window, then select 'Properties' 
 
-### Know Bugs:
+### Questions... Feedbacks... Suggestions...
+If you'll find any bugs, or have any questions/suggestions/feedbacks, please feel free to open issues, start discussions or mail us: support@dbeast.co 
 
 ### Terms and conditions
-This is the first Beta version, so if you'll find any bugs, or have any recommendations, please feel free to contact as in mail: support@dbeast.co
-
-Copyright © 2020 Matskeplishvili Vakhtang & Yevgeny Levin
+Copyright © 2021 Matskeplishvili Vakhtang
 Licensed under the Apache License, Version 2.0
