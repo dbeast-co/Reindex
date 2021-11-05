@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '../../services/api.service';
 import {IProjectMonitoring} from '../../models/project-monitoring';
 import {MatTableDataSource} from '@angular/material';
@@ -7,16 +7,17 @@ import {ProjectMonitoringService} from '../../services/project-monitoring.servic
 import {Router} from '@angular/router';
 import {SubSink} from 'subsink';
 import {HeaderService} from '../../services/header.service';
+import {MatSort, Sort} from '@angular/material/sort';
 
 @Component({
   selector: 'yl-about',
   templateUrl: './project-monitoring.component.html',
   styleUrls: ['./project-monitoring.component.scss'],
 })
-export class ProjectMonitoringComponent implements OnInit, OnDestroy {
+export class ProjectMonitoringComponent implements OnInit, OnDestroy, AfterViewInit {
   displayedColumnsForSourceProjectMonitoringTable: string[] = ['project_name', 'start_time', 'end_time', 'tasks_number', 'estimated_docs', 'transferred_docs', 'succeeded_tasks', 'failed_tasks', 'progress', 'status', 'buttons'];
 
-  sourceProjectMonitoring: MatTableDataSource<IProjectMonitoring>;
+  sourceProjectMonitoring: MatTableDataSource<IProjectMonitoring> = new MatTableDataSource<IProjectMonitoring>();
   isShowYesNoDialog: boolean = false;
   selected_project: IProjectMonitoring = {
     project_id: '',
@@ -34,6 +35,7 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
   private timer: NodeJS.Timer;
   private sourceInterval: NodeJS.Timer;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private api: ApiService,
               private toastr: ToastrService,
@@ -51,6 +53,11 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy {
       i++;
 
     }, 10000);
+  }
+
+  ngAfterViewInit() {
+    this.sourceProjectMonitoring.sort = this.sort;
+    this.cdr.markForCheck();
   }
 
   /**
@@ -134,5 +141,21 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy {
   onMonitoring(project: IProjectMonitoring) {
     this.headerService.setHeaderTitle('Project monitoring');
     this.router.navigate(['/progress'], {queryParams: {id: project.project_id}});
+  }
+
+  announceSortChange(event: Sort) {
+    console.log(event);
+    this.sourceProjectMonitoring.sort = this.sort;
+    if (event.active === 'status') {
+      this.sourceProjectMonitoring.data.sort((a, b) => {
+        if (a.project_status < b.project_status) {
+          return -1;
+        } else if (a.project_status > b.project_status) {
+          return 1;
+        }
+        return 0;
+      });
+    }
+    this.cdr.markForCheck();
   }
 }

@@ -49,10 +49,10 @@
       <div class="index_status" style="max-height: 297px;overflow-y: auto">
         <table  mat-table #table id="index_status_table" class="mat-elevation-z8"
                *ngIf="dataSourceForIndexStatusTable"
-               [dataSource]="dataSourceForIndexStatusTable">
+               [dataSource]="dataSourceForIndexStatusTable" matSort>
 
           <ng-container matColumnDef="index">
-            <th mat-header-cell *matHeaderCellDef> Index</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Index</th>
             <td mat-cell *matCellDef="let element" style="pointer-events: none">
               <span>{{element?.index_name}}</span>
             </td>
