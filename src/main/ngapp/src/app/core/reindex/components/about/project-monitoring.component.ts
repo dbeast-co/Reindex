@@ -144,7 +144,6 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   announceSortChange(event: Sort) {
-    console.log(event);
     this.sourceProjectMonitoring.sort = this.sort;
     if (event.active === 'status') {
       this.sourceProjectMonitoring.data.sort((a, b) => {
