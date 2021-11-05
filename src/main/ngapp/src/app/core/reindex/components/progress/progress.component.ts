@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '../../services/api.service';
 import {ProjectIdService} from '../../services/project-id.service';
 import {IFailedTask, IIndexStatus, IMonitoringProjectModel, IOnFlyTask} from '../../models/monitoring_project.model';
@@ -8,13 +8,14 @@ import {MatTableDataSource} from '@angular/material';
 import {ClickService} from '../../services/click.service';
 import {ProjectMonitoringService} from '../../services/project-monitoring.service';
 import {HeaderService} from '../../services/header.service';
+import {MatSort} from '@angular/material/sort';
 
 @Component({
   selector: 'yl-progress',
   templateUrl: './progress.component.html',
   styleUrls: ['./progress.component.scss'],
 })
-export class ProgressComponent implements OnInit, OnDestroy {
+export class ProgressComponent implements OnInit, OnDestroy,AfterViewInit {
 
   project: IMonitoringProjectModel;
   displayedColumnsForIndexStatusTable: string[] = ['index', 'start_time', 'end_time', 'tasks_number', 'estimated_docs', 'transferred_docs', 'succeeded_tasks', 'failed_tasks', 'progress', 'status'];
@@ -28,7 +29,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
   selectedTask: SelectedFailedTask;
   private sourceInterval: NodeJS.Timer;
   private time: number = 10000;
-
+  @ViewChild(MatSort) sort: MatSort;
   constructor(private projectIdService: ProjectIdService,
               private projectService: ProjectMonitoringService,
               private api: ApiService,
@@ -49,6 +50,9 @@ export class ProgressComponent implements OnInit, OnDestroy {
       this.getProjectMonitoringData();
     }, this.time);
 
+
+  }
+  ngAfterViewInit() {
 
   }
 
