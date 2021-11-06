@@ -2,7 +2,7 @@
 <!--  <h2>Projects monitoring</h2>-->
   <table mat-table #table id="sourceIndexListMatSource" class="mat-elevation-z8"
          *ngIf="sourceProjectMonitoring;else showProgressBar"
-         [dataSource]="sourceProjectMonitoring" matSort (matSortChange)="announceSortChange($event)">
+         [dataSource]="sourceProjectMonitoring" matSort >
     <ng-container matColumnDef="checkboxIndexPattern">
 <!--      <th mat-header-cell *matHeaderCellDef>-->
 <!--        <mat-checkbox (change)="$event ? masterToggleIndexList() : null"-->
@@ -86,7 +86,7 @@
     </ng-container>
 
 
-    <ng-container matColumnDef="status">
+    <ng-container matColumnDef="project_status">
       <th mat-header-cell *matHeaderCellDef mat-sort-header >Status</th>
       <td mat-cell *matCellDef="let element" >
         <span [ngClass]="{'success': element.project_status === 'SUCCEEDED','new_stopped':element.project_status === 'NEW'||element.project_status === 'STOPPED' ,'warn':element.project_status=== 'ON_FLY' ,'danger': element.project_status === 'FAILED'}" style="cursor: default">{{element.project_status}}</span>
