@@ -48,17 +48,18 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   ngOnInit() {
+
     this.getSourceProjectMonitoringData();
     this.sourceInterval = setInterval(() => {
       let i = 0;
       this.getSourceProjectMonitoringData();
       i++;
-
     }, 10000);
   }
 
   ngAfterViewInit() {
     this.sourceProjectMonitoring.sort = this.sort;
+
     this.cdr.markForCheck();
   }
 
@@ -70,8 +71,8 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy, AfterViewI
       projects.sort((a, b) => {
         switch (this.columnToSort) {
           case 'project_name':
-            return this.onSortColumn(a.project_status, b.project_status);
-          case 'status':
+            return this.onSortColumn(a.project_name, b.project_name);
+          case 'project_status':
             return this.onSortColumn(a.project_status, b.project_status);
           case 'start_time':
             return this.onSortColumn(a.start_time, b.start_time);
@@ -80,6 +81,7 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy, AfterViewI
           case 'progress':
             return this.onSortColumn(a.execution_progress, b.execution_progress);
         }
+
         this.sourceProjectMonitoring = new MatTableDataSource<IProjectMonitoring>(projects);
       });
     }));
@@ -170,4 +172,8 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy, AfterViewI
   }
 
 
+  onSort(event: Sort) {
+    this.sourceProjectMonitoring.sort = this.sort;
+    this.columnToSort = event.active;
+  }
 }

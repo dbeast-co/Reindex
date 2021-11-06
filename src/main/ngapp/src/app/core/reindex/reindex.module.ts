@@ -8,7 +8,7 @@ import {MainComponent} from './components/main/main.component';
 import {RouterModule} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SavedProjectsComponent} from './components/saved-projects/saved-projects.component';
-import {ProjectMonitoringComponent} from './components/about/project-monitoring.component';
+import {ProjectMonitoringComponent} from './components/projects-monitoring/project-monitoring.component';
 import {ReindexRoutingModule} from './reindex-routing.module';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {CustomSpinnerDirective} from './directives/custom-spinner.directive';
