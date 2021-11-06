@@ -2,7 +2,7 @@
 <!--  <h2>Projects monitoring</h2>-->
   <table mat-table #table id="sourceIndexListMatSource" class="mat-elevation-z8"
          *ngIf="sourceProjectMonitoring;else showProgressBar"
-         [dataSource]="sourceProjectMonitoring" matSort >
+         [dataSource]="sourceProjectMonitoring" matSort (matSortChange)="onSort($event)">
     <ng-container matColumnDef="checkboxIndexPattern">
 <!--      <th mat-header-cell *matHeaderCellDef>-->
 <!--        <mat-checkbox (change)="$event ? masterToggleIndexList() : null"-->

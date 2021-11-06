@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {MainComponent} from './components/main/main.component';
-import {ProjectMonitoringComponent} from './components/about/project-monitoring.component';
+import {ProjectMonitoringComponent} from './components/projects-monitoring/project-monitoring.component';
 import {ProgressComponent} from './components/progress/progress.component';
 
 const routes: Routes = [
