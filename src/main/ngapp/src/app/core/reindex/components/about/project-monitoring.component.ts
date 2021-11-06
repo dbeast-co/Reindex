@@ -7,7 +7,7 @@ import {ProjectMonitoringService} from '../../services/project-monitoring.servic
 import {Router} from '@angular/router';
 import {SubSink} from 'subsink';
 import {HeaderService} from '../../services/header.service';
-import {MatSort, Sort} from '@angular/material/sort';
+import {MatSort, Sort, SortDirection} from '@angular/material/sort';
 
 @Component({
   selector: 'yl-about',
@@ -36,6 +36,8 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy, AfterViewI
   private timer: NodeJS.Timer;
   private sourceInterval: NodeJS.Timer;
   @ViewChild(MatSort) sort: MatSort;
+  private columnToSort: string;
+  private sortDirection: SortDirection;
 
   constructor(private api: ApiService,
               private toastr: ToastrService,
@@ -64,10 +66,34 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy, AfterViewI
    * get data for Monitoring table
    */
   getSourceProjectMonitoringData() {
-    this.subs.add(this.api.getSavedProjectsForMonitoring().subscribe(data => {
-      this.sourceProjectMonitoring = new MatTableDataSource<IProjectMonitoring>(data);
+    this.subs.add(this.api.getSavedProjectsForMonitoring().subscribe(projects => {
+      projects.sort((a, b) => {
+        switch (this.columnToSort) {
+          case 'project_name':
+            return this.onSortColumn(a.project_status, b.project_status);
+          case 'status':
+            return this.onSortColumn(a.project_status, b.project_status);
+          case 'start_time':
+            return this.onSortColumn(a.start_time, b.start_time);
+          case 'end_time':
+            return this.onSortColumn(a.end_time, b.end_time);
+          case 'progress':
+            return this.onSortColumn(a.execution_progress, b.execution_progress);
+        }
+        this.sourceProjectMonitoring = new MatTableDataSource<IProjectMonitoring>(projects);
+      });
     }));
   }
+
+  onSortColumn(aProperty, bProperty): number {
+    if (aProperty < bProperty) {
+      return -1;
+    } else if (aProperty > bProperty) {
+      return 1;
+    }
+    return 0;
+  }
+
 
   /**
    * Click on delete Icon
@@ -145,6 +171,8 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy, AfterViewI
 
   announceSortChange(event: Sort) {
     this.sourceProjectMonitoring.sort = this.sort;
+    this.columnToSort = event.active;
+    this.sortDirection = event.direction;
     if (event.active === 'status') {
       this.sourceProjectMonitoring.data.sort((a, b) => {
         if (a.project_status < b.project_status) {
