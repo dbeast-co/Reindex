@@ -15,7 +15,7 @@ import {MatSort, Sort, SortDirection} from '@angular/material/sort';
   styleUrls: ['./project-monitoring.component.scss'],
 })
 export class ProjectMonitoringComponent implements OnInit, OnDestroy, AfterViewInit {
-  displayedColumnsForSourceProjectMonitoringTable: string[] = ['project_name', 'start_time', 'end_time', 'tasks_number', 'estimated_docs', 'transferred_docs', 'succeeded_tasks', 'failed_tasks', 'progress', 'status', 'buttons'];
+  displayedColumnsForSourceProjectMonitoringTable: string[] = ['project_name', 'start_time', 'end_time', 'tasks_number', 'estimated_docs', 'transferred_docs', 'succeeded_tasks', 'failed_tasks', 'progress', 'project_status', 'buttons'];
 
   sourceProjectMonitoring: MatTableDataSource<IProjectMonitoring> = new MatTableDataSource<IProjectMonitoring>();
   isShowYesNoDialog: boolean = false;
@@ -169,20 +169,5 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy, AfterViewI
     this.router.navigate(['/progress'], {queryParams: {id: project.project_id}});
   }
 
-  announceSortChange(event: Sort) {
-    this.sourceProjectMonitoring.sort = this.sort;
-    this.columnToSort = event.active;
-    this.sortDirection = event.direction;
-    if (event.active === 'status') {
-      this.sourceProjectMonitoring.data.sort((a, b) => {
-        if (a.project_status < b.project_status) {
-          return -1;
-        } else if (a.project_status > b.project_status) {
-          return 1;
-        }
-        return 0;
-      });
-    }
-    this.cdr.markForCheck();
-  }
+
 }
