@@ -23,6 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.dbeast.reindex.Reindex.FILE_SEPARATOR;
+
 public class DataWarehouse {
     private static final Logger logger = LogManager.getLogger();
 
@@ -90,7 +92,7 @@ public class DataWarehouse {
     }
 
     public synchronized void writeStatusToFile(final String projectId) {
-        GeneralUtils.createFile(appSettings.getInternals().getProjectsFolder() + projectId + "/" +
+        GeneralUtils.createFile(appSettings.getInternals().getProjectsFolder() + projectId + FILE_SEPARATOR +
                         EAppSettings.PROJECT_MONITORING_FILE.getStringValueOfSetting(),
                 projectsStatus.get(projectId));
     }

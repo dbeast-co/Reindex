@@ -42,6 +42,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.dbeast.reindex.Reindex.FILE_SEPARATOR;
+
 public class ReindexSettingsController {
     private static final Logger logger = LogManager.getLogger();
 
@@ -217,11 +219,11 @@ public class ReindexSettingsController {
         res = GeneralUtils.createFolder(appSettings.getInternals().getProjectsFolder() + project.getProjectId());
         projectsStatus.put(project.getProjectId(), new ProjectStatusPOJO(project.getProjectId(), project.getProjectName()));
         res = GeneralUtils.createFile(appSettings.getInternals().getProjectsFolder() +
-                        project.getProjectId() + "/" + EAppSettings.PROJECT_MONITORING_FILE.getStringValueOfSetting(),
+                        project.getProjectId() + FILE_SEPARATOR + EAppSettings.PROJECT_MONITORING_FILE.getStringValueOfSetting(),
                 projectsStatus.get(project.getProjectId())) && res;
 //        }
         res = GeneralUtils.createFile(appSettings.getInternals().getProjectsFolder() +
-                        project.getProjectId() + "/" + EAppSettings.PROJECT_SETTINGS_FILE.getStringValueOfSetting(),
+                        project.getProjectId() + FILE_SEPARATOR + EAppSettings.PROJECT_SETTINGS_FILE.getStringValueOfSetting(),
                 projectsMap.get(project.getProjectId())) && res;
         return res;
     }
@@ -244,7 +246,7 @@ public class ReindexSettingsController {
     //TODO  update delete old cert
     public boolean uploadSSLCert(final Request request) {
         String location = appSettings.getInternals().getProjectsFolder() +
-                request.params(":projectId") + "/";
+                request.params(":projectId") + FILE_SEPARATOR;
         GeneralUtils.createFolder(location);
         request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(location));
         try {

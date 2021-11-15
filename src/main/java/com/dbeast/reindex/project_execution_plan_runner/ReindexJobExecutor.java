@@ -80,12 +80,6 @@ public class ReindexJobExecutor implements Runnable {
     }
 
     public void stop() {
-        reindexTasksThreadPool.shutdownNow();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         reindexJobStatus.setInActiveProcess(false);
         reindexJobStatus.setInterrupted(true);
         reindexJobStatus.getReindexTasks().stream()
@@ -95,6 +89,12 @@ public class ReindexJobExecutor implements Runnable {
                     task.setStatus(EProjectStatus.STOPPED);
                     cancelTask(task.getTaskId());
                 });
+        reindexTasksThreadPool.shutdownNow();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         dataWarehouse.writeStatusToFile(projectId);
         logger.warn("The job for index: " + reindexJob.getIndexName() + " was interrupted");
     }
@@ -106,7 +106,7 @@ public class ReindexJobExecutor implements Runnable {
     public void cancelTask(final String taskId) {
         try {
             logger.info("Canceling the task: " + taskId);
-            CancelTasksRequest byTaskIdRequest = new CancelTasksRequest.Builder()
+            CancelTasksRequest byTaskIdRequest = new org.elasticsearch.client.tasks.CancelTasksRequest.Builder()
                     .withTaskId(new org.elasticsearch.client.tasks.TaskId(taskId))
                     .build();
             client.tasks().cancel(byTaskIdRequest, RequestOptions.DEFAULT);

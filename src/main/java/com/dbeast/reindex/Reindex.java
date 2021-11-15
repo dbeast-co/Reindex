@@ -15,6 +15,7 @@ import java.io.IOException;
 
 public class Reindex {
     private static final Logger logger = LogManager.getLogger();
+    public static final String FILE_SEPARATOR = System.getProperty("file.separator");
 
     public static void main(String[] args) throws Exception {
         logger.info("Welcome to Reindex application");
