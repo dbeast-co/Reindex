@@ -33,6 +33,8 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 
+import static com.dbeast.reindex.Reindex.FILE_SEPARATOR;
+
 public class ElasticsearchDbProvider {
     private static final Logger logger = LogManager.getLogger();
     private final String projectsFolder;
@@ -73,7 +75,7 @@ public class ElasticsearchDbProvider {
                 CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
                 credentialsProvider.setCredentials(AuthScope.ANY,
                         new UsernamePasswordCredentials(connectionSettings.getUsername(), connectionSettings.getPassword()));
-                Path caCertificatePath = Paths.get(projectsFolder + projectId + "/" + connectionSettings.getSsl_file());
+                Path caCertificatePath = Paths.get(projectsFolder + projectId + FILE_SEPARATOR + connectionSettings.getSsl_file());
                 CertificateFactory factory = CertificateFactory.getInstance("X.509");
                 Certificate trustedCa;
                 try (InputStream is = Files.newInputStream(caCertificatePath)) {

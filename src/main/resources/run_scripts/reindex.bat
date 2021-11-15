@@ -1,15 +1,15 @@
 @echo off
 
-set REINDEXER_HOME_DIR=%~dp0
-
+set REINDEX_HOME_DIR=%~dp0
+set REINDEX_HOME_DIR=%REINDEX_HOME_DIR:~0,-1%
 
 ECHO ###################################################################
-ECHO Reindexer home folder: %REINDEXER_HOME_DIR%
+ECHO Reindex home folder: %REINDEX_HOME_DIR%
 ECHO ###################################################################
 ECHO #
 
-copy %REINDEXER_HOME_DIR%\config\reindex.yml %REINDEXER_HOME_DIR%\client\assets
+copy "%REINDEX_HOME_DIR%\config\reindex.yml" "%REINDEX_HOME_DIR%\client\assets"
 
-java -Dlog4j2.configurationFile=%REINDEXER_HOME_DIR%\config\log4j2.xml -cp %REINDEXER_HOME_DIR%\lib\*;%REINDEXER_HOME_DIR%\bin\* com.dbeast.reindex.Reindex %REINDEXER_HOME_DIR%
+java -Dlog4j2.configurationFile="%REINDEX_HOME_DIR%\config\log4j2.xml" -cp "%REINDEX_HOME_DIR%\lib\*";"%REINDEX_HOME_DIR%\bin\*" com.dbeast.reindex.Reindex "%REINDEX_HOME_DIR%"
 
 PAUSE
