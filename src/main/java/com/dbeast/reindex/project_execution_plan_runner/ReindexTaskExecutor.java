@@ -12,10 +12,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.client.*;
 import org.elasticsearch.client.tasks.GetTaskRequest;
 import org.elasticsearch.client.tasks.GetTaskResponse;
 import org.elasticsearch.client.tasks.TaskSubmissionResponse;
+import org.elasticsearch.common.breaker.CircuitBreakingException;
 
 import java.io.IOException;
 import java.util.stream.Collectors;
@@ -111,7 +113,7 @@ public class ReindexTaskExecutor implements Runnable {
                         dataWarehouse.writeStatusToFile(projectId);
                     }
                     numberOfRetries = 0;
-                } catch (IOException e) {
+                } catch (IOException | ElasticsearchException e) {
                     if (numberOfRetries < taskRetries) {
                         logger.warn("There is an error in the Task execution loop in the project: " + projectId + ". " +
                                 "Task description: " + task.getDescription() + ". " +
@@ -130,7 +132,7 @@ public class ReindexTaskExecutor implements Runnable {
                 Thread.sleep(taskRefreshInterval * 1000);
                 try {
                     lowResponse = lowLevelClient.performRequest(new Request("GET", "_tasks/" + taskId));
-                } catch (IOException e) {
+                } catch (IOException | ElasticsearchException e) {
                     if (numberOfRetries < taskRetries) {
                         logger.warn("There is an error in the Task execution loop in the project: " + projectId + ". " +
                                 "Task description: " + task.getDescription() + ". " +
@@ -164,7 +166,7 @@ public class ReindexTaskExecutor implements Runnable {
                 reindexJobStatus.updateExecutionProgress();
                 reindexProjectStatus.updateExecutionProgress();
             }
-        } catch (IOException e) {
+        } catch (IOException | ElasticsearchException e) {
             reindexTaskStatus.setInActiveProcess(false);
             reindexTaskStatus.setFailed(true);
             reindexTaskStatus.setDone(true);
