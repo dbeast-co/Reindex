@@ -1,4 +1,4 @@
-package com.dbeast.reindex.reindex_execution_plan_builder.dao;
+package com.dbeast.reindex.elasticsearch.dao;
 
 import com.dbeast.reindex.utils.GeneralUtils;
 import com.dbeast.reindex.reindex_execution_plan_monitoring.ClusterTaskStatusPOJO;

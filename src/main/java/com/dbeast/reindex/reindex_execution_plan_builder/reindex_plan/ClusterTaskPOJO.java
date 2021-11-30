@@ -1,6 +1,6 @@
 package com.dbeast.reindex.reindex_execution_plan_builder.reindex_plan;
 
-import com.dbeast.reindex.reindex_execution_plan_builder.dao.IClusterTaskDAO;
+import com.dbeast.reindex.elasticsearch.dao.IClusterTaskDAO;
 import com.dbeast.reindex.reindex_execution_plan_monitoring.BasicStatusPOJO;
 
 public class ClusterTaskPOJO extends BasicStatusPOJO {

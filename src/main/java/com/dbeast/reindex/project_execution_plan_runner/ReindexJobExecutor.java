@@ -56,6 +56,7 @@ public class ReindexJobExecutor implements Runnable {
         reindexJobStatus.setInActiveProcess(true);
         reindexJobStatus.setStartTime(System.currentTimeMillis());
         if (reindexJobStatus.getTotalDocs() > 0) {
+            //TODO Create index and change index number of replica
             CompletableFuture<?>[] futures = reindexJob.getReindexTasks().stream()
                     .filter(task -> !task.isDone())
                     .map(task -> CompletableFuture.runAsync(new ReindexTaskExecutor(projectId,

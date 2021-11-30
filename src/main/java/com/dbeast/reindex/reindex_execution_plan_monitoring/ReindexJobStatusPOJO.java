@@ -1,16 +1,20 @@
 package com.dbeast.reindex.reindex_execution_plan_monitoring;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public  class ReindexJobStatusPOJO extends AdvancedStatusPOJO {
+public class ReindexJobStatusPOJO extends AdvancedStatusPOJO {
     @JsonProperty("source_index")
     private String sourceIndex;
     @JsonProperty("reindex_tasks")
     private List<ReindexTaskStatusPOJO> reindexTasks = new LinkedList<>();
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("original_number_of_replicas")
+    private int originalNumberOfReplicas;
 
     public ReindexJobStatusPOJO(final String sourceIndex) {
         this.sourceIndex = sourceIndex;
@@ -19,10 +23,18 @@ public  class ReindexJobStatusPOJO extends AdvancedStatusPOJO {
     public ReindexJobStatusPOJO() {
     }
 
-    public synchronized void  updateTransferredDocsCount() {
+    public synchronized void updateTransferredDocsCount() {
         setTransferredDocs(reindexTasks.stream()
                 .mapToLong(task -> task.getCreated() + task.getUpdated())
                 .sum());
+    }
+
+    public int getOriginalNumberOfReplicas() {
+        return originalNumberOfReplicas;
+    }
+
+    public void setOriginalNumberOfReplicas(int originalNumberOfReplicas) {
+        this.originalNumberOfReplicas = originalNumberOfReplicas;
     }
 
     public boolean isCurrentIndex(String index) {

@@ -1,7 +1,7 @@
-package com.dbeast.reindex.reindex_execution_plan_builder.dao.index;
+package com.dbeast.reindex.elasticsearch.dao.index;
 
-import com.dbeast.reindex.reindex_execution_plan_builder.dao.AClusterTaskDAO;
-import com.dbeast.reindex.reindex_execution_plan_builder.dao.IClusterTaskDAO;
+import com.dbeast.reindex.elasticsearch.dao.AClusterTaskDAO;
+import com.dbeast.reindex.elasticsearch.dao.IClusterTaskDAO;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;

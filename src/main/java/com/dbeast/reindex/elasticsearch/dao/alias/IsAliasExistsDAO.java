@@ -1,6 +1,6 @@
-package com.dbeast.reindex.reindex_execution_plan_builder.dao.alias;
+package com.dbeast.reindex.elasticsearch.dao.alias;
 
-import com.dbeast.reindex.reindex_execution_plan_builder.dao.IClusterTaskDAO;
+import com.dbeast.reindex.elasticsearch.dao.IClusterTaskDAO;
 import com.dbeast.reindex.reindex_execution_plan_monitoring.ClusterTaskStatusPOJO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
