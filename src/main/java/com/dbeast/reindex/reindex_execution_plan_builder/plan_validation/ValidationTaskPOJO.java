@@ -1,6 +1,6 @@
 package com.dbeast.reindex.reindex_execution_plan_builder.plan_validation;
 
-import com.dbeast.reindex.reindex_execution_plan_builder.dao.IClusterTaskDAO;
+import com.dbeast.reindex.elasticsearch.dao.IClusterTaskDAO;
 
 public class ValidationTaskPOJO {
 

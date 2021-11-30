@@ -5,7 +5,7 @@ import com.dbeast.reindex.data_warehouse.DataWarehouse;
 import com.dbeast.reindex.elasticsearch.ElasticsearchController;
 import com.dbeast.reindex.elasticsearch.ElasticsearchDbProvider;
 import com.dbeast.reindex.exceptions.ClusterConnectionException;
-import com.dbeast.reindex.reindex_execution_plan_builder.dao.IClusterTaskDAO;
+import com.dbeast.reindex.elasticsearch.dao.IClusterTaskDAO;
 import com.dbeast.reindex.reindex_execution_plan_builder.reindex_plan.ReindexPlanPOJO;
 import com.dbeast.reindex.reindex_execution_plan_monitoring.ProjectStatusPOJO;
 import org.apache.logging.log4j.LogManager;

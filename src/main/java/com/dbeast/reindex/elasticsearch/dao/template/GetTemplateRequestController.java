@@ -1,4 +1,4 @@
-package com.dbeast.reindex.reindex_execution_plan_builder.dao.template;
+package com.dbeast.reindex.elasticsearch.dao.template;
 
 import org.elasticsearch.client.indices.GetIndexTemplatesRequest;
 

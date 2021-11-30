@@ -1,27 +1,27 @@
-package com.dbeast.reindex.reindex_execution_plan_builder.dao.index;
+package com.dbeast.reindex.elasticsearch.dao.index;
 
-import com.dbeast.reindex.elasticsearch.DataPeriodFromEs;
-import com.dbeast.reindex.elasticsearch.ElasticsearchController;
-import com.dbeast.reindex.reindex_execution_plan_builder.dao.IClusterTaskDAO;
+import com.dbeast.reindex.elasticsearch.dao.IClusterTaskDAO;
 import com.dbeast.reindex.reindex_execution_plan_monitoring.ClusterTaskStatusPOJO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.elasticsearch.ElasticsearchStatusException;
+import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.GetIndexRequest;
 
-public class IsDateFieldExistsAndHaveDateTypeDAO implements IClusterTaskDAO {
+import java.io.IOException;
+import java.util.Arrays;
+
+public class IsIndexExistsDAO implements IClusterTaskDAO {
     protected static final Logger logger = LogManager.getLogger();
 
     private final String index;
-    private final String dateField;
-    private final ElasticsearchController request;
+    private final GetIndexRequest request;
 
-    public IsDateFieldExistsAndHaveDateTypeDAO(String index, String dateField) {
+    public IsIndexExistsDAO(String index) {
         this.index = index;
-        this.dateField = dateField;
         this.request = generateRequest();
     }
-
     @Override
     public boolean execute(final RestHighLevelClient client,
                            final ClusterTaskStatusPOJO status) {
@@ -43,17 +43,21 @@ public class IsDateFieldExistsAndHaveDateTypeDAO implements IClusterTaskDAO {
         return null;
     }
 
-    protected ElasticsearchController generateRequest() {
-        return new ElasticsearchController();
+    protected GetIndexRequest generateRequest() {
+        return new GetIndexRequest(index);
     }
 
-    protected boolean executeRequest(final ElasticsearchController request,
+    protected boolean executeRequest(final GetIndexRequest request,
                                      final RestHighLevelClient client) {
-        DataPeriodFromEs date = request.getStartAndEndDateOfIndex(client, index, dateField);
-        return date.getDataStartDate() >= 0 && date.getDataEndDate() >= 0 && date.getDataEndDate() < 2003629646000L;
+        try {
+            return !client.indices().exists(request, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            logger.error("Suppressed: " + Arrays.toString(e.getSuppressed()));
+            return false;
+        }
     }
 
-    protected ElasticsearchController getRequest() {
+    protected GetIndexRequest getRequest() {
         return this.request;
     }
 }

@@ -11,10 +11,17 @@ import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.ElasticsearchStatusException;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthRequest;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
+import org.elasticsearch.action.admin.indices.settings.get.GetSettingsRequest;
+import org.elasticsearch.action.admin.indices.settings.get.GetSettingsResponse;
+import org.elasticsearch.action.admin.indices.settings.put.UpdateSettingsRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.*;
 import org.elasticsearch.client.core.CountRequest;
+import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.client.indices.CreateIndexResponse;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.metrics.Max;
@@ -32,6 +39,64 @@ public class ElasticsearchController {
     private static final Logger logger = LogManager.getLogger();
     private final ObjectMapper mapper = new ObjectMapper();
     private final ElasticsearchDbProvider elasticsearchClient = new ElasticsearchDbProvider();
+
+    public boolean createIndex(final RestHighLevelClient client,
+                               final String index) {
+        //Check is index exists
+        CreateIndexRequest request = new CreateIndexRequest(index);
+        try {
+            CreateIndexResponse createIndexResponse = client.indices().create(request, RequestOptions.DEFAULT);
+            return createIndexResponse.isAcknowledged();
+        } catch (IOException | ElasticsearchStatusException e) {
+            logger.error(e);
+            return false;
+        } catch (RuntimeException e) {
+            logger.warn(e);
+            return false;
+        }
+    }
+
+    public int getNumberOfReplicasFromIndex(final RestHighLevelClient client,
+                                            final String index) {
+        GetSettingsRequest request = new GetSettingsRequest().indices(index);
+        try {
+            GetSettingsResponse getSettingsResponse = client.indices().getSettings(request, RequestOptions.DEFAULT);
+            if (getSettingsResponse != null) {
+                return getSettingsResponse.getIndexToSettings().get(index).getAsInt("index.number_of_replicas", -1);
+            } else {
+                return -1;
+            }
+        } catch (IOException | ElasticsearchStatusException e) {
+            logger.error(e);
+            return -1;
+        } catch (RuntimeException e) {
+            logger.warn(e);
+            return -1;
+        }
+    }
+
+
+    public boolean updateNumberOfReplicas(final RestHighLevelClient client,
+                                          final String index,
+                                          final int numberOfReplicas) {
+        UpdateSettingsRequest request = new UpdateSettingsRequest(index);
+        String settingKey = "index.number_of_replicas";
+        Settings settings = Settings.builder()
+                .put(settingKey, numberOfReplicas)
+                .build();
+        request.settings(settings);
+        try {
+            AcknowledgedResponse updateSettingsResponse =
+                    client.indices().putSettings(request, RequestOptions.DEFAULT);
+            return updateSettingsResponse.isAcknowledged();
+        } catch (IOException | ElasticsearchStatusException e) {
+            logger.error(e);
+            return false;
+        } catch (RuntimeException e) {
+            logger.warn(e);
+            return false;
+        }
+    }
 
     public long getIndexDocsCount(final EsSettings connectionSettings,
                                   final String projectId,
