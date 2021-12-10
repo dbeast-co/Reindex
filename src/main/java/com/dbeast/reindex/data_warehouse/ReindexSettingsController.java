@@ -221,7 +221,6 @@ public class ReindexSettingsController {
         res = GeneralUtils.createFile(appSettings.getInternals().getProjectsFolder() +
                         project.getProjectId() + FILE_SEPARATOR + EAppSettings.PROJECT_MONITORING_FILE.getStringValueOfSetting(),
                 projectsStatus.get(project.getProjectId())) && res;
-//        }
         res = GeneralUtils.createFile(appSettings.getInternals().getProjectsFolder() +
                         project.getProjectId() + FILE_SEPARATOR + EAppSettings.PROJECT_SETTINGS_FILE.getStringValueOfSetting(),
                 projectsMap.get(project.getProjectId())) && res;
