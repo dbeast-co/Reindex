@@ -32,7 +32,6 @@ public class ValidationPlanBuilder {
         this.validationPlan = new ValidationPlanPOJO(project);
     }
 
-    //test is template exists
     public ValidationPlanPOJO generateValidationPlan() {
         ReindexSettingsPOJO reindexSettings = project.getReindexSettings();
 

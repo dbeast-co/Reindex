@@ -21,11 +21,15 @@ public class RESTReindexSettings extends ARest {
     public void rest() {
         path("/reindex_settings", () -> {
             get("/new", (request, response) -> {
-                logger.info("Got request for new project!");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for new project!");
+                }
                 return objectToString(reindexSettingsController.getNewProject());
             });
             get("/get/:id", (request, response) -> {
-                logger.info("Got request for project with id: " + request.params(":id"));
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for project with id: " + request.params(":id"));
+                }
                 ProjectPOJO result = reindexSettingsController.getProjectById(request.params(":id"));
                 return objectToString(result);
             });
@@ -39,23 +43,33 @@ public class RESTReindexSettings extends ARest {
                 return true;
             });
             get("/list", (request, response) -> {
-                logger.info("Got requests for project list");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got requests for project list");
+                }
                 return objectToString(reindexSettingsController.getProjectsList());
             });
             get("/validate/:projectName", (request, response) -> {
-                logger.info("Got request for validate project name: " + request.params("projectName"));
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for validate project name: " + request.params("projectName"));
+                }
                 return objectToString(reindexSettingsController.validateIsProjectNameExists(request.params("projectName")));
             });
             get("/validate/", (request, response) -> {
-                logger.info("Got request for validate project name: " + request.params("projectName"));
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for validate project name: " + request.params("projectName"));
+                }
                 return false;
             });
             get("/get_status/:projectId", (request, response) -> {
-                logger.info("Got request for project monitoring with id: " + request.params(":projectId"));
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for project monitoring with id: " + request.params(":projectId"));
+                }
                 return objectToString(reindexSettingsController.getProjectStatusForSettingsPageForId(request.params(":projectId")));
             });
             get("/prepare_project/:projectId", (request, response) -> {
-                logger.info("Got request for prepare project with id: " + request.params(":projectId"));
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for prepare project with id: " + request.params(":projectId"));
+                }
                 ValidationResponsePOJO res = reindexSettingsController.prepareProject(request.params(":projectId"));
                 return objectToString(res);
             });
@@ -65,22 +79,26 @@ public class RESTReindexSettings extends ARest {
             });
 
             post("/get_index_parameters/:projectId/:index", (request, response) -> {
-                logger.info("Got request for the index parameters of the index: " + request.params(":index")
-                        + " for project: " + request.params("projectId"));
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for the index parameters of the index: " + request.params(":index")
+                            + " for project: " + request.params("projectId"));
+                }
                 return reindexSettingsController.getIndexParameters(mapper.readValue(request.body(), EsSettings.class),
                         request.params(":index"),
                         request.params(":projectId"));
             });
             post("/get_template_parameters/:projectId/:template", (request, response) -> {
-                logger.info("Got request for the index parameters of the template: " + request.params(":template")
-                        + " for project: " + request.params("projectId"));
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for the index parameters of the template: " + request.params(":template")
+                            + " for project: " + request.params("projectId"));
+                }
                 return reindexSettingsController.getTemplateParameters(mapper.readValue(request.body(), EsSettings.class),
                         request.params(":template"),
                         request.params(":projectId"));
             });
             post("/get_sources", (request, response) -> {
-                logger.info("Got request for get sources from Elasticsearch");
                 if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for get sources from Elasticsearch");
                     logger.debug("Request body: " + request.body());
                 }
                 ProjectPOJO project = mapper.readValue(request.body(), ProjectPOJO.class);
@@ -88,8 +106,8 @@ public class RESTReindexSettings extends ARest {
                 return objectToString(project);
             });
             post("/test_cluster/:id", (request, response) -> {
-                logger.info("Got request for test Elasticsearch server with id: " + request.params(":id"));
                 if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for test Elasticsearch server with id: " + request.params(":id"));
                     logger.debug("Request body: " + request.body());
                 }
                 EsSettings connectionSettings = mapper.readValue(request.body(), EsSettings.class);
@@ -100,8 +118,8 @@ public class RESTReindexSettings extends ARest {
                 return responseBody;
             });
             post("/save", (request, response) -> {
-                logger.info("Got request for save project");
                 if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for save project");
                     logger.debug("Request body: " + request.body());
                 }
                 ProjectPOJO project = mapper.readValue(request.body(), ProjectPOJO.class);
@@ -109,8 +127,9 @@ public class RESTReindexSettings extends ARest {
             });
 
             post("/ssl_cert/:usage/:projectId", (request, response) -> {
-                logger.info("Got request for upload SSL certificate");
-//                setCorsHeaders(response);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for upload SSL certificate");
+                }
                 return reindexSettingsController.uploadSSLCert(request);
             });
 
