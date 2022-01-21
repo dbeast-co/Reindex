@@ -82,8 +82,9 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy, AfterViewI
             return this.onSortColumn(a.execution_progress, b.execution_progress);
         }
 
-        this.sourceProjectMonitoring = new MatTableDataSource<IProjectMonitoring>(projects);
+
       });
+      this.sourceProjectMonitoring = new MatTableDataSource<IProjectMonitoring>(projects);
     }));
   }
 
