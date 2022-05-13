@@ -97,7 +97,7 @@
     <ng-container matColumnDef="buttons">
       <th mat-header-cell *matHeaderCellDef >Actions</th>
       <td mat-cell *matCellDef="let element">
-        <button mat-raised-button (click)="onEditProject(element)" matTooltip="Edit project">
+        <button mat-raised-button (click)="onEditProject(element)" matTooltip="Edit project" id="edit_btn">
           <img src="assets/icons/edit-white-18dp.svg" alt="">
         </button>
         <button mat-raised-button (click)="onDeleteProject(element)" matTooltip="Delete project">

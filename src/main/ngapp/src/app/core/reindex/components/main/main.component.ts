@@ -429,7 +429,6 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
    */
   initializeForm(project: IProjectModel): FormGroup {
 
-
     const hostRegex = '(http|https):\\/\\/((\\w|-|\\d|_|\\.)+)\\:\\d{2,5}';
     this.project = project;
     this.sourceIndexListMatSource = new MatTableDataSource<ISourceIndexList>(project.source_index_list);
@@ -1468,6 +1467,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.is_add_suffix.patchValue(false);
     this.is_add_prefix.patchValue(false);
     this.is_remove_suffix.patchValue(false);
+    this.is_use_same_index_name.patchValue(false);
     this.merge_to_one_index_index_nameInput.patchValue('');
     this.send_to_alias_aliasInput.patchValue('');
     this.send_to_pipeline_pipeline_nameInput.patchValue('');
@@ -1486,6 +1486,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.is_is_use_ilm.patchValue(false);
     this.is_add_suffix.patchValue(false);
     this.is_add_prefix.patchValue(false);
+    this.is_use_same_index_name.patchValue(false)
     this.merge_to_one_index_index_nameInput.patchValue('');
     this.send_to_alias_aliasInput.patchValue('');
     this.send_to_pipeline_pipeline_nameInput.patchValue('');
@@ -1495,6 +1496,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
   }
 
   checkAllCheckboxesAndInputsForSaveButton(): boolean {
+
     this.cdr.markForCheck();
     if (this.is_merge_to_one_index.value && this.merge_to_one_index_index_nameInput.value !== '' ||
       this.is_send_to_alias_index.value && this.send_to_alias_aliasInput.value !== '' ||
@@ -1852,8 +1854,15 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
   }
 
 
-  onUserSameIndexName() {
+  onUserSameIndexName(event: MatCheckboxChange) {
+
+    console.log(event);
+    // if(event.checked){
+    //   this.isDisableSaveBtn = false;
+    //   this.isDisableStartStopBtn =false;
+    // }
     this.onShowRequiredMessage();
+    this.cdr.markForCheck();
   }
 
 

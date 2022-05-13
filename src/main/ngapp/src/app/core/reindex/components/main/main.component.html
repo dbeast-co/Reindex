@@ -37,7 +37,7 @@
           <img src="./assets/icons/{{playIcon}}" alt="play/stop">
         </button>
 
-        <button #saveBtn mat-raised-button type="button" (click)="onSaveProject()" [disabled]="projectForm.get('project_name').value === '' || showValidationNameError  || isDisableSaveBtn || source_index_list.length === 0 && source_template_list.length === 0 || checkAllCheckboxesAndInputsForSaveButton()
+        <button #saveBtn mat-raised-button type="button" (click)="onSaveProject()" [disabled]="projectForm.get('project_name').value === '' || showValidationNameError  || isDisableSaveBtn || source_index_list.length === 0 && source_template_list.length === 0 || checkAllCheckboxesAndInputsForSaveButton() || is_use_same_index_name.value === false
         ">
           Save
           <img src="assets/icons/save-white-18dp.svg" alt=""
@@ -458,7 +458,7 @@
         </div>
 
         <div class="form-group use_ilm" *ngIf="!isHideDestinationForm">
-          <mat-checkbox formControlName="is_use_same_index_name" (click)="onUserSameIndexName()">Use same index name</mat-checkbox>
+          <mat-checkbox formControlName="is_use_same_index_name" #is_use_same_index_nameRef (change)="onUserSameIndexName($event)">Use same index name</mat-checkbox>
         </div>
         <!--Todo: in next phase-->
         <!--        <hr>-->
