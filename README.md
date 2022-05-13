@@ -1,6 +1,8 @@
 ## Welcome to reindex application for Elasticsearch
 This application will help you to reindex one or more existing indices, into the local or remote Elasticsearch cluster.
 
+Complete guide can be found on our web site: [https://dbeast.co/#/reindex-for-elasticsearch](https://dbeast.co/#/reindex-for-elasticsearch).
+
 #### The reindex destinations:
 - Merge multiple indices into one index
 - Reindex to alias
@@ -69,5 +71,5 @@ Unpack the reindex.zip file in your local or remote machine
 If you'll find any bugs, or have any questions/suggestions/feedbacks, please feel free to open issues, start discussions or mail us: support@dbeast.co 
 
 ### Terms and conditions
-Copyright © 2021 Matskeplishvili Vakhtang
+Copyright © 2021 Matskeplishvili Vakhtang  [https://dbeast.co](https://dbeast.co).
 Licensed under the Apache License, Version 2.0
