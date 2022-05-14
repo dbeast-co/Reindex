@@ -37,7 +37,7 @@
           <img src="./assets/icons/{{playIcon}}" alt="play/stop">
         </button>
 
-        <button #saveBtn mat-raised-button type="button" (click)="onSaveProject()" [disabled]="projectForm.get('project_name').value === '' || showValidationNameError  || isDisableSaveBtn || source_index_list.length === 0 && source_template_list.length === 0 || checkAllCheckboxesAndInputsForSaveButton() || is_use_same_index_name.value === false
+        <button #saveBtn mat-raised-button type="button" (click)="onSaveProject()" [disabled]="projectForm.get('project_name').value === '' || showValidationNameError  || isDisableSaveBtn || source_index_list.length === 0 && source_template_list.length === 0 || checkAllCheckboxesAndInputsForSaveButton()
         ">
           Save
           <img src="assets/icons/save-white-18dp.svg" alt=""

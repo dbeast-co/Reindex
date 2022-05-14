@@ -1505,7 +1505,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
       this.is_add_suffix.value && this.add_suffix_suffixInput.value !== '' ||
       this.is_send_to_rollover_alias.value && this.send_to_rollover_alias_aliasInput.value !== '' ||
       this.is_create_first_index_of_rollover.value && this.create_first_index_of_rollover_index_nameInput.value !== '' ||
-      this.is_remove_suffix.value && this.remove_suffix_suffixInput.value !== ''
+      this.is_remove_suffix.value && this.remove_suffix_suffixInput.value !== '' ||
+      this.is_use_same_index_name.value === true
 
     ) {
       return false;
