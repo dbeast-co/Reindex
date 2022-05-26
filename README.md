@@ -1,7 +1,9 @@
 ## Welcome to reindex application for Elasticsearch
 This application will help you to reindex one or more existing indices, into the local or remote Elasticsearch cluster.
 
-Complete guide can be found on our web site: [https://dbeast.co/#/reindex-for-elasticsearch](https://dbeast.co/#/reindex-for-elasticsearch).
+Complete guide can be found on our web site: [https://dbeast.co/#/reindex-for-elasticsearch](https://dbeast.co/#/reindex-for-elasticsearch). 
+
+Download the application: [https://github.com/dbeast-co/Reindex/releases/](https://github.com/dbeast-co/Reindex/releases/).
 
 #### The reindex destinations:
 - Merge multiple indices into one index
@@ -68,7 +70,7 @@ Unpack the reindex.zip file in your local or remote machine
    To get to these settings, right-click on the PowerShell/Console-Logo in the top-left of your terminal window, then select 'Properties' 
 
 ### Questions... Feedbacks... Suggestions...
-If you'll find any bugs, or have any questions/suggestions/feedbacks, please feel free to open issues, start discussions or mail us: support@dbeast.co 
+If you'll find any bugs, or have any questions/suggestions/feedbacks, please feel free to open issues, start [discussion](https://github.com/dbeast-co/Reindex/discussions) or mail us: support@dbeast.co 
 
 ### Terms and conditions
 Copyright © 2021 Matskeplishvili Vakhtang  [https://dbeast.co](https://dbeast.co).
