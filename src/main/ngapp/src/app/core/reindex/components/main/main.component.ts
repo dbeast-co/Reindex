@@ -13,11 +13,24 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import {ProjectService} from '../../services/project.service';
-import {IAlgorithmParams, IProjectModel, IReindexAlgorithm, ISourceIndexList, ISourceTemplateList} from '../../models/project.model';
+import {
+  IAlgorithmParams,
+  IProjectModel,
+  IReindexAlgorithm,
+  ISourceIndexList,
+  ISourceTemplateList
+} from '../../models/project.model';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ProjectFormService} from '../../services/project-form.service';
 import {ApiService} from '../../services/api.service';
-import {MatCheckbox, MatCheckboxChange, MatDialog, MatSelectChange, MatSort, MatTableDataSource} from '@angular/material';
+import {
+  MatCheckbox,
+  MatCheckboxChange,
+  MatDialog,
+  MatSelectChange,
+  MatSort,
+  MatTableDataSource
+} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ToastrService} from 'ngx-toastr';
 import {map, mergeMap} from 'rxjs/operators';
@@ -1804,6 +1817,27 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     }
   }
 
+  onUserSameIndexName(is_use_same_index_name: MatCheckboxChange) {
+    const checked = is_use_same_index_name.checked;
+    if (checked) {
+      this.is_merge_to_one_index.patchValue(false);
+      this.is_send_to_alias_index.patchValue(false);
+      this.is_add_prefix.patchValue(false);
+      this.is_add_suffix.patchValue(false);
+      this.is_is_use_ilm.patchValue(false);
+      this.is_send_to_rollover_alias.patchValue(false);
+      this.is_create_first_index_of_rollover.patchValue(false);
+      this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
+      this.clearValidatorRequired(this.send_to_alias_aliasInput);
+      this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
+      this.clearValidatorRequired(this.add_prefix_prefixInput);
+      this.clearValidatorRequired(this.add_suffix_suffixInput);
+      this.clearValidatorRequired(this.create_first_index_of_rollover_index_nameInput);
+    }
+    this.onShowRequiredMessage();
+    this.cdr.markForCheck();
+  }
+
   onMonitoringProject() {
     this.cdr.markForCheck();
     this.headerService.setHeaderTitle('Project monitoring');
@@ -1852,18 +1886,6 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
   onDestinationInput(username: any, password: any = '') {
     this.cdr.markForCheck();
     this.isDisableDestinationTestButton = !(username && password);
-  }
-
-
-  onUserSameIndexName(event: MatCheckboxChange) {
-
-    console.log(event);
-    // if(event.checked){
-    //   this.isDisableSaveBtn = false;
-    //   this.isDisableStartStopBtn =false;
-    // }
-    this.onShowRequiredMessage();
-    this.cdr.markForCheck();
   }
 
 
