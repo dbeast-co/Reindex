@@ -1,7 +1,7 @@
 ## Welcome to reindex application for Elasticsearch
 This application will help you to reindex one or more existing indices, into the local or remote Elasticsearch cluster.
 
-Complete guide can be found on our web site: [https://dbeast.co/#/reindex-for-elasticsearch](https://dbeast.co/#/reindex-for-elasticsearch). 
+Complete guide can be found on our web site: [https://dbeast.co/reindex-for-elasticsearch](https://dbeast.co/reindex-for-elasticsearch). 
 
 Download the application: [https://github.com/dbeast-co/Reindex/releases/](https://github.com/dbeast-co/Reindex/releases/).
 
