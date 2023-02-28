@@ -15,6 +15,9 @@ public class ReindexJobStatusPOJO extends AdvancedStatusPOJO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("original_number_of_replicas")
     private int originalNumberOfReplicas;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("original_refresh_interval")
+    private int originalRefreshInterval;
 
     public ReindexJobStatusPOJO(final String sourceIndex) {
         this.sourceIndex = sourceIndex;
@@ -35,6 +38,14 @@ public class ReindexJobStatusPOJO extends AdvancedStatusPOJO {
 
     public void setOriginalNumberOfReplicas(int originalNumberOfReplicas) {
         this.originalNumberOfReplicas = originalNumberOfReplicas;
+    }
+
+    public int getOriginalRefreshInterval() {
+        return originalRefreshInterval;
+    }
+
+    public void setOriginalRefreshInterval(int originalRefreshInterval) {
+        this.originalRefreshInterval = originalRefreshInterval;
     }
 
     public boolean isCurrentIndex(String index) {

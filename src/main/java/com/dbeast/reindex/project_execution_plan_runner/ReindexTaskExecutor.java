@@ -1,6 +1,7 @@
 package com.dbeast.reindex.project_execution_plan_runner;
 
 import com.dbeast.reindex.data_warehouse.DataWarehouse;
+import com.dbeast.reindex.elasticsearch.ElasticsearchController;
 import com.dbeast.reindex.reindex_execution_plan_builder.reindex_plan.ReindexJobPOJO;
 import com.dbeast.reindex.reindex_execution_plan_builder.reindex_plan.ReindexPlanPOJO;
 import com.dbeast.reindex.reindex_execution_plan_builder.reindex_plan.ReindexTaskPOJO;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.lucene.index.OneMergeWrappingMergePolicy;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.client.*;
 import org.elasticsearch.client.tasks.GetTaskRequest;
@@ -38,6 +40,7 @@ public class ReindexTaskExecutor implements Runnable {
     private final ReindexPlanPOJO reindexProjectPlan;
     private final ReindexTaskPOJO reindexTaskPlan;
     private final int taskRetries;
+    private final ElasticsearchController elasticsearchController = new ElasticsearchController();
 
     public ReindexTaskExecutor(final String projectId,
                                final ReindexTaskPOJO task,
@@ -91,6 +94,7 @@ public class ReindexTaskExecutor implements Runnable {
             GetTaskRequest taskRequest = new GetTaskRequest(taskForRequest[0], Long.parseLong(taskForRequest[1]));
             GetTaskResponse response;
             int numberOfRetries = 0;
+
             do {
                 Thread.sleep(taskRefreshInterval * 1000);
                 try {

@@ -20,7 +20,8 @@ public abstract class AClusterTaskDAO<T> {
         this.params = params;
     }
 
-    public boolean execute(final RestHighLevelClient client, final ClusterTaskStatusPOJO status) {
+    public boolean execute(final RestHighLevelClient client,
+                           final ClusterTaskStatusPOJO status) {
         boolean result = false;
         status.setInActiveProcess(true);
         status.setStartTime(System.currentTimeMillis());

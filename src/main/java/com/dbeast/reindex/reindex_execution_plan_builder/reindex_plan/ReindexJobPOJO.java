@@ -9,6 +9,9 @@ public class ReindexJobPOJO {
     private boolean isDone = false;
     private boolean isInActiveProcess = false;
 
+    private int originalNumberOfReplicas = 0;
+    private String originalRefreshInterval = "-1";
+
     public ReindexJobPOJO(String indexName) {
         this.indexName = indexName;
     }
@@ -52,6 +55,22 @@ public class ReindexJobPOJO {
         isInActiveProcess = inActiveProcess;
     }
 
+    public int getOriginalNumberOfReplicas() {
+        return originalNumberOfReplicas;
+    }
+
+    public void setOriginalNumberOfReplicas(int originalNumberOfReplicas) {
+        this.originalNumberOfReplicas = originalNumberOfReplicas;
+    }
+
+    public String getOriginalRefreshInterval() {
+        return originalRefreshInterval;
+    }
+
+    public void setOriginalRefreshInterval(String originalRefreshInterval) {
+        this.originalRefreshInterval = originalRefreshInterval;
+    }
+
     @Override
     public String toString() {
         return "ReindexJobPOJO{" +
@@ -59,6 +78,8 @@ public class ReindexJobPOJO {
                 ", reindexTasks=" + reindexTasks +
                 ", isDone=" + isDone +
                 ", isInActiveProcess=" + isInActiveProcess +
+                ", originalNumberOfReplicas=" + originalNumberOfReplicas +
+                ", originalRefreshInterval='" + originalRefreshInterval + '\'' +
                 '}';
     }
 }

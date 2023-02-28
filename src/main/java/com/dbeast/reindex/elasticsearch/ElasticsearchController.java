@@ -62,7 +62,7 @@ public class ElasticsearchController {
         try {
             GetSettingsResponse getSettingsResponse = client.indices().getSettings(request, RequestOptions.DEFAULT);
             if (getSettingsResponse != null) {
-                return getSettingsResponse.getIndexToSettings().get(index).getAsInt("index.number_of_replicas", -1);
+                return getSettingsResponse.getIndexToSettings().get(index).getAsInt("index.number_of_replicas", 0);
             } else {
                 return -1;
             }

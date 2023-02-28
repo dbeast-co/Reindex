@@ -69,7 +69,10 @@ class ReindexProjectExecutor implements Runnable {
                                 .forEach(job -> job.setTotalDocs(docsCount));
                         return docsCount;
                     } catch (ClusterConnectionException e) {
+
+                        //TODO update status + exit
                         e.printStackTrace();
+                        updateFailedExecutionStatus();
                         return 0;
                     }
                 })
@@ -122,6 +125,11 @@ class ReindexProjectExecutor implements Runnable {
                     "Plan Id: " + plan.getProjectId());
             e.printStackTrace();
         }
+    }
+
+    private void updateFailedExecutionStatus() {
+        projectStatus.setInActiveProcess(true);
+        projectStatus.setStartTime(System.currentTimeMillis());
     }
 
     void stop() {

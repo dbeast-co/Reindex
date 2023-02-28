@@ -2,6 +2,7 @@ package com.dbeast.reindex.project_execution_plan_runner;
 
 import com.dbeast.reindex.constants.EProjectStatus;
 import com.dbeast.reindex.data_warehouse.DataWarehouse;
+import com.dbeast.reindex.elasticsearch.ElasticsearchController;
 import com.dbeast.reindex.reindex_execution_plan_builder.reindex_plan.ReindexJobPOJO;
 import com.dbeast.reindex.reindex_execution_plan_monitoring.ProjectStatusPOJO;
 import com.dbeast.reindex.reindex_execution_plan_monitoring.ReindexJobStatusPOJO;
@@ -30,6 +31,7 @@ public class ReindexJobExecutor implements Runnable {
     private final DataWarehouse dataWarehouse = DataWarehouse.getInstance();
     private final int tasksAPIRetriesNumber;
     private final ProjectStatusPOJO reindexProjectStatus;
+    private final ElasticsearchController elasticsearchController = new ElasticsearchController();
 
     public ReindexJobExecutor(final String projectId,
                               final ReindexJobPOJO reindexJob,
@@ -56,13 +58,19 @@ public class ReindexJobExecutor implements Runnable {
         reindexJobStatus.setInActiveProcess(true);
         reindexJobStatus.setStartTime(System.currentTimeMillis());
         if (reindexJobStatus.getTotalDocs() > 0) {
-            //TODO Create index and change index number of replica
+            //TODO change index number of replica
+//            getAndUpdateOriginalIndexSettings();
             CompletableFuture<?>[] futures = reindexJob.getReindexTasks().stream()
                     .filter(task -> !task.isDone())
                     .map(task -> CompletableFuture.runAsync(new ReindexTaskExecutor(projectId,
-                            task, client, taskRefreshInterval, tasksAPIRetriesNumber), reindexTasksThreadPool))
+                                    task,
+                                    client,
+                                    taskRefreshInterval,
+                                    tasksAPIRetriesNumber),
+                            reindexTasksThreadPool))
                     .toArray(CompletableFuture[]::new);
             CompletableFuture.allOf(futures).join();
+            returnOriginalIndexSettings();
             if (!reindexJobStatus.getStatus().equals(EProjectStatus.STOPPED)) {
                 reindexJobStatus.updateStatus();
             }
@@ -74,10 +82,46 @@ public class ReindexJobExecutor implements Runnable {
             reindexJobStatus.setStatus(EProjectStatus.SUCCEEDED);
         }
 
+// Return original index settings
         reindexJobStatus.setInActiveProcess(false);
         reindexTasksThreadPool.shutdown();
         reindexJobStatus.setEndTime(System.currentTimeMillis());
         dataWarehouse.writeStatusToFile(projectId);
+    }
+
+    private void getAndUpdateOriginalIndexSettings() {
+        if (dataWarehouse.getProjectsMap().get(projectId).getReindexSettings().isAddIndexPrefix() ||
+                dataWarehouse.getProjectsMap().get(projectId).getReindexSettings().isAddIndexSuffix() ||
+                dataWarehouse.getProjectsMap().get(projectId).getReindexSettings().isRemoveIndexSuffix() ||
+                dataWarehouse.getProjectsMap().get(projectId).getReindexSettings().isMergeToOneIndex()) {
+            boolean creationResult = elasticsearchController.createIndex(client,
+                    reindexJob.getReindexTasks().get(0).getReindexRequest().getDestination().index());
+            if (creationResult) {
+                int originalNumberOfReplicas = elasticsearchController.getNumberOfReplicasFromIndex(client,
+                        reindexJob.getReindexTasks().get(0).getReindexRequest().getDescription());
+                if (originalNumberOfReplicas > 0) {
+                    reindexJobStatus.setOriginalNumberOfReplicas(originalNumberOfReplicas);
+                    reindexJob.setOriginalNumberOfReplicas(originalNumberOfReplicas);
+                    elasticsearchController.updateNumberOfReplicas(client,
+                            reindexJob.getReindexTasks().get(0).getReindexRequest().getDescription(),
+                            0);
+                }
+            }
+
+        }
+    }
+
+    private void returnOriginalIndexSettings() {
+        if (dataWarehouse.getProjectsMap().get(projectId).getReindexSettings().isAddIndexPrefix() ||
+                dataWarehouse.getProjectsMap().get(projectId).getReindexSettings().isAddIndexSuffix() ||
+                dataWarehouse.getProjectsMap().get(projectId).getReindexSettings().isRemoveIndexSuffix() ||
+                dataWarehouse.getProjectsMap().get(projectId).getReindexSettings().isMergeToOneIndex()) {
+            if (reindexJob.getOriginalNumberOfReplicas() > 0) {
+                elasticsearchController.updateNumberOfReplicas(client,
+                        reindexJob.getReindexTasks().get(0).getReindexRequest().getDestination().index(),
+                        0);
+            }
+        }
     }
 
     public void stop() {
@@ -99,6 +143,7 @@ public class ReindexJobExecutor implements Runnable {
         dataWarehouse.writeStatusToFile(projectId);
         logger.warn("The job for index: " + reindexJob.getIndexName() + " was interrupted");
     }
+
 
     public ReindexJobStatusPOJO getReindexJobStatus() {
         return reindexJobStatus;
