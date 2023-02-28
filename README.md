@@ -1,7 +1,7 @@
 ## Welcome to reindex application for Elasticsearch
 This application will help you to reindex one or more existing indices, into the local or remote Elasticsearch cluster.
 
-Complete guide can be found on our web site: [https://dbeast.co/#/reindex-for-elasticsearch](https://dbeast.co/#/reindex-for-elasticsearch). 
+Complete guide can be found on our web site: [https://dbeast.co/reindex-for-elasticsearch](https://dbeast.co/reindex-for-elasticsearch). 
 
 Download the application: [https://github.com/dbeast-co/Reindex/releases/](https://github.com/dbeast-co/Reindex/releases/).
 
@@ -63,11 +63,18 @@ Unpack the reindex.zip file in your local or remote machine
 
 3. ./reindex.sh
 
+### Change log
+Version 1.1
+1. Update Run scripts
+2. Add Reindex service file for Linux (you can copy it to the systemd folder)
+
 ### Known issues
 1. The application tested only in the Chrome browser
 2. In Windows, in the time of application running, if you click within the console, it will pause the output.
    This could happen, because of  QuickEdit Mode and/or Insert options are checked in the console settings.
    To get to these settings, right-click on the PowerShell/Console-Logo in the top-left of your terminal window, then select 'Properties' 
+3. The problem with compile from the Maven
+4. Node version - 14
 
 ### Questions... Feedbacks... Suggestions...
 If you'll find any bugs, or have any questions/suggestions/feedbacks, please feel free to open issues, start [discussion](https://github.com/dbeast-co/Reindex/discussions) or mail us: support@dbeast.co 
