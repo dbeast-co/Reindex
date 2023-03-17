@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Input() buttons: Array<IButtonModel>;
   savedProjects: ISavedProject[] = [];
   savedProject: ISavedProject;
-  @ViewChild('savedProjectsRef', {static: false}) savedProjectsRef: QueryList<ElementRef>;
+  @ViewChild('savedProjectsRef') savedProjectsRef: QueryList<ElementRef>;
   headerTitle: string = '';
   project_id: string = '';
 

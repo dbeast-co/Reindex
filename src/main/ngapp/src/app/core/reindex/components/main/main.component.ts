@@ -107,9 +107,9 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
   isSuccessForDestination: boolean = false;
   isErrorForSource: boolean = false;
   isErrorForDestination: boolean = false;
-  @ViewChild('fileSourceRef', {static: false}) fileSourceRef: ElementRef;
-  @ViewChild('fileDestinationRef', {static: false}) fileDestinationRef: ElementRef;
-  @ViewChild('mainCheckboxForIndexList', {static: false}) mainCheckboxForIndexList: ElementRef;
+  @ViewChild('fileSourceRef') fileSourceRef: ElementRef;
+  @ViewChild('fileDestinationRef') fileDestinationRef: ElementRef;
+  @ViewChild('mainCheckboxForIndexList') mainCheckboxForIndexList: ElementRef;
   isShowViewDialog: boolean = false;
   viewResult: Object;
   selectedIndex: string = '';
@@ -128,9 +128,9 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
   isOnFilter: boolean = false;
   isShowErrorDialog: boolean = false;
   errorMessage: string = '';
-  @ViewChild('sourceClusterStatus', {static: false}) sourceClusterStatusRef: ElementRef;
-  @ViewChild('destinationClusterStatusRef', {static: false}) destinationClusterStatus: ElementRef;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild('sourceClusterStatus') sourceClusterStatusRef: ElementRef;
+  @ViewChild('destinationClusterStatusRef') destinationClusterStatus: ElementRef;
+  @ViewChild(MatSort) sort: MatSort;
   showValidationNameErrorRequired: boolean = false;
   isDisableSourceTestButton: boolean = false;
   isDisableDestinationTestButton: boolean = false;

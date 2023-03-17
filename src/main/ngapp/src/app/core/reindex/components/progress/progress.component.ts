@@ -29,7 +29,7 @@ export class ProgressComponent implements OnInit, OnDestroy,AfterViewInit {
   selectedTask: SelectedFailedTask;
   private sourceInterval: NodeJS.Timer;
   private time: number = 10000;
-  @ViewChild(MatSort,  {static: false}) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
   constructor(private projectIdService: ProjectIdService,
               private projectService: ProjectMonitoringService,
               private api: ApiService,
