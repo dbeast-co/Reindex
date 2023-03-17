@@ -33,11 +33,10 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy, AfterViewI
     transferred_docs: null
   };
   private subs = new SubSink();
-  private timer: NodeJS.Timer;
-  private sourceInterval: NodeJS.Timer;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   private columnToSort: string;
   private sortDirection: SortDirection;
+  private sourceInterval: NodeJS.Timer;
 
   constructor(private api: ApiService,
               private toastr: ToastrService,
