@@ -23,14 +23,11 @@ import {
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ProjectFormService} from '../../services/project-form.service';
 import {ApiService} from '../../services/api.service';
-import {
-  MatCheckbox,
-  MatCheckboxChange,
-  MatDialog,
-  MatSelectChange,
-  MatSort,
-  MatTableDataSource
-} from '@angular/material';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSelectChange } from '@angular/material/select';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ToastrService} from 'ngx-toastr';
 import {map, mergeMap} from 'rxjs/operators';

@@ -1,7 +1,7 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '../../services/api.service';
 import {IProjectMonitoring} from '../../models/project-monitoring';
-import {MatTableDataSource} from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import {ToastrService} from 'ngx-toastr';
 import {ProjectMonitoringService} from '../../services/project-monitoring.service';
 import {Router} from '@angular/router';

@@ -4,7 +4,7 @@ import {ProjectIdService} from '../../services/project-id.service';
 import {IFailedTask, IIndexStatus, IMonitoringProjectModel, IOnFlyTask} from '../../models/monitoring_project.model';
 import {FormBuilder} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatTableDataSource} from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import {ClickService} from '../../services/click.service';
 import {ProjectMonitoringService} from '../../services/project-monitoring.service';
 import {HeaderService} from '../../services/header.service';

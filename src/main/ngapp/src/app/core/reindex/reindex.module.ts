@@ -25,7 +25,7 @@ import {AppConfigService} from './services/app-config.service';
 import {AppConfig} from './models/app.config';
 import {ErrorComponent} from './dialogs/error/error.component';
 import { DisableEnterDirective } from './directives/disable-enter.directive';
-import {MatSortModule} from '@angular/material';
+import { MatSortModule } from '@angular/material/sort';
 
 export function initializeAppFn(appConfigService: AppConfigService) {
   return () => {

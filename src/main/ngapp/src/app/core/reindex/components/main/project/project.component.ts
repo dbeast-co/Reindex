@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormGroup} from '@angular/forms';
 import {IAlgorithmParams, IProjectModel, IReindexAlgorithm, ISourceIndexList, ISourceTemplateList} from '../../../models/project.model';
-import {MatTableDataSource} from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ICheckedSettings, IRadioBtn} from '../main.component';
 import {IReportModel} from '../../../models/report.model';
