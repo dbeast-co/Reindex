@@ -107,9 +107,9 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
   isSuccessForDestination: boolean = false;
   isErrorForSource: boolean = false;
   isErrorForDestination: boolean = false;
-  @ViewChild('fileSourceRef') fileSourceRef: ElementRef;
-  @ViewChild('fileDestinationRef') fileDestinationRef: ElementRef;
-  @ViewChild('mainCheckboxForIndexList') mainCheckboxForIndexList: ElementRef;
+  @ViewChild('fileSourceRef', {static: false}) fileSourceRef: ElementRef;
+  @ViewChild('fileDestinationRef', {static: false}) fileDestinationRef: ElementRef;
+  @ViewChild('mainCheckboxForIndexList', {static: false}) mainCheckboxForIndexList: ElementRef;
   isShowViewDialog: boolean = false;
   viewResult: Object;
   selectedIndex: string = '';
@@ -128,9 +128,9 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
   isOnFilter: boolean = false;
   isShowErrorDialog: boolean = false;
   errorMessage: string = '';
-  @ViewChild('sourceClusterStatus') sourceClusterStatusRef: ElementRef;
-  @ViewChild('destinationClusterStatusRef') destinationClusterStatus: ElementRef;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('sourceClusterStatus', {static: false}) sourceClusterStatusRef: ElementRef;
+  @ViewChild('destinationClusterStatusRef', {static: false}) destinationClusterStatus: ElementRef;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
   showValidationNameErrorRequired: boolean = false;
   isDisableSourceTestButton: boolean = false;
   isDisableDestinationTestButton: boolean = false;
@@ -1499,7 +1499,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.is_is_use_ilm.patchValue(false);
     this.is_add_suffix.patchValue(false);
     this.is_add_prefix.patchValue(false);
-    this.is_use_same_index_name.patchValue(false)
+    this.is_use_same_index_name.patchValue(false);
     this.merge_to_one_index_index_nameInput.patchValue('');
     this.send_to_alias_aliasInput.patchValue('');
     this.send_to_pipeline_pipeline_nameInput.patchValue('');
