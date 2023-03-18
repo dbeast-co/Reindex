@@ -40,24 +40,24 @@ export function initializeAppFn(appConfigService: AppConfigService) {
 // }
 
 @NgModule({
-  declarations: [
-    ReindexComponent,
-    YesNoDialogComponent,
-    HeaderComponent,
-    MainComponent,
-    SavedProjectsComponent,
-    ProjectMonitoringComponent,
-    CustomSpinnerDirective,
-    SearchInSourceIndexListPipe,
-    ReportDialogComponent,
-    ProjectComponent,
-    ViewDialogComponent,
-    PrettyJsonPipe,
-    ProgressComponent,
-    FailuresDialogComponent,
-    ErrorComponent,
-    DisableEnterDirective,
-  ],
+    declarations: [
+        ReindexComponent,
+        YesNoDialogComponent,
+        HeaderComponent,
+        MainComponent,
+        SavedProjectsComponent,
+        ProjectMonitoringComponent,
+        CustomSpinnerDirective,
+        SearchInSourceIndexListPipe,
+        ReportDialogComponent,
+        ProjectComponent,
+        ViewDialogComponent,
+        PrettyJsonPipe,
+        ProgressComponent,
+        FailuresDialogComponent,
+        ErrorComponent,
+        DisableEnterDirective,
+    ],
     imports: [
         CommonModule,
         MaterialModule,
@@ -69,30 +69,28 @@ export function initializeAppFn(appConfigService: AppConfigService) {
         NgxJsonViewerModule,
         PrettyJsonModule,
     ],
-  exports: [
-    ReindexComponent,
-  ],
-  providers: [
-    {
-      provide: AppConfig,
-      deps: [HttpClient],
-      useExisting: AppConfigService
-    },
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      deps: [AppConfigService],
-      useFactory: initializeAppFn
-    },
-    // {
-    //   provide: APP_INITIALIZER,
-    //   multi: true,
-    //   deps: [AppConfigService],
-    //   useFactory: getUrl
-    // }
-  ],
-
-  entryComponents: [YesNoDialogComponent]
+    exports: [
+        ReindexComponent,
+    ],
+    providers: [
+        {
+            provide: AppConfig,
+            deps: [HttpClient],
+            useExisting: AppConfigService
+        },
+        {
+            provide: APP_INITIALIZER,
+            multi: true,
+            deps: [AppConfigService],
+            useFactory: initializeAppFn
+        },
+        // {
+        //   provide: APP_INITIALIZER,
+        //   multi: true,
+        //   deps: [AppConfigService],
+        //   useFactory: getUrl
+        // }
+    ]
 })
 export class ReindexModule {
 }
