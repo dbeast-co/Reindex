@@ -26,6 +26,7 @@ import {AppConfig} from './models/app.config';
 import {ErrorComponent} from './dialogs/error/error.component';
 import { DisableEnterDirective } from './directives/disable-enter.directive';
 import { MatSortModule } from '@angular/material/sort';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 export function initializeAppFn(appConfigService: AppConfigService) {
   return () => {

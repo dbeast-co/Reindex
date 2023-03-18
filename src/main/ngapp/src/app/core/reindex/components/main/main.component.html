@@ -86,7 +86,7 @@
           <div class="source_cluster" formGroupName="source">
             <h2 class="source_title">Source</h2>
             <div class="host_wrapper">
-              <mat-form-field>
+              <mat-form-field floatLabel="auto" appearance="standard" >
                 <input matInput type="text" formControlName="es_host" placeholder="Host" ylDisableEnter>
               </mat-form-field>
               <mat-error class="es_host_source_error" *ngIf="es_source_host?.errors?.pattern">

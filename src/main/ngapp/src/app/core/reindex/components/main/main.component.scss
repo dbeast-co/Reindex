@@ -150,6 +150,7 @@
 
       .host_wrapper {
         position: relative;
+        margin-block-end: 2rem;
 
         mat-error.mat-error {
           color: #faffaa !important;
@@ -160,6 +161,7 @@
       }
 
     }
+
 
     .reindex_type_wrapper {
       display: flex;
@@ -223,13 +225,15 @@
         display: flex;
         justify-content: space-between;
         width: 100%;
+        margin-block: 2rem;
 
-        mat-form-field.username {
+
+        .mat-form-field.username {
           width: 130px !important;
 
         }
 
-        mat-form-field.password {
+        .mat-form-field.password {
           width: 130px !important;
         }
 
@@ -242,7 +246,7 @@
       .actions {
         @include flex-space-between;
         padding: 0;
-        //margin-top: 2rem;
+        margin-top: 2rem;
         .left {
           display: flex;
         }
@@ -572,6 +576,7 @@ mat-form-field.status{
     width: calc(100% - 90px) !important;
     min-height: 88.6vh !important;
     margin-top: 30px !important;
+    padding-block: 3rem;
   }
 }
 

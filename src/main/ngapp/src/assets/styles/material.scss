@@ -25,11 +25,11 @@ mat-form-field {
     width: 300px;
     position: relative;
     &:after{
-      content: '*';
-      color: $dangerBackground;
-      position: absolute;
-      top: 21px;
-      left: -18px;
+      //content: '*';
+      //color: $dangerBackground;
+      //position: absolute;
+      //top: 21px;
+      //left: -18px;
     }
 
     .mat-form-field-infix {
@@ -71,6 +71,10 @@ mat-form-field {
 
 .mat-checkbox-inner-container {
   border: 1px solid white;
+}
+.mat-checkbox-frame{
+  border-width: unset !important;
+  border-style: unset !important;
 }
 
 .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
@@ -236,7 +240,7 @@ mat-form-field{
 }
 mat-form-field.status{
   width: 120px;
-  margin-top: 7px;
+  //margin-top: 7px;
 
   &.warn{
     .mat-form-field-infix{
@@ -342,6 +346,12 @@ mat-form-field.textarea {
   border: 1px solid #fff;
   color: #fff;
   cursor: not-allowed;
+}
+.mat-raised-button:not([disabled]){
+  background: #ffffff;
+}
+.mat-raised-button.view_btn,.mat-raised-button.in_table_btn{
+  background: transparent;
 }
 
 .cardFlows {
