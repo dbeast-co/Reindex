@@ -27,7 +27,7 @@
     "core-js": "^2.5.4",
     "http-server": "^0.12.3",
     "ngx-json-viewer": "^2.4.0",
-    "ngx-toastr": "^14.0.0",
+    "ngx-toastr": "^15.2.0",
     "rxjs": "~6.6.7",
     "subsink": "^1.0.1",
     "tslib": "^2.0.0",
