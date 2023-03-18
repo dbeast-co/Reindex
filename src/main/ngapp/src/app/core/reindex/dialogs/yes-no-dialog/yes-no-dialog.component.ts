@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import {ISavedProject} from '../../models/saved_project.model';
 
 @Component({
