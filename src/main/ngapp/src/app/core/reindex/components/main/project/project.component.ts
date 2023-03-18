@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {AbstractControl, FormGroup} from '@angular/forms';
+import {AbstractControl, UntypedFormGroup} from '@angular/forms';
 import {IAlgorithmParams, IProjectModel, IReindexAlgorithm, ISourceIndexList, ISourceTemplateList} from '../../../models/project.model';
 import { MatTableDataSource } from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -12,7 +12,7 @@ import {IReportModel} from '../../../models/report.model';
   styleUrls: ['./project.component.scss']
 })
 export class ProjectComponent implements OnInit {
-  @Input()projectForm: FormGroup;
+  @Input()projectForm: UntypedFormGroup;
   @Input()project: IProjectModel;
   @Input() displayedColumnsForIndexPatternNamesTable: string[];
   @Input()  displayedColumnsForTemplatesTable: string[];

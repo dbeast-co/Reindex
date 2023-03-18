@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {from, Observable} from 'rxjs';
 import {IProjectModel} from '../models/project.model';
 import {ProjectService} from './project.service';
@@ -8,16 +8,16 @@ import {ProjectService} from './project.service';
   providedIn: 'root'
 })
 export class ProjectFormService {
-  private projectForm: FormGroup;
+  private projectForm: UntypedFormGroup;
   private projectFromFromService: IProjectModel;
 
-  constructor(private fb: FormBuilder, private projectService: ProjectService) {
+  constructor(private fb: UntypedFormBuilder, private projectService: ProjectService) {
     // this.projectService.getProject().subscribe(data => {
     //   this.projectFromFromService = data;
     // });
   }
 
-  getProjectForm(): FormGroup {
+  getProjectForm(): UntypedFormGroup {
     this.projectForm = this.fb.group({
       projectId: [''],
       project_name: [],
