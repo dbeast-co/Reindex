@@ -11,6 +11,7 @@
 }
 mat-form-field {
   position: relative;
+  min-height: 20px;
   .mat-form-field-infix {
     color: $whiteColor;
     width: 180px;
@@ -467,6 +468,7 @@ mat-form-field.textarea {
 mat-form-field.mat-form-field.ng-tns-c3-5.mat-primary.mat-form-field-type-mat-select.mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-has-label.mat-form-field-hide-placeholder {
   min-width: 322px;
 }
+
 .mat-select-arrow {
   width: 0;
   height: 0;
@@ -496,9 +498,10 @@ mat-error.mat-error{
   line-height: 4px;
   margin-left: -27px;
   position: absolute;
-  top: 80%;
+  top: 62%;
   left: 21%;
   font-size: 14px;
+  color:$dangerBackground ;
   //max-width: 300px;
   /* margin: auto; */
   //position: absolute;

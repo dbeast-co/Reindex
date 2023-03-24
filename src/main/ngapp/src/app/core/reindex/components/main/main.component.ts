@@ -20,7 +20,7 @@ import {
   ISourceIndexList,
   ISourceTemplateList
 } from '../../models/project.model';
-import {AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ProjectFormService} from '../../services/project-form.service';
 import {ApiService} from '../../services/api.service';
 import { MatLegacyCheckbox as MatCheckbox, MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
@@ -39,6 +39,7 @@ import {SavedProjectService} from '../../services/saved-project.service';
 import {ProjectIdService} from '../../services/project-id.service';
 import {HeaderService} from '../../services/header.service';
 import {IError} from '../../models/error.model';
+import {FloatLabelType} from '@angular/material/form-field';
 
 @Component({
   selector: 'yl-main',
@@ -140,7 +141,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
   showtimeFrameTooltip: boolean = true;
   filterTableValue: string = '';
   isDisableSort: boolean = false;
-
+  floatLabelControl = new FormControl('auto' as FloatLabelType);
 
   constructor(private projectService: ProjectService,
               private savedProjectService: SavedProjectService,
@@ -176,6 +177,9 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.onClickInMenu();
     this.cdr.markForCheck();
 
+  }
+  getFloatLabelValue(): FloatLabelType {
+    return this.floatLabelControl.value || 'auto';
   }
 
   onChangeForm() {

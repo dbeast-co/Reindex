@@ -13,6 +13,7 @@ import {PrettyJsonModule} from 'angular2-prettyjson';
 import {AboutModule} from './about/about.module';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {ErrorInterceptor} from './core/reindex/interceptors/error-interceptor';
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,9 @@ import {ErrorInterceptor} from './core/reindex/interceptors/error-interceptor';
   ],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy},
+
+  {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {floatLabel: 'auto'}}
+
     // {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
   ],
 
