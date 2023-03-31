@@ -12,6 +12,11 @@
   border-radius: 15px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
   margin-top: -20px;
+  padding: 30px;
+
+  form{
+    margin-block-start: 20px;
+  }
 
   mat-progress-bar {
     top: -34px;
@@ -108,7 +113,7 @@
     }
 
     .project_actions {
-      max-width: 650px;
+      max-width: 700px;
       width: 100%;
       @include flex;
       margin: 0 0 0 auto;
@@ -141,7 +146,7 @@
     align-items: start;
     gap: 20px;
     justify-content: space-around !important;
-
+    margin-block-start: 24px;
     .connection_settings_wrapper {
       display: flex;
       flex-direction: column;
@@ -150,8 +155,8 @@
 
       .host_wrapper {
         position: relative;
-        margin-block: 2rem;
-        min-height: 45px;
+        margin-block: 1rem;
+        min-height: 43px;
         mat-error.mat-error {
           color: #faffaa !important;
           position: absolute;
@@ -225,7 +230,7 @@
         display: flex;
         justify-content: space-between;
         width: 100%;
-        margin-block: 2rem;
+        margin-block: 1rem;
 
 
         .mat-form-field.username {
@@ -310,7 +315,7 @@
 
     .reindex_settings {
       width: 573px;
-      padding: 42px 20px;
+      padding: 18px 20px;
       height: 903px;
       overflow-y: auto;
       border-radius: 15px;
@@ -331,7 +336,7 @@
         }
       .form-group {
         @include flex-space-between;
-        height: 42px;
+        height: 40px;
         color: $whiteColor;
         align-items: flex-start;
 
@@ -378,7 +383,7 @@
   .ssl {
     @include flex-space-between;
     color: $whiteColor;
-    margin-top: 2rem;
+    margin-top: 1rem;
     padding: 0;
 
     .right_source, .right_dest {
@@ -438,7 +443,7 @@
 
 }
 .credentials_wrapper{
-  min-height: 45px !important;
+  min-height: 30px !important;
   mat-error.username_error{
     position: absolute;
     left: 27px;
