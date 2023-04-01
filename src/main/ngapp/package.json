@@ -1,6 +1,6 @@
 {
   "name": "reindex",
-  "version": "0.0.0",
+  "version": "2.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 6200",
@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "clean": "rimraf node_modules"
+    "clean": "rimraf node_modules",
+    "npm_install": "npm install --ignore-script --force"
   },
   "private": true,
   "dependencies": {

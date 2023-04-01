@@ -24,7 +24,7 @@ Download the application: [https://github.com/dbeast-co/Reindex/releases/](https
 
 - You can set up the number of concurrently processed indices, and the number of concurrent data frames per index (in case of Time oriented algorithm usage)
 
-### Requirements
+### Installation Requirements
 - Java 8+
 
 - For remote reindex, you'll need to define the reindex.whitelist setting  in your elasticsearch.yml file in each Elasticsearch node of the remote cluster, you'll require to define:
@@ -62,6 +62,12 @@ Unpack the reindex.zip file in your local or remote machine
    port: PORT
 
 3. ./reindex.sh
+
+### Compilation Requirements
+In windows:
+- NodeJS 16
+- Visual Studio community 2022
+- Python 3.10
 
 ### Known issues
 1. The application tested only in the Chrome browser
