@@ -27,7 +27,7 @@
 
   .project_form {
     @include flex-vertical-center;
-    padding: 0 0 0 15px;
+    padding: 0 ;
     margin: -20px auto;
     max-width: 98%;
     margin-bottom: 1rem;
@@ -117,6 +117,7 @@
       width: 100%;
       @include flex;
       margin: 0 0 0 auto;
+      padding: 0;
 
       button {
         //background: transparent;
@@ -315,7 +316,7 @@
 
     .reindex_settings {
       width: 573px;
-      padding: 18px 20px;
+      padding: 12px 20px;
       height: 903px;
       overflow-y: auto;
       border-radius: 15px;
