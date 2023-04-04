@@ -274,17 +274,23 @@
       /* border: 1px solid #ffffff; */
       padding:  20px;
       border-radius: 15px;
-      //background: #6c1b6a;
-      //background: #3C7A89;
       background: $bgCard;
       box-shadow: 10px 10px 10px rgba(28, 28, 28, 0.8);
+      .index_pattern-table__filter,.templates-table__filter{
+        .mat-form-field{
+          margin-block-end: 1rem !important;
+        }
 
+      }
       .index_pattern-table, .templates-table {
         height: 633px;
         overflow: auto;
         display: flex;
         flex-direction: column;
         //flex: 1;
+
+        ::ng-deep.mat-form-field{
+        }
       }
 
       .spinner_wrapper {
@@ -443,6 +449,8 @@
 
 
 }
+
+
 .credentials_wrapper{
   min-height: 30px !important;
   mat-error.username_error{
