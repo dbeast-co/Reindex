@@ -68,7 +68,7 @@ In windows:
 - NodeJS 16
 - Visual Studio community 2022
 - Python 3.10
-=======
+
 ### Change log
 Version 1.1
 1. Update Run scripts
@@ -79,8 +79,6 @@ Version 1.1
 2. In Windows, in the time of application running, if you click within the console, it will pause the output.
    This could happen, because of  QuickEdit Mode and/or Insert options are checked in the console settings.
    To get to these settings, right-click on the PowerShell/Console-Logo in the top-left of your terminal window, then select 'Properties' 
-3. The problem with compile from the Maven
-4. Node version - 14
 
 ### Questions... Feedbacks... Suggestions...
 If you'll find any bugs, or have any questions/suggestions/feedbacks, please feel free to open issues, start [discussion](https://github.com/dbeast-co/Reindex/discussions) or mail us: support@dbeast.co 
