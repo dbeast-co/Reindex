@@ -43,44 +43,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <groupId>org.codehaus.mojo</groupId>-->
-            <!--                <artifactId>exec-maven-plugin</artifactId>-->
-            <!--                <version>3.0.0</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>exec-npm-install</id>-->
-            <!--                        <phase>generate-sources</phase>-->
-            <!--                        <configuration>-->
-            <!--                            <workingDirectory>${project.basedir}/src/main/ngapp</workingDirectory>-->
-            <!--                            <executable>npm.cmd</executable>-->
-            <!--                            <arguments>-->
-            <!--                                <argument>install &#45;&#45;force</argument>-->
-            <!--                            </arguments>-->
-            <!--                        </configuration>-->
-            <!--                        <goals>-->
-            <!--                            <goal>exec</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                    <execution>-->
-            <!--                        <id>exec-npm-ng-build</id>-->
-            <!--                        <phase>generate-sources</phase>-->
-            <!--                        <configuration>-->
-            <!--                            <workingDirectory>${project.basedir}/src/main/ngapp</workingDirectory>-->
-            <!--                            <executable>ng.cmd</executable>-->
-            <!--                            <arguments>-->
-            <!--                                <argument>build</argument>-->
-            <!--                                <argument>&#45;&#45;no-progress</argument>-->
-            <!--                                <argument>&#45;&#45;output-path=${project.basedir}/out/client</argument>-->
-            <!--                            </arguments>-->
-            <!--                        </configuration>-->
-            <!--                        <goals>-->
-            <!--                            <goal>exec</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
-
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
@@ -122,7 +84,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
+                <version>3.3.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
@@ -207,9 +169,6 @@
                             <resources>
                                 <resource>
                                     <directory>${basedir}/src/main/ngapp/dist/DBeast-reindex</directory>
-<!--                                    <includes>-->
-<!--                                        <include>*</include>-->
-<!--                                    </includes>-->
                                 </resource>
                             </resources>
                         </configuration>
@@ -229,23 +188,23 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.11.2</version>
+            <version>2.14.2</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.11.2</version>
+            <version>2.14.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.19.0</version>
+            <version>2.20.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.17.0</version>
+            <version>2.20.0</version>
         </dependency>
 
         <dependency>
@@ -269,7 +228,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
