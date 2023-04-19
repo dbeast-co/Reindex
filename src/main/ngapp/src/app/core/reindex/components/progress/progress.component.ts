@@ -2,9 +2,9 @@ import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/c
 import {ApiService} from '../../services/api.service';
 import {ProjectIdService} from '../../services/project-id.service';
 import {IFailedTask, IIndexStatus, IMonitoringProjectModel, IOnFlyTask} from '../../models/monitoring_project.model';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatTableDataSource} from '@angular/material';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import {ClickService} from '../../services/click.service';
 import {ProjectMonitoringService} from '../../services/project-monitoring.service';
 import {HeaderService} from '../../services/header.service';
@@ -37,7 +37,7 @@ export class ProgressComponent implements OnInit, OnDestroy,AfterViewInit {
               private route: Router,
               private clickService: ClickService,
               private headerService: HeaderService,
-              private fb: FormBuilder) {
+              private fb: UntypedFormBuilder) {
   }
 
   ngOnInit() {

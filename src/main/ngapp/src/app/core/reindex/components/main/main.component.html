@@ -17,11 +17,12 @@
       </div>
       <!--      ============= Project name -->
       <div class="project_name">
-        <mat-form-field class="project-name__input">
-          <mat-label>Project name</mat-label>
+        <mat-form-field class="project-name__input" [floatLabel]="'never'">
+<!--          <mat-label>Project name</mat-label>-->
           <input matInput type="text" formControlName="project_name"
-                 (input)="onInputProjectName(projectForm.get('project_name').value)" ylDisableEnter>
+                 (input)="onInputProjectName(projectForm.get('project_name').value)" placeholder="Project name" ylDisableEnter>
         </mat-form-field>
+
         <mat-error class="project_name_error"
                    *ngIf="showValidationNameError">
           This project name is already exists
@@ -86,9 +87,13 @@
           <div class="source_cluster" formGroupName="source">
             <h2 class="source_title">Source</h2>
             <div class="host_wrapper">
-              <mat-form-field>
-                <input matInput type="text" formControlName="es_host" placeholder="Host" ylDisableEnter>
+              <mat-form-field [floatLabel]="'never'">
+                <input matInput type="text" formControlName="es_host" placeholder="Host"  ylDisableEnter>
               </mat-form-field>
+
+
+
+
               <mat-error class="es_host_source_error" *ngIf="es_source_host?.errors?.pattern">
                 Host format is invalid
               </mat-error>
@@ -98,12 +103,12 @@
               authentication
             </mat-checkbox>
             <div class="credentials_wrapper" style="position: relative">
-              <mat-form-field class="username">
+              <mat-form-field class="username" [floatLabel]="'never'">
                 <input matInput type="text" ylDisableEnter formControlName="username" placeholder="Username" (input)="onSourceInput(source_username.value,source_password.value)">
               </mat-form-field>
 
               <mat-error class="username_error" *ngIf="source_username.errors && source_username.touched">This field is required</mat-error>
-              <mat-form-field class="password">
+              <mat-form-field class="password" [floatLabel]="'never'">
                 <input matInput type="password" ylDisableEnter formControlName="password" placeholder="Password" (input)="onSourceInput(source_username.value,source_password.value)">
               </mat-form-field>
               <mat-error class="password_error" *ngIf="source_password.errors && source_password.touched">This field is required</mat-error>
@@ -158,7 +163,7 @@
           <div class="source_cluster" style="padding: 12px 30px" formGroupName="destination">
             <h2 class="source_title">Destination</h2>
             <div class="host_wrapper">
-              <mat-form-field>
+              <mat-form-field [floatLabel]="'never'">
                 <input matInput type="text" ylDisableEnter formControlName="es_host" placeholder="Host" (input)="onSourceInput(destination_username.value,destination_password.value)">
               </mat-form-field>
 
@@ -170,11 +175,11 @@
               authentication
             </mat-checkbox>
             <div class="credentials_wrapper" style="position: relative">
-              <mat-form-field class="username">
+              <mat-form-field class="username" [floatLabel]="'never'">
                 <input matInput type="text" ylDisableEnter formControlName="username" placeholder="Username" (input)="onDestinationInput(destination_username.value,destination_password.value)">
               </mat-form-field>
               <mat-error class="username_error" *ngIf="destination_username.errors && destination_username.touched">This field is required</mat-error>
-              <mat-form-field class="password">
+              <mat-form-field class="password" [floatLabel]="'never'">
                 <input matInput type="password" ylDisableEnter formControlName="password" placeholder="Password" (input)="onDestinationInput(destination_username.value,destination_password.value)">
               </mat-form-field>
               <mat-error class="password_error" *ngIf="destination_password.errors && destination_password.touched">This field is required</mat-error>
@@ -341,7 +346,7 @@
                         (change)="onCheckIsMergeToOneIndex(is_merge_to_one_indexCheckboxRef)">Merge to one
             index
           </mat-checkbox>
-          <div style="position: relative">
+          <div style="position: relative;min-height: 45px">
             <mat-form-field [floatLabel]="'never'">
               <input matInput type="text" id="merge" placeholder="Index name"
                      formControlName="merge_to_one_index_index_name" ylDisableEnter
@@ -357,7 +362,7 @@
           <mat-checkbox #checkboxRef formControlName="is_send_to_alias"
                         (change)="onCheckIsSendAlias(checkboxRef)">Send to alias
           </mat-checkbox>
-          <div style="position: relative">
+          <div style="position: relative;min-height: 45px">
             <mat-form-field [floatLabel]="'never'">
               <input matInput type="text" placeholder="Alias" [readonly]="!checkboxRef.checked"
                      formControlName="send_to_alias_alias" ylDisableEnter>
@@ -384,7 +389,7 @@
           <mat-checkbox #is_add_prefixRef formControlName="is_add_prefix" (change)="onCheckAddPrefix()">Add index
             prefix
           </mat-checkbox>
-          <div style="position: relative">
+          <div style="position: relative;min-height: 45px">
             <mat-form-field [floatLabel]="'never'">
               <input matInput type="text" [readonly]="!is_add_prefixRef.checked" placeholder="Prefix"
                      formControlName="add_prefix_prefix" ylDisableEnter>
@@ -398,7 +403,7 @@
           <mat-checkbox #is_add_suffixRef formControlName="is_add_suffix" (change)="onCheckAddSuffix()">Add index
             suffix
           </mat-checkbox>
-          <div style="position: relative">
+          <div style="position: relative;min-height: 45px">
             <mat-form-field [floatLabel]="'never'">
               <input matInput type="text" [readonly]="!is_add_suffixRef.checked" placeholder="Suffix"
                      formControlName="add_suffix_suffix" ylDisableEnter>
@@ -413,7 +418,7 @@
           <mat-checkbox #is_remove_suffixRef formControlName="is_remove_suffix" (change)="onCheckRemoveSuffix($event)">Remove index
             suffix
           </mat-checkbox>
-          <div style="position: relative">
+          <div style="position: relative;min-height: 45px">
             <mat-form-field [floatLabel]="'never'">
               <input matInput type="text" [readonly]="!is_remove_suffixRef.checked" placeholder="Suffix"
                      formControlName="remove_suffix_suffix" ylDisableEnter >
@@ -431,7 +436,7 @@
           <mat-checkbox class="checkbox_inside" #is_send_to_rollover_aliasRef formControlName="is_send_to_rollover_alias"
                         (change)="onCheckSendToRollOverAlias(is_send_to_rollover_aliasRef)">Send to rollover alias
           </mat-checkbox>
-          <div style="position: relative">
+          <div style="position: relative;min-height: 45px">
             <mat-form-field [floatLabel]="'never'">
               <input matInput type="text" [readonly]="!is_send_to_rollover_aliasRef.checked" placeholder="Alias"
                      formControlName="send_to_rollover_alias_alias" ylDisableEnter>
@@ -447,7 +452,7 @@
                         (change)="onCheckCreateFirstIndexOfRollOver(is_create_first_index_of_rolloverRef)">Create first index
             of rollover
           </mat-checkbox>
-          <div style="position: relative">
+          <div style="position: relative;min-height: 45px">
             <mat-form-field [floatLabel]="'never'">
               <input matInput type="text" placeholder="Index name"
                      [readonly]="!is_create_first_index_of_rolloverRef.checked"
@@ -472,7 +477,7 @@
 
         <div class="form-group labels">
           <label>Number of concurrent processed indices</label>
-          <div style="position: relative">
+          <div style="position: relative;min-height: 45px">
             <mat-form-field>
               <input matInput type="number" formControlName="number_of_concurrent_processed_indices" ylDisableEnter>
             </mat-form-field>
@@ -481,7 +486,7 @@
 
         <div class="form-group labels">
           <label>Total number of threads per index</label>
-          <div style="position: relative">
+          <div style="position: relative;min-height: 45px">
             <mat-form-field>
               <input matInput type="number" formControlName="total_number_of_threads" ylDisableEnter>
             </mat-form-field>
@@ -490,7 +495,7 @@
 
         <hr>
         <!--------------------------- Reindex algorithms---------------------------------->
-        <div class="form-group">
+        <div class="form-group select">
           <label>Reindex algorithm</label>
           <div>
             <mat-form-field>

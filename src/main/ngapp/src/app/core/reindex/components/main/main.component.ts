@@ -20,17 +20,14 @@ import {
   ISourceIndexList,
   ISourceTemplateList
 } from '../../models/project.model';
-import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ProjectFormService} from '../../services/project-form.service';
 import {ApiService} from '../../services/api.service';
-import {
-  MatCheckbox,
-  MatCheckboxChange,
-  MatDialog,
-  MatSelectChange,
-  MatSort,
-  MatTableDataSource
-} from '@angular/material';
+import { MatLegacyCheckbox as MatCheckbox, MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
+import { MatSort } from '@angular/material/sort';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ToastrService} from 'ngx-toastr';
 import {map, mergeMap} from 'rxjs/operators';
@@ -42,6 +39,7 @@ import {SavedProjectService} from '../../services/saved-project.service';
 import {ProjectIdService} from '../../services/project-id.service';
 import {HeaderService} from '../../services/header.service';
 import {IError} from '../../models/error.model';
+import {FloatLabelType} from '@angular/material/form-field';
 
 @Component({
   selector: 'yl-main',
@@ -50,7 +48,7 @@ import {IError} from '../../models/error.model';
 
 })
 export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterContentInit {
-  projectForm: FormGroup;
+  projectForm: UntypedFormGroup;
   project: IProjectModel = null;
   displayedColumnsForIndexPatternNamesTable: string[] = ['checkboxIndexPattern', 'index_name', 'viewIndexPattern'];
   displayedColumnsForTemplatesTable: string[] = ['checkboxTemplate', 'template_name', 'viewTemplate'];
@@ -143,7 +141,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
   showtimeFrameTooltip: boolean = true;
   filterTableValue: string = '';
   isDisableSort: boolean = false;
-
+  floatLabelControl = new FormControl('auto' as FloatLabelType);
 
   constructor(private projectService: ProjectService,
               private savedProjectService: SavedProjectService,
@@ -160,7 +158,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
               private viewContainer: ViewContainerRef,
               private headerService: HeaderService,
               private render: Renderer2,
-              private fb: FormBuilder) {
+              private fb: UntypedFormBuilder) {
 
   }
 
@@ -179,6 +177,9 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.onClickInMenu();
     this.cdr.markForCheck();
 
+  }
+  getFloatLabelValue(): FloatLabelType {
+    return this.floatLabelControl.value || 'auto';
   }
 
   onChangeForm() {
@@ -440,7 +441,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
    * Initialize form
    * @param project: IProjectModel
    */
-  initializeForm(project: IProjectModel): FormGroup {
+  initializeForm(project: IProjectModel): UntypedFormGroup {
 
     const hostRegex = '(http|https):\\/\\/((\\w|-|\\d|_|\\.)+)\\:\\d{2,5}';
     this.project = project;
@@ -606,11 +607,11 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
   }
 
   get source_index_list() {
-    return this.projectForm.get('source_index_list') as FormArray;
+    return this.projectForm.get('source_index_list') as UntypedFormArray;
   }
 
   get source_template_list() {
-    return this.projectForm.get('source_template_list') as FormArray;
+    return this.projectForm.get('source_template_list') as UntypedFormArray;
   }
 
   get execution_progress() {
@@ -710,7 +711,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
   }
 
   get reindex_algorithms() {
-    return this.projectForm.get('reindex_settings').get('reindex_algorithms') as FormArray;
+    return this.projectForm.get('reindex_settings').get('reindex_algorithms') as UntypedFormArray;
   }
 
   get is_use_same_index_name() {
@@ -795,7 +796,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
 
   }
 
-  onTestSource(projectForm: FormGroup, target: string) {
+  onTestSource(projectForm: UntypedFormGroup, target: string) {
     this.cdr.markForCheck();
     this.source_cluster_status = 'a';
     this.source_status_on_reload_page = 'a';
@@ -806,7 +807,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
 
   }
 
-  onTestDestination(projectForm: FormGroup, target: string) {
+  onTestDestination(projectForm: UntypedFormGroup, target: string) {
     this.cdr.markForCheck();
     this.destination_cluster_status = 'a';
     this.destination_status_on_reload_page = 'a';
@@ -816,7 +817,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.isShowErrorDialog = false;
   }
 
-  onTestSourceOrDestination(projectForm: FormGroup, target: string) {
+  onTestSourceOrDestination(projectForm: UntypedFormGroup, target: string) {
     this.cdr.markForCheck();
     const clusterSettings = {
       es_host: projectForm.get('connection_settings').get(`${target}`).get('es_host').value,
@@ -1499,7 +1500,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.is_is_use_ilm.patchValue(false);
     this.is_add_suffix.patchValue(false);
     this.is_add_prefix.patchValue(false);
-    this.is_use_same_index_name.patchValue(false)
+    this.is_use_same_index_name.patchValue(false);
     this.merge_to_one_index_index_nameInput.patchValue('');
     this.send_to_alias_aliasInput.patchValue('');
     this.send_to_pipeline_pipeline_nameInput.patchValue('');
@@ -1857,7 +1858,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
 
       this.source_index_list.patchValue(this.selectionIndexList.selected);
       const filteredSourceIndexList = this.source_index_list.controls.filter(a => a.value !== null);
-      const newSourceIndexList: FormArray = new FormArray([]);
+      const newSourceIndexList: UntypedFormArray = new UntypedFormArray([]);
       filteredSourceIndexList.forEach((item) => {
         newSourceIndexList.push(item);
       });

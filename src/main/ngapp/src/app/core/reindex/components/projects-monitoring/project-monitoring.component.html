@@ -97,14 +97,14 @@
     <ng-container matColumnDef="buttons">
       <th mat-header-cell *matHeaderCellDef >Actions</th>
       <td mat-cell *matCellDef="let element">
-        <button mat-raised-button (click)="onEditProject(element)" matTooltip="Edit project" id="edit_btn">
+        <button mat-raised-button class="in_table_btn" (click)="onEditProject(element)" matTooltip="Edit project" id="edit_btn">
           <img src="assets/icons/edit-white-18dp.svg" alt="">
         </button>
-        <button mat-raised-button (click)="onDeleteProject(element)" matTooltip="Delete project">
+        <button mat-raised-button class="in_table_btn" (click)="onDeleteProject(element)" matTooltip="Delete project">
           <img src="assets/icons/delete-black-18dp.svg" alt="">
         </button>
 
-        <button mat-raised-button (click)="onMonitoring(element)" matTooltip="Show details">
+        <button mat-raised-button class="in_table_btn" (click)="onMonitoring(element)" matTooltip="Show details">
           <img src="assets/icons/visibility-24px.svg" alt="">
         </button>
       </td>

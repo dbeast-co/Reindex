@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {YesNoDialogComponent} from '../yes-no-dialog/yes-no-dialog.component';
 import {IProjectModel} from '../../models/project.model';
-import {MatTableDataSource} from '@angular/material';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import {IReportModel, IValidationResult} from '../../models/report.model';
 import {ApiService} from '../../services/api.service';
 

@@ -6,7 +6,7 @@
 
     <groupId>dbeast</groupId>
     <artifactId>Reindex</artifactId>
-    <version>1.1</version>
+    <version>1.0</version>
     <build>
         <finalName>reindex</finalName>
         <plugins>
@@ -24,8 +24,67 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/out/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.12.1</version>
+                <configuration>
+                    <nodeVersion>v16.17.0</nodeVersion>
+                    <npmVersion>8.15.0</npmVersion>
+                    <workingDirectory>${project.basedir}/src/main/ngapp</workingDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>install --ignore-script --force</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>prod</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run-script build</arguments>
+                        </configuration>
+                        <phase>generate-resources</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
+                <version>3.3.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
@@ -67,7 +126,6 @@
                                     <includes>
                                         <include>reindex.bat</include>
                                         <include>reindex.sh</include>
-                                        <include>reindex.service</include>
                                     </includes>
                                 </resource>
                                 <resource>
@@ -99,93 +157,54 @@
                             </resources>
                         </configuration>
                     </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.1</version>
-                <executions>
                     <execution>
-                        <id>copy-dependencies</id>
+                        <id>copy-client</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>copy-dependencies</goal>
+                            <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/out/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <encoding>UTF-8</encoding>
+                            <outputDirectory>${basedir}/out/client</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/ngapp/dist/DBeast-reindex</directory>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.codehaus.mojo</groupId>-->
-<!--                <artifactId>exec-maven-plugin</artifactId>-->
-<!--                <version>3.0.0</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>exec-npm-install</id>-->
-<!--                        <phase>generate-sources</phase>-->
-<!--                        <configuration>-->
-<!--                            <workingDirectory>${project.basedir}/src/main/ngapp</workingDirectory>-->
-<!--                            <executable>npm.cmd</executable>-->
-<!--                            <arguments>-->
-<!--                                <argument>install</argument>-->
-<!--                            </arguments>-->
-<!--                        </configuration>-->
-<!--                        <goals>-->
-<!--                            <goal>exec</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>exec-npm-ng-build</id>-->
-<!--                        <phase>generate-sources</phase>-->
-<!--                        <configuration>-->
-<!--                            <workingDirectory>${project.basedir}/src/main/ngapp</workingDirectory>-->
-<!--                            <executable>ng.cmd</executable>-->
-<!--                            <arguments>-->
-<!--                                <argument>build</argument>-->
-<!--                                <argument>&#45;&#45;no-progress</argument>-->
-<!--                                <argument>&#45;&#45;output-path=${project.basedir}/out/client</argument>-->
-<!--                            </arguments>-->
-<!--                        </configuration>-->
-<!--                        <goals>-->
-<!--                            <goal>exec</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
         </plugins>
     </build>
     <properties>
         <java.version>1.8</java.version>
-        <es.version>7.17.8</es.version>
+        <es.version>7.9.0</es.version>
         <maven.test.skip>true</maven.test.skip>
+        <node.version>v16.17.0</node.version>
+        <npm.version>8.15.0</npm.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.14.1</version>
+            <version>2.14.2</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.14.1</version>
+            <version>2.14.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.19.0</version>
+            <version>2.20.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.19.0</version>
+            <version>2.20.0</version>
         </dependency>
 
         <dependency>
@@ -209,13 +228,13 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.github.eirslett</groupId>
             <artifactId>frontend-maven-plugin</artifactId>
-            <version>1.11.2</version>
+            <version>1.12.1</version>
             <scope>compile</scope>
         </dependency>
 

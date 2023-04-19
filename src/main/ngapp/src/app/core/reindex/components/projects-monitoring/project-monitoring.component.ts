@@ -1,7 +1,7 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '../../services/api.service';
 import {IProjectMonitoring} from '../../models/project-monitoring';
-import {MatTableDataSource} from '@angular/material';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import {ToastrService} from 'ngx-toastr';
 import {ProjectMonitoringService} from '../../services/project-monitoring.service';
 import {Router} from '@angular/router';
@@ -33,11 +33,10 @@ export class ProjectMonitoringComponent implements OnInit, OnDestroy, AfterViewI
     transferred_docs: null
   };
   private subs = new SubSink();
-  private timer: NodeJS.Timer;
-  private sourceInterval: NodeJS.Timer;
   @ViewChild(MatSort) sort: MatSort;
   private columnToSort: string;
   private sortDirection: SortDirection;
+  private sourceInterval: NodeJS.Timer;
 
   constructor(private api: ApiService,
               private toastr: ToastrService,
