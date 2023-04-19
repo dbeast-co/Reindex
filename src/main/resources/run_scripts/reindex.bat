@@ -10,6 +10,13 @@ ECHO #
 
 copy "%REINDEX_HOME_DIR%\config\reindex.yml" "%REINDEX_HOME_DIR%\client\assets"
 
+where java >nul 2>nul
+if %errorlevel%==1 (
+    @echo Java not found in path.
+    exit
+)
+
+
 java -Dlog4j2.configurationFile="%REINDEX_HOME_DIR%\config\log4j2.xml" -cp "%REINDEX_HOME_DIR%\lib\*";"%REINDEX_HOME_DIR%\bin\*" com.dbeast.reindex.Reindex "%REINDEX_HOME_DIR%"
 
 PAUSE
