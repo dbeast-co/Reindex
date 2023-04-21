@@ -1,5 +1,5 @@
 import {APP_INITIALIZER, NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {ReindexComponent} from './reindex.component';
 import {MaterialModule} from '../../shared/material/material.module';
 import {YesNoDialogComponent} from './dialogs/yes-no-dialog/yes-no-dialog.component';
@@ -59,17 +59,18 @@ export function initializeAppFn(appConfigService: AppConfigService) {
         ErrorComponent,
         DisableEnterDirective,
     ],
-    imports: [
-        CommonModule,
-        MaterialModule,
-        RouterModule,
-        FormsModule,
-        ReactiveFormsModule,
-        ReindexRoutingModule,
-        HttpClientModule,
-        NgxJsonViewerModule,
-        PrettyJsonModule,
-    ],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ReindexRoutingModule,
+    HttpClientModule,
+    NgxJsonViewerModule,
+    PrettyJsonModule,
+    NgOptimizedImage,
+  ],
     exports: [
         ReindexComponent,
     ],

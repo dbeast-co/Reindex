@@ -146,9 +146,10 @@
         </div>
       </div>
       <!--      ============= Tables -->
+
       <div class="sources_table" [ngClass]="{'noDataSource': sourceIndexListMatSource?.data?.length === 0}">
         <div class="index_pattern-table__filter" style="display: flex;flex-direction: column">
-          <mat-form-field>
+          <mat-form-field [floatLabel]="'always'">
             <input type="text" matInput (keyup)="applyFilterForSourceIndexTable($event)"
                    placeholder="Search index name...">
           </mat-form-field>

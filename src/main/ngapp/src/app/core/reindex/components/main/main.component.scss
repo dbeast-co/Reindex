@@ -1,5 +1,5 @@
-@import "src/assets/styles/colors";
-@import "src/assets/styles/mixins";
+@import "../../../../../assets/styles/colors";
+@import "../../../../../assets/styles/mixins";
 
 .container {
   background: $dialogContainer2;
@@ -136,7 +136,6 @@
 
     mat-error.project_name_error {
       position: absolute;
-      bottom: 11px;
       left: 37px;
     }
   }
@@ -162,7 +161,6 @@
           color: #faffaa !important;
           position: absolute;
           left: 28px;
-          top: 62%;
         }
       }
 
