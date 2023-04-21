@@ -238,7 +238,7 @@ td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type, th.mat-header-cell:la
 }
 
 label.mat-form-field-label {
-  color: $whiteColor !important;
+  color: #b3bdcd !important;
 }
 mat-form-field{
   width: 100%;
@@ -469,8 +469,10 @@ mat-form-field.textarea {
   margin-right: 3rem;
 }
 
+
 mat-form-field.mat-form-field.ng-tns-c3-5.mat-primary.mat-form-field-type-mat-select.mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-has-label.mat-form-field-hide-placeholder {
   min-width: 322px;
+
 }
 
 .mat-select-arrow {
