@@ -77,7 +77,9 @@ public class ReindexTaskExecutor implements Runnable {
 
     @Override
     public void run() {
-        logger.info("Start to execute Task for index: " + task.getSourceIndex() + " Reindex part: " + task.getQuery());
+        if (logger.isDebugEnabled()) {
+            logger.debug("Start to execute Task for index: " + task.getSourceIndex() + " Reindex part: " + task.getQuery());
+        }
         try {
             reindexTaskStatus.setInActiveProcess(true);
 

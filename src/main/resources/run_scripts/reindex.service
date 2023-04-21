@@ -1,0 +1,12 @@
+[Unit]
+Description=DBeast Reindex for Elasticsearch
+Documentation=https://dbeast.co/reindex-for-elasticsearch
+
+[Service]
+Type=simple
+
+WorkingDirectory=/opt/reindex
+ExecStart=/opt/reindex/reindex.sh
+
+[Install]
+WantedBy=multi-user.target
