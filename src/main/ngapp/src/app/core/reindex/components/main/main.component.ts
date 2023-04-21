@@ -1642,7 +1642,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     // console.log(event.target.value);
   }
 
-  onCheckUseIlm(is_send_to_rollover_aliasRef: MatCheckbox) {
+  onCheckUseIlm(is_send_to_rollover_aliasRef) {
     this.onShowRequiredMessage();
     this.cdr.markForCheck();
     const checked = is_send_to_rollover_aliasRef.checked;
@@ -1670,7 +1670,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.showRequiredMessage = !this.showRequiredMessage;
   }
 
-  onCheckIsMergeToOneIndex(is_merge_to_one_indexCheckboxRef: MatCheckbox) {
+  onCheckIsMergeToOneIndex(is_merge_to_one_indexCheckboxRef) {
     this.onShowRequiredMessage();
     this.cdr.markForCheck();
     const isChecked = is_merge_to_one_indexCheckboxRef.checked;
@@ -1694,7 +1694,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     }
   }
 
-  onCheckIsSendAlias(checkboxRef: MatCheckbox) {
+  onCheckIsSendAlias(checkboxRef) {
     this.onShowRequiredMessage();
     this.cdr.markForCheck();
     const isChecked = checkboxRef.checked;
@@ -1754,7 +1754,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
 
   }
 
-  onCheckSendToRollOverAlias(is_send_to_rollover_alias: MatCheckbox) {
+  onCheckSendToRollOverAlias(is_send_to_rollover_alias) {
     this.onShowRequiredMessage();
     this.cdr.markForCheck();
     const checked = is_send_to_rollover_alias.checked;
@@ -1787,7 +1787,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
 
   }
 
-  onCheckCreateFirstIndexOfRollOver(is_create_first_index_of_rolloverRef: MatCheckbox) {
+  onCheckCreateFirstIndexOfRollOver(is_create_first_index_of_rolloverRef) {
     this.onShowRequiredMessage();
     this.cdr.markForCheck();
     const checked = is_create_first_index_of_rolloverRef.checked;

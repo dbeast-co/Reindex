@@ -188,6 +188,9 @@ table.mat-table{
 .mat-row:nth-child(odd){
   background-color: #07737e !important;
 }
+.show_failed{
+  background-color: transparent;
+}
 
 
 @media (max-width: 1800px) {

@@ -50,7 +50,6 @@ export class ProgressComponent implements OnInit, OnDestroy,AfterViewInit {
       this.getProjectMonitoringData();
     }, this.time);
 
-
   }
   ngAfterViewInit() {
 

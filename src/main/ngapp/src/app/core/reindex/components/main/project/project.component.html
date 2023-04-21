@@ -1,418 +1,418 @@
-<div class="container">
-  <form [formGroup]="projectForm"  *ngIf="project">
-    <div class="project_form">
-      <!--      ============= Project status -->
-      <div class="project_status" formGroupName="status">
-        <mat-form-field class="status">
-          <!--          <input matInput type="text" [value]="project_status.value" [ngClass]="{'success': project_status.value === 'SUCCEEDED'}">-->
-          <input matInput type="text" [value]="project_status.value">
-        </mat-form-field>
-        <div class="status__progress">
-          <mat-progress-bar mode="determinate" [value]="execution_progress?.value"></mat-progress-bar>
-          <span style="color: white">{{execution_progress?.value}}%</span></div>
-      </div>
+<!--<div class="container">-->
+<!--  <form [formGroup]="projectForm"  *ngIf="project">-->
+<!--    <div class="project_form">-->
+<!--      &lt;!&ndash;      ============= Project status &ndash;&gt;-->
+<!--      <div class="project_status" formGroupName="status">-->
+<!--        <mat-form-field class="status">-->
+<!--          &lt;!&ndash;          <input matInput type="text" [value]="project_status.value" [ngClass]="{'success': project_status.value === 'SUCCEEDED'}">&ndash;&gt;-->
+<!--          <input matInput type="text" [value]="project_status.value">-->
+<!--        </mat-form-field>-->
+<!--        <div class="status__progress">-->
+<!--          <mat-progress-bar mode="determinate" [value]="execution_progress?.value"></mat-progress-bar>-->
+<!--          <span style="color: white">{{execution_progress?.value}}%</span></div>-->
+<!--      </div>-->
 
-      <!--      ============= Project name -->
-      <div class="project_name">
-        <mat-form-field class="project-name__input">
-          <mat-label>Project name</mat-label>
-          <input matInput type="text" formControlName="project_name" (input)="onInputProjectName($event)">
-        </mat-form-field>
-      </div>
-      <div class="project_actions">
-        <button mat-raised-button (click)="onStart()">{{startStopBtn}}
-          <img src="assets/icons/{{playIcon}}" alt="play/stop">
-        </button>
-        <button mat-raised-button (click)="onSaveProject()" [disabled]="projectForm.get('project_name').value === ''">
-          Save
-          <img src="assets/icons/save-white-18dp.svg" alt=""
-               *ngIf="projectForm.get('project_name').value ;else btnEnabled">
-          <ng-template #btnEnabled>
-            <img src="assets/icons/save-white-18dp_color_white.svg" alt="">
-          </ng-template>
-        </button>
-        <button mat-raised-button (click)="onPrepareProject(projectForm.get('project_id').value)">Prepare selectedFailedTask
-          <img src="assets/icons/delete_forever-white-18dp.svg" alt="">
-        </button>
+<!--      &lt;!&ndash;      ============= Project name &ndash;&gt;-->
+<!--      <div class="project_name">-->
+<!--        <mat-form-field class="project-name__input">-->
+<!--          <mat-label>Project name</mat-label>-->
+<!--          <input matInput type="text" formControlName="project_name" (input)="onInputProjectName($event)">-->
+<!--        </mat-form-field>-->
+<!--      </div>-->
+<!--      <div class="project_actions">-->
+<!--        <button mat-raised-button (click)="onStart()">{{startStopBtn}}-->
+<!--          <img src="assets/icons/{{playIcon}}" alt="play/stop">-->
+<!--        </button>-->
+<!--        <button mat-raised-button (click)="onSaveProject()" [disabled]="projectForm.get('project_name').value === ''">-->
+<!--          Save-->
+<!--          <img src="assets/icons/save-white-18dp.svg" alt=""-->
+<!--               *ngIf="projectForm.get('project_name').value ;else btnEnabled">-->
+<!--          <ng-template #btnEnabled>-->
+<!--            <img src="assets/icons/save-white-18dp_color_white.svg" alt="">-->
+<!--          </ng-template>-->
+<!--        </button>-->
+<!--        <button mat-raised-button (click)="onPrepareProject(projectForm.get('project_id').value)">Prepare selectedFailedTask-->
+<!--          <img src="assets/icons/delete_forever-white-18dp.svg" alt="">-->
+<!--        </button>-->
 
-        <button mat-raised-button (click)="onDeleteProject()">Delete
-          <img src="assets/icons/delete_forever-white-18dp.svg" alt="">
-        </button>
-      </div>
-    </div>
-
-
-    <!--      ============= Sources -->
-
-    <div class="sources_container">
-      <div class="connection_settings_wrapper">
-
-        <div formGroupName="connection_settings">
-
-          <div class="source_cluster" formGroupName="source">
-            <h2 class="source_title">Source</h2>
-            <mat-form-field>
-              <input matInput type="text" formControlName="es_host" placeholder="Host">
-            </mat-form-field>
-            <mat-checkbox #auth formControlName="authentication_enabled" (change)="onUseSourceAuth($event)">Use authentication
-            </mat-checkbox>
-            <div class="credentials_wrapper">
-              <mat-form-field class="username">
-                <input matInput type="text" formControlName="username" placeholder="Username" >
-              </mat-form-field>
-              <mat-form-field class="password">
-                <input matInput type="password" formControlName="password" placeholder="Password">
-              </mat-form-field>
-            </div>
-            <div class="ssl">
-              <div class="left">
-                <mat-checkbox #ssl formControlName="ssl_enabled" (change)="onSourceSSL($event)">SSL</mat-checkbox>
-              </div>
-              <div class="right_source" [ngClass]="{'show': showSourceSSLBtn}">
-                <span>SSL Certificate</span>
-                <div class="upload_ssl">
-                  <label for="ssl-source">Browse</label>
-                  <input type="file" name="ssl" id="ssl-source" (change)="onImportSSL($event)"/>
-                </div>
-              </div>
-            </div>
-            <div class="actions">
-              <div class="left">
-                <button mat-raised-button type="button" (click)="onTest(projectForm)">Test</button>
-                <button mat-raised-button type="button" [disabled]="isDisableGetSettingsBtn" (click)="onGetSettings()">
-                  Get Settings
-                </button>
-              </div>
-              <div class="right">
-                <mat-form-field class="status"
-                                [ngClass]="{'warn': cluster_status === 'YELLOW','danger': cluster_status === 'RED'}">
-                  <input matInput type="text" formControlName="status">
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="reindex_type_wrapper">
-
-          <label [for]="'local'+i" *ngFor="let radio of radioBtns;let i=index"  (click)="onRadioButton($event.preventDefault(),radio,i)" [ngClass]="{'selected': selectedRadioBtn === i || radio.label === reindex_type.value}">
-            <input type="radio" name="radio" [id]="'local'+i" [checked]="radio.label === reindex_type.value">
-            <span>{{radio.label}}</span>
-          </label>
-
-        </div>
-        <div formGroupName="connection_settings">
-          <div class="source_cluster" formGroupName="destination">
-            <h2 class="source_title">Destination</h2>
-            <mat-form-field>
-              <input matInput type="text" formControlName="es_host" placeholder="Host">
-            </mat-form-field>
-            <mat-checkbox #authDest formControlName="authentication_enabled" (change)="onUseDestAuth($event)">Use authentication
-            </mat-checkbox>
-            <div class="credentials_wrapper">
-              <mat-form-field class="username">
-                <input matInput type="text" formControlName="username" placeholder="Username" >
-              </mat-form-field>
-              <mat-form-field class="password">
-                <input matInput type="password" formControlName="password" placeholder="Password" >
-              </mat-form-field>
-            </div>
-            <div class="ssl">
-              <div class="left">
-                <mat-checkbox #ssl formControlName="ssl_enabled" (change)="onDestSSL($event)">SSL</mat-checkbox>
-              </div>
-              <div class="right_dest" [ngClass]="{'show': showDestSSLBtn}">
-                <span>SSL Certificate</span>
-                <div class="upload_ssl" >
-                  <label for="ssl-dest">Browse</label>
-                  <input type="file" name="ssl" id="ssl-dest"  (change)="onImportSSL($event)"/>
-                </div>
-              </div>
-            </div>
-            <div class="actions">
-              <div class="left">
-                <button mat-raised-button type="button" (click)="onTest(projectForm)">Test</button>
-                <button mat-raised-button type="button" [disabled]="isDisableGetSettingsBtn" >
-                  Get Settings
-                </button>
-              </div>
-              <div class="right">
-                <mat-form-field class="status"
-                                [ngClass]="{'warn': cluster_status === 'YELLOW','danger': cluster_status === 'RED'}">
-                  <input matInput type="text" formControlName="status">
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--      ============= Tables -->
-      <div class="sources_table" [ngClass]="{'noDataSource': sourceIndexListMatSource?.data?.length === 0}">
-        <div class="index_pattern-table__filter" style="display: flex;flex-direction: column">
-          <mat-form-field>
-            <input type="text" matInput (keyup)="applyFilterForSourceIndexTable($event)"
-                   placeholder="Search index name...">
-          </mat-form-field>
-          <div class="index_pattern-table" *ngIf="sourceIndexListMatSource">
-
-            <table mat-table #table id="sourceIndexListMatSource" class="mat-elevation-z8"
-                   *ngIf="sourceIndexListMatSource"
-                   [dataSource]="sourceIndexListMatSource">
-              <ng-container matColumnDef="checkboxIndexPattern">
-                <th mat-header-cell *matHeaderCellDef>
-                  <mat-checkbox (change)="$event ? masterToggleIndexList() : null"
-                                [checked]="selectionIndexList.hasValue() && isAllSelectedIndexList()"
-                                [indeterminate]="selectionIndexList.hasValue() && !isAllSelectedIndexList()"
-                                *ngIf="showViewButtonInTables">
-                  </mat-checkbox>
-                </th>
-                <td mat-cell *matCellDef="let element">
-                  <mat-checkbox (click)="$event.stopPropagation()"
-                                (change)="checkRowOfSourceIndexTable($event,element) ? selectionIndexList.toggle(element) : null"
-                                [checked]="selectionIndexList.isSelected(element)" *ngIf="showViewButtonInTables">
-                  </mat-checkbox>
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="index_name">
-                <th mat-header-cell *matHeaderCellDef> Index name</th>
-                <td mat-cell *matCellDef="let element">
-                  <span>{{element.index_name}}</span>
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="viewIndexPattern">
-                <th mat-header-cell *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let element">
-                  <button mat-raised-button class="view_btn" *ngIf="showViewButtonInTables">
-                    <img src="././assets/icons/visibility-24px.svg"
-                         matTooltip="Edit">
-                  </button>
-                </td>
-              </ng-container>
-              <tr mat-header-row *matHeaderRowDef="displayedColumnsForIndexPatternNamesTable"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumnsForIndexPatternNamesTable;"></tr>
-            </table>
-          </div>
-        </div>
-        <div class="spinner_wrapper" *ngIf="showSpinner">
-          <div class="spinner">
-            <mat-spinner [diameter]="30" ylCustomSpinner color="#087F8C"></mat-spinner>
-          </div>
-        </div>
-
-        <div class="templates-table__filter" style="display: flex;flex-direction: column">
-          <mat-form-field>
-            <input type="text" matInput (keyup)="applyFilterIndexTemplatesTable($event)"
-                   placeholder="Search template name...">
-          </mat-form-field>
+<!--        <button mat-raised-button (click)="onDeleteProject()">Delete-->
+<!--          <img src="assets/icons/delete_forever-white-18dp.svg" alt="">-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
 
 
-          <div class="templates-table" *ngIf="sourceIndexListMatSource">
+<!--    &lt;!&ndash;      ============= Sources &ndash;&gt;-->
 
-            <table mat-table #table id="sourceIndexTemplatesMatSource" class="mat-elevation-z8"
-                   [dataSource]="sourceIndexTemplatesMatSource">
-              <ng-container matColumnDef="checkboxTemplate">
-                <th mat-header-cell *matHeaderCellDef>
-                  <mat-checkbox (change)="$event ? masterToggleTemplateList() : null"
-                                [checked]="selectionTemplateList.hasValue() && isAllSelectedTemplateList()"
-                                [indeterminate]="selectionTemplateList.hasValue() && !isAllSelectedTemplateList()"
-                                *ngIf="showViewButtonInTables">
-                  </mat-checkbox>
-                </th>
-                <td mat-cell *matCellDef="let element">
-                  <mat-checkbox (click)="$event.stopPropagation()"
-                                (change)="checkRowOfTemplateTable($event,element) ? selectionTemplateList.toggle(element) : null"
-                                [checked]="selectionTemplateList.isSelected(element)" *ngIf="showViewButtonInTables">
-                  </mat-checkbox>
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="template_name">
-                <th mat-header-cell *matHeaderCellDef> Template name</th>
-                <td mat-cell *matCellDef="let element">
-                  <span>{{element.template_name}}</span>
-                </td>
-              </ng-container>
+<!--    <div class="sources_container">-->
+<!--      <div class="connection_settings_wrapper">-->
 
-              <ng-container matColumnDef="viewTemplate">
-                <th mat-header-cell *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let element">
-                  <button mat-raised-button class="view_btn" *ngIf="showViewButtonInTables">
-                    <img src="././assets/icons/visibility-24px.svg"
-                         matTooltip="Edit">
-                  </button>
-                </td>
-              </ng-container>
-              <tr mat-header-row *matHeaderRowDef="displayedColumnsForTemplatesTable"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumnsForTemplatesTable;"></tr>
-            </table>
-          </div>
-        </div>
+<!--        <div formGroupName="connection_settings">-->
+
+<!--          <div class="source_cluster" formGroupName="source">-->
+<!--            <h2 class="source_title">Source</h2>-->
+<!--            <mat-form-field>-->
+<!--              <input matInput type="text" formControlName="es_host" placeholder="Host">-->
+<!--            </mat-form-field>-->
+<!--            <mat-checkbox #auth formControlName="authentication_enabled" (change)="onUseSourceAuth($event)">Use authentication-->
+<!--            </mat-checkbox>-->
+<!--            <div class="credentials_wrapper">-->
+<!--              <mat-form-field class="username">-->
+<!--                <input matInput type="text" formControlName="username" placeholder="Username" >-->
+<!--              </mat-form-field>-->
+<!--              <mat-form-field class="password">-->
+<!--                <input matInput type="password" formControlName="password" placeholder="Password">-->
+<!--              </mat-form-field>-->
+<!--            </div>-->
+<!--            <div class="ssl">-->
+<!--              <div class="left">-->
+<!--                <mat-checkbox #ssl formControlName="ssl_enabled" (change)="onSourceSSL($event)">SSL</mat-checkbox>-->
+<!--              </div>-->
+<!--              <div class="right_source" [ngClass]="{'show': showSourceSSLBtn}">-->
+<!--                <span>SSL Certificate</span>-->
+<!--                <div class="upload_ssl">-->
+<!--                  <label for="ssl-source">Browse</label>-->
+<!--                  <input type="file" name="ssl" id="ssl-source" (change)="onImportSSL($event)"/>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="actions">-->
+<!--              <div class="left">-->
+<!--                <button mat-raised-button type="button" (click)="onTest(projectForm)">Test</button>-->
+<!--                <button mat-raised-button type="button" [disabled]="isDisableGetSettingsBtn" (click)="onGetSettings()">-->
+<!--                  Get Settings-->
+<!--                </button>-->
+<!--              </div>-->
+<!--              <div class="right">-->
+<!--                <mat-form-field class="status"-->
+<!--                                [ngClass]="{'warn': cluster_status === 'YELLOW','danger': cluster_status === 'RED'}">-->
+<!--                  <input matInput type="text" formControlName="status">-->
+<!--                </mat-form-field>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="reindex_type_wrapper">-->
+
+<!--          <label [for]="'local'+i" *ngFor="let radio of radioBtns;let i=index"  (click)="onRadioButton($event.preventDefault(),radio,i)" [ngClass]="{'selected': selectedRadioBtn === i || radio.label === reindex_type.value}">-->
+<!--            <input type="radio" name="radio" [id]="'local'+i" [checked]="radio.label === reindex_type.value">-->
+<!--            <span>{{radio.label}}</span>-->
+<!--          </label>-->
+
+<!--        </div>-->
+<!--        <div formGroupName="connection_settings">-->
+<!--          <div class="source_cluster" formGroupName="destination">-->
+<!--            <h2 class="source_title">Destination</h2>-->
+<!--            <mat-form-field>-->
+<!--              <input matInput type="text" formControlName="es_host" placeholder="Host">-->
+<!--            </mat-form-field>-->
+<!--            <mat-checkbox #authDest formControlName="authentication_enabled" (change)="onUseDestAuth($event)">Use authentication-->
+<!--            </mat-checkbox>-->
+<!--            <div class="credentials_wrapper">-->
+<!--              <mat-form-field class="username">-->
+<!--                <input matInput type="text" formControlName="username" placeholder="Username" >-->
+<!--              </mat-form-field>-->
+<!--              <mat-form-field class="password">-->
+<!--                <input matInput type="password" formControlName="password" placeholder="Password" >-->
+<!--              </mat-form-field>-->
+<!--            </div>-->
+<!--            <div class="ssl">-->
+<!--              <div class="left">-->
+<!--                <mat-checkbox #ssl formControlName="ssl_enabled" (change)="onDestSSL($event)">SSL</mat-checkbox>-->
+<!--              </div>-->
+<!--              <div class="right_dest" [ngClass]="{'show': showDestSSLBtn}">-->
+<!--                <span>SSL Certificate</span>-->
+<!--                <div class="upload_ssl" >-->
+<!--                  <label for="ssl-dest">Browse</label>-->
+<!--                  <input type="file" name="ssl" id="ssl-dest"  (change)="onImportSSL($event)"/>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="actions">-->
+<!--              <div class="left">-->
+<!--                <button mat-raised-button type="button" (click)="onTest(projectForm)">Test</button>-->
+<!--                <button mat-raised-button type="button" [disabled]="isDisableGetSettingsBtn" >-->
+<!--                  Get Settings-->
+<!--                </button>-->
+<!--              </div>-->
+<!--              <div class="right">-->
+<!--                <mat-form-field class="status"-->
+<!--                                [ngClass]="{'warn': cluster_status === 'YELLOW','danger': cluster_status === 'RED'}">-->
+<!--                  <input matInput type="text" formControlName="status">-->
+<!--                </mat-form-field>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      &lt;!&ndash;      ============= Tables &ndash;&gt;-->
+<!--      <div class="sources_table" [ngClass]="{'noDataSource': sourceIndexListMatSource?.data?.length === 0}">-->
+<!--        <div class="index_pattern-table__filter" style="display: flex;flex-direction: column">-->
+<!--          <mat-form-field>-->
+<!--            <input type="text" matInput (keyup)="applyFilterForSourceIndexTable($event)"-->
+<!--                   placeholder="Search index name...">-->
+<!--          </mat-form-field>-->
+<!--          <div class="index_pattern-table" *ngIf="sourceIndexListMatSource">-->
+
+<!--            <table mat-table #table id="sourceIndexListMatSource" class="mat-elevation-z8"-->
+<!--                   *ngIf="sourceIndexListMatSource"-->
+<!--                   [dataSource]="sourceIndexListMatSource">-->
+<!--              <ng-container matColumnDef="checkboxIndexPattern">-->
+<!--                <th mat-header-cell *matHeaderCellDef>-->
+<!--                  <mat-checkbox (change)="$event ? masterToggleIndexList() : null"-->
+<!--                                [checked]="selectionIndexList.hasValue() && isAllSelectedIndexList()"-->
+<!--                                [indeterminate]="selectionIndexList.hasValue() && !isAllSelectedIndexList()"-->
+<!--                                *ngIf="showViewButtonInTables">-->
+<!--                  </mat-checkbox>-->
+<!--                </th>-->
+<!--                <td mat-cell *matCellDef="let element">-->
+<!--                  <mat-checkbox (click)="$event.stopPropagation()"-->
+<!--                                (change)="checkRowOfSourceIndexTable($event,element) ? selectionIndexList.toggle(element) : null"-->
+<!--                                [checked]="selectionIndexList.isSelected(element)" *ngIf="showViewButtonInTables">-->
+<!--                  </mat-checkbox>-->
+<!--                </td>-->
+<!--              </ng-container>-->
+<!--              <ng-container matColumnDef="index_name">-->
+<!--                <th mat-header-cell *matHeaderCellDef> Index name</th>-->
+<!--                <td mat-cell *matCellDef="let element">-->
+<!--                  <span>{{element.index_name}}</span>-->
+<!--                </td>-->
+<!--              </ng-container>-->
+
+<!--              <ng-container matColumnDef="viewIndexPattern">-->
+<!--                <th mat-header-cell *matHeaderCellDef></th>-->
+<!--                <td mat-cell *matCellDef="let element">-->
+<!--                  <button mat-raised-button class="view_btn" *ngIf="showViewButtonInTables">-->
+<!--                    <img src="././assets/icons/visibility-24px.svg"-->
+<!--                         matTooltip="Edit">-->
+<!--                  </button>-->
+<!--                </td>-->
+<!--              </ng-container>-->
+<!--              <tr mat-header-row *matHeaderRowDef="displayedColumnsForIndexPatternNamesTable"></tr>-->
+<!--              <tr mat-row *matRowDef="let row; columns: displayedColumnsForIndexPatternNamesTable;"></tr>-->
+<!--            </table>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="spinner_wrapper" *ngIf="showSpinner">-->
+<!--          <div class="spinner">-->
+<!--            <mat-spinner [diameter]="30" ylCustomSpinner color="#087F8C"></mat-spinner>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="templates-table__filter" style="display: flex;flex-direction: column">-->
+<!--          <mat-form-field>-->
+<!--            <input type="text" matInput (keyup)="applyFilterIndexTemplatesTable($event)"-->
+<!--                   placeholder="Search template name...">-->
+<!--          </mat-form-field>-->
 
 
-      </div>
+<!--          <div class="templates-table" *ngIf="sourceIndexListMatSource">-->
+
+<!--            <table mat-table #table id="sourceIndexTemplatesMatSource" class="mat-elevation-z8"-->
+<!--                   [dataSource]="sourceIndexTemplatesMatSource">-->
+<!--              <ng-container matColumnDef="checkboxTemplate">-->
+<!--                <th mat-header-cell *matHeaderCellDef>-->
+<!--                  <mat-checkbox (change)="$event ? masterToggleTemplateList() : null"-->
+<!--                                [checked]="selectionTemplateList.hasValue() && isAllSelectedTemplateList()"-->
+<!--                                [indeterminate]="selectionTemplateList.hasValue() && !isAllSelectedTemplateList()"-->
+<!--                                *ngIf="showViewButtonInTables">-->
+<!--                  </mat-checkbox>-->
+<!--                </th>-->
+<!--                <td mat-cell *matCellDef="let element">-->
+<!--                  <mat-checkbox (click)="$event.stopPropagation()"-->
+<!--                                (change)="checkRowOfTemplateTable($event,element) ? selectionTemplateList.toggle(element) : null"-->
+<!--                                [checked]="selectionTemplateList.isSelected(element)" *ngIf="showViewButtonInTables">-->
+<!--                  </mat-checkbox>-->
+<!--                </td>-->
+<!--              </ng-container>-->
+<!--              <ng-container matColumnDef="template_name">-->
+<!--                <th mat-header-cell *matHeaderCellDef> Template name</th>-->
+<!--                <td mat-cell *matCellDef="let element">-->
+<!--                  <span>{{element.template_name}}</span>-->
+<!--                </td>-->
+<!--              </ng-container>-->
+
+<!--              <ng-container matColumnDef="viewTemplate">-->
+<!--                <th mat-header-cell *matHeaderCellDef></th>-->
+<!--                <td mat-cell *matCellDef="let element">-->
+<!--                  <button mat-raised-button class="view_btn" *ngIf="showViewButtonInTables">-->
+<!--                    <img src="././assets/icons/visibility-24px.svg"-->
+<!--                         matTooltip="Edit">-->
+<!--                  </button>-->
+<!--                </td>-->
+<!--              </ng-container>-->
+<!--              <tr mat-header-row *matHeaderRowDef="displayedColumnsForTemplatesTable"></tr>-->
+<!--              <tr mat-row *matRowDef="let row; columns: displayedColumnsForTemplatesTable;"></tr>-->
+<!--            </table>-->
+<!--          </div>-->
+<!--        </div>-->
 
 
-      <div class="reindex_settings" formGroupName="reindex_settings">
-        <div class="form-group">
-          <!--          <input type="radio" formControlName="is_merge_to_one_index">-->
-          <mat-checkbox #is_merge_to_one_indexCheckboxRef formControlName="is_merge_to_one_index"
-                        (change)="onCheck('is_merge_to_one_index',is_merge_to_one_indexCheckboxRef)">Merge to one
-            index
-          </mat-checkbox>
-          <div>
-            <mat-form-field>
-              <input matInput type="text" id="merge" placeholder="Index name"
-                     formControlName="merge_to_one_index_index_name">
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="form-group">
-          <mat-checkbox #checkboxRef formControlName="is_send_to_alias"
-                        (change)="onCheck('is_send_to_alias',checkboxRef)">Send to alias
-          </mat-checkbox>
-          <mat-form-field>
-            <input matInput type="text" placeholder="Alias" formControlName="send_to_alias_alias">
-          </mat-form-field>
-        </div>
+<!--      </div>-->
+
+
+<!--      <div class="reindex_settings" formGroupName="reindex_settings">-->
 <!--        <div class="form-group">-->
-<!--          <mat-checkbox formControlName="is_send_to_pipeline">Send to pipeline</mat-checkbox>-->
+<!--          &lt;!&ndash;          <input type="radio" formControlName="is_merge_to_one_index">&ndash;&gt;-->
+<!--          <mat-checkbox #is_merge_to_one_indexCheckboxRef formControlName="is_merge_to_one_index"-->
+<!--                        (change)="onCheck('is_merge_to_one_index',is_merge_to_one_indexCheckboxRef)">Merge to one-->
+<!--            index-->
+<!--          </mat-checkbox>-->
 <!--          <div>-->
 <!--            <mat-form-field>-->
-<!--              <input matInput type="text" placeholder="Alias" formControlName="send_to_pipeline_pipeline_name">-->
+<!--              <input matInput type="text" id="merge" placeholder="Index name"-->
+<!--                     formControlName="merge_to_one_index_index_name">-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--          <mat-checkbox #checkboxRef formControlName="is_send_to_alias"-->
+<!--                        (change)="onCheck('is_send_to_alias',checkboxRef)">Send to alias-->
+<!--          </mat-checkbox>-->
+<!--          <mat-form-field>-->
+<!--            <input matInput type="text" placeholder="Alias" formControlName="send_to_alias_alias">-->
+<!--          </mat-form-field>-->
+<!--        </div>-->
+<!--&lt;!&ndash;        <div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;          <mat-checkbox formControlName="is_send_to_pipeline">Send to pipeline</mat-checkbox>&ndash;&gt;-->
+<!--&lt;!&ndash;          <div>&ndash;&gt;-->
+<!--&lt;!&ndash;            <mat-form-field>&ndash;&gt;-->
+<!--&lt;!&ndash;              <input matInput type="text" placeholder="Alias" formControlName="send_to_pipeline_pipeline_name">&ndash;&gt;-->
+<!--&lt;!&ndash;            </mat-form-field>&ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+
+<!--        <div class="form-group">-->
+<!--          <mat-checkbox formControlName="is_add_prefix">Add index prefix</mat-checkbox>-->
+<!--          <div>-->
+<!--            <mat-form-field>-->
+<!--              <input matInput type="text" placeholder="Prefix" formControlName="add_prefix_prefix">-->
+
+<!--            </mat-form-field>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--          <mat-checkbox formControlName="is_add_suffix">Add index suffix</mat-checkbox>-->
+<!--          <div>-->
+<!--            <mat-form-field>-->
+<!--              <input matInput type="text" placeholder="Suffix" formControlName="add_suffix_suffix">-->
 <!--            </mat-form-field>-->
 <!--          </div>-->
 <!--        </div>-->
 
-        <div class="form-group">
-          <mat-checkbox formControlName="is_add_prefix">Add index prefix</mat-checkbox>
-          <div>
-            <mat-form-field>
-              <input matInput type="text" placeholder="Prefix" formControlName="add_prefix_prefix">
+<!--        <div class="form-group use_ilm">-->
+<!--          <mat-checkbox #useIlmRef formControlName="is_use_ilm">Use ILM</mat-checkbox>-->
+<!--        </div>-->
 
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="form-group">
-          <mat-checkbox formControlName="is_add_suffix">Add index suffix</mat-checkbox>
-          <div>
-            <mat-form-field>
-              <input matInput type="text" placeholder="Suffix" formControlName="add_suffix_suffix">
-            </mat-form-field>
-          </div>
-        </div>
+<!--        <div class="form-group">-->
+<!--          <mat-checkbox class="checkbox_inside" formControlName="is_send_to_rollover_alias">Send to rollover alias-->
+<!--          </mat-checkbox>-->
+<!--          <div>-->
+<!--            <mat-form-field>-->
+<!--              <input matInput type="text" placeholder="Alias" formControlName="send_to_rollover_alias_alias">-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-group use_ilm">
-          <mat-checkbox #useIlmRef formControlName="is_use_ilm">Use ILM</mat-checkbox>
-        </div>
+<!--        <div class="form-group">-->
+<!--          <mat-checkbox class="checkbox_inside" formControlName="is_create_first_index_of_rollover">Create first index-->
+<!--            of rollover-->
+<!--          </mat-checkbox>-->
+<!--          <div>-->
+<!--            <mat-form-field>-->
+<!--              <input matInput type="text" placeholder="Index name"-->
+<!--                     formControlName="create_first_index_of_rollover_index_name">-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <hr>-->
 
-        <div class="form-group">
-          <mat-checkbox class="checkbox_inside" formControlName="is_send_to_rollover_alias">Send to rollover alias
-          </mat-checkbox>
-          <div>
-            <mat-form-field>
-              <input matInput type="text" placeholder="Alias" formControlName="send_to_rollover_alias_alias">
-            </mat-form-field>
-          </div>
-        </div>
+<!--        <div class="form-group use_ilm">-->
+<!--          <mat-checkbox formControlName="is_transfer_index_settings_from_source_index">Transfer index settings from-->
+<!--            source index-->
+<!--          </mat-checkbox>-->
+<!--        </div>-->
 
-        <div class="form-group">
-          <mat-checkbox class="checkbox_inside" formControlName="is_create_first_index_of_rollover">Create first index
-            of rollover
-          </mat-checkbox>
-          <div>
-            <mat-form-field>
-              <input matInput type="text" placeholder="Index name"
-                     formControlName="create_first_index_of_rollover_index_name">
-            </mat-form-field>
-          </div>
-        </div>
-        <hr>
+<!--        <hr>-->
 
-        <div class="form-group use_ilm">
-          <mat-checkbox formControlName="is_transfer_index_settings_from_source_index">Transfer index settings from
-            source index
-          </mat-checkbox>
-        </div>
+<!--        <div class="form-group labels">-->
+<!--          <label>Number of concurrent processed indices</label>-->
+<!--          <div>-->
+<!--            <mat-form-field>-->
+<!--              <input matInput type="number" formControlName="number_of_concurrent_processed_indices">-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <hr>
+<!--        <div class="form-group labels">-->
+<!--          <label>Total number of threads per index</label>-->
+<!--          <div>-->
+<!--            <mat-form-field>-->
+<!--              <input matInput type="number" formControlName="total_number_of_threads">-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-group labels">
-          <label>Number of concurrent processed indices</label>
-          <div>
-            <mat-form-field>
-              <input matInput type="number" formControlName="number_of_concurrent_processed_indices">
-            </mat-form-field>
-          </div>
-        </div>
+<!--        <hr>-->
 
-        <div class="form-group labels">
-          <label>Total number of threads per index</label>
-          <div>
-            <mat-form-field>
-              <input matInput type="number" formControlName="total_number_of_threads">
-            </mat-form-field>
-          </div>
-        </div>
+<!--        <div class="form-group">-->
+<!--          <label>Reindex algorithm</label>-->
+<!--          <div>-->
+<!--            <mat-form-field>-->
+<!--              <mat-select (selectionChange)="onSelectAlgorithm($event)" [value]="defaultName">-->
+<!--                <mat-option *ngFor="let select of reindex_algorithms.controls;let i= index"-->
+<!--                            [value]="select?.value?.reindex_algorithm_name">{{ select.value.reindex_algorithm_name}}</mat-option>-->
+<!--              </mat-select>-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <hr>
+<!--        &lt;!&ndash;        Todo : show Default value&ndash;&gt;-->
 
-        <div class="form-group">
-          <label>Reindex algorithm</label>
-          <div>
-            <mat-form-field>
-              <mat-select (selectionChange)="onSelectAlgorithm($event)" [value]="defaultName">
-                <mat-option *ngFor="let select of reindex_algorithms.controls;let i= index"
-                            [value]="select?.value?.reindex_algorithm_name">{{ select.value.reindex_algorithm_name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-        </div>
+<!--        <div *ngIf="selectedAlgorithm;else default">-->
+<!--          <div class="form-group" *ngFor="let i of selectedAlgorithm?.algorithm_params">-->
+<!--            <label>{{i.label}}</label>-->
+<!--            <mat-form-field>-->
+<!--              <input matInput type="text" [(ngModel)]="i.actual_value" [ngModelOptions]="{'standalone': true}"-->
+<!--                     name="{{i.actual_value}}">-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <!--        Todo : show Default value-->
+<!--        <ng-template #default>-->
+<!--          <div class="form-group" *ngFor="let i of defaultAlgorithm?.algorithm_params">-->
+<!--            <label>{{i.label}}</label>-->
+<!--            <mat-form-field>-->
+<!--              <input matInput type="text" [(ngModel)]="i.actual_value" [ngModelOptions]="{'standalone': true}"-->
+<!--                     name="{{i.actual_value}}">-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
+<!--        </ng-template>-->
 
-        <div *ngIf="selectedAlgorithm;else default">
-          <div class="form-group" *ngFor="let i of selectedAlgorithm?.algorithm_params">
-            <label>{{i.label}}</label>
-            <mat-form-field>
-              <input matInput type="text" [(ngModel)]="i.actual_value" [ngModelOptions]="{'standalone': true}"
-                     name="{{i.actual_value}}">
-            </mat-form-field>
-          </div>
-        </div>
+<!--        <div class="form-group labels">-->
+<!--          <mat-checkbox formControlName="is_continue_on_failure">Continue on failure</mat-checkbox>-->
+<!--        </div>-->
 
-        <ng-template #default>
-          <div class="form-group" *ngFor="let i of defaultAlgorithm?.algorithm_params">
-            <label>{{i.label}}</label>
-            <mat-form-field>
-              <input matInput type="text" [(ngModel)]="i.actual_value" [ngModelOptions]="{'standalone': true}"
-                     name="{{i.actual_value}}">
-            </mat-form-field>
-          </div>
-        </ng-template>
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div [ngClass]="{'show-overlay': isActiveOverlay}"></div>-->
+<!--  </form>-->
 
-        <div class="form-group labels">
-          <mat-checkbox formControlName="is_continue_on_failure">Continue on failure</mat-checkbox>
-        </div>
+<!--  {{projectForm?.value | json}}-->
+<!--</div>-->
 
-      </div>
-    </div>
-    <div [ngClass]="{'show-overlay': isActiveOverlay}"></div>
-  </form>
+<!--<yl-yes-no-dialog *ngIf="showYesNoDialog"-->
+<!--                  (isYesEmit)="onYesInYesNoDialog($event)"-->
+<!--                  (isNoEmit)="OnNoInYesNoDialog($event)"-->
+<!--                  (isCloseDialog)="onCloseInYesNoDialog($event)">-->
 
-  {{projectForm?.value | json}}
-</div>
+<!--</yl-yes-no-dialog>-->
 
-<yl-yes-no-dialog *ngIf="showYesNoDialog"
-                  (isYesEmit)="onYesInYesNoDialog($event)"
-                  (isNoEmit)="OnNoInYesNoDialog($event)"
-                  (isCloseDialog)="onCloseInYesNoDialog($event)">
+<!--<yl-report-dialog *ngIf="showReportDialog"-->
+<!--                  (isCloseDialog)="onCloseInReportDialog($event)"-->
+<!--                  (isNoEmit)="onNoInYesNoDialog($event)"-->
+<!--                  [projectReport]="projectReport"-->
+<!--                  (isYesEmit)="onYesInReportDialog($event)">-->
 
-</yl-yes-no-dialog>
-
-<yl-report-dialog *ngIf="showReportDialog"
-                  (isCloseDialog)="onCloseInReportDialog($event)"
-                  (isNoEmit)="onNoInYesNoDialog($event)"
-                  [projectReport]="projectReport"
-                  (isYesEmit)="onYesInReportDialog($event)">
-
-</yl-report-dialog>
+<!--</yl-report-dialog>-->
 

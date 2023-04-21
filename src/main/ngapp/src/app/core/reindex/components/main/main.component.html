@@ -227,7 +227,7 @@
       <!--      ============= Tables -->
       <div class="sources_table" [ngClass]="{'noDataSource': sourceIndexListMatSource?.data?.length === 0}">
         <div class="index_pattern-table__filter" style="display: flex;flex-direction: column">
-          <mat-form-field>
+          <mat-form-field [floatLabel]="'never'">
             <input type="text" matInput (keyup)="applyFilterForSourceIndexTable($event)"
                    placeholder="Search index name..." [(ngModel)]="filterTableValue" [ngModelOptions]="{'standalone': true}" ylDisableEnter>
           </mat-form-field>
@@ -290,7 +290,7 @@
         </div>
 
         <div class="templates-table__filter" style="display: flex;flex-direction: column">
-          <mat-form-field>
+          <mat-form-field [floatLabel]="'never'">
             <input type="text" matInput ylDisableEnter (keyup)="applyFilterIndexTemplatesTable($event)"
                    placeholder="Search template name...">
           </mat-form-field>
@@ -323,7 +323,7 @@
                 <th mat-header-cell *matHeaderCellDef></th>
                 <td mat-cell *matCellDef="let element">
                   <button mat-raised-button class="view_btn"
-                          (click)="onViewIndex(element.template_name,'templates-table',element.is_checked)" *ngIf="showViewButtonInTables">
+                          (click)="onViewIndex(element.template_name,'templates-table')" *ngIf="showViewButtonInTables">
                     <img src="././assets/icons/visibility-24px.svg"
                          matTooltip="Edit">
                   </button>
