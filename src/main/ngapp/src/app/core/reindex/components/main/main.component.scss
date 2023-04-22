@@ -108,7 +108,7 @@
       font-size: 22px;
 
       .mat-form-field-infix {
-        width: 300px !important;
+        max-width: 300px !important;
       }
     }
 
@@ -640,7 +640,7 @@ mat-form-field.status{
   }
 }
 
-@media (max-width: 1700px) {
+@media (max-width: 1800px) {
   .project_form {
     .project_name {
       margin-left: -90px !important;
@@ -652,7 +652,7 @@ mat-form-field.status{
     margin-left: 7px !important;
   }
   .project_status {
-    max-width: 604px;
+    max-width: 610px !important;
     width: 100%;
   }
 }

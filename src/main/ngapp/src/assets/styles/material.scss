@@ -23,7 +23,7 @@ mat-form-field {
   &.project-name__input {
     //line-height: 0.125;
     margin-left: 1rem;
-    width: 300px;
+    max-width: 300px;
     position: relative;
     &:after{
       //content: '*';
@@ -34,7 +34,7 @@ mat-form-field {
     }
 
     .mat-form-field-infix {
-      width: 320px;
+      max-width: 320px;
     }
   }
 
