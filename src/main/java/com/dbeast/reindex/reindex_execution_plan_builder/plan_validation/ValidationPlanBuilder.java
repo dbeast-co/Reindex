@@ -115,6 +115,7 @@ public class ValidationPlanBuilder {
             }
         }
         validationPlan.setValidationResponse(validationResponse);
+        validationPlan.setValidationResponse(validationResponse);
         return validationPlan;
     }
 
