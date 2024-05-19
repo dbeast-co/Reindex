@@ -6,7 +6,7 @@
 
     <groupId>dbeast</groupId>
     <artifactId>Reindex</artifactId>
-    <version>1.0</version>
+    <version>1.2</version>
     <build>
         <finalName>reindex</finalName>
         <plugins>
@@ -22,26 +22,6 @@
                         <exclude>${basedir}/src/main/resources</exclude>
                     </excludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.1</version>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/out/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>com.github.eirslett</groupId>
@@ -126,6 +106,7 @@
                                     <includes>
                                         <include>reindex.bat</include>
                                         <include>reindex.sh</include>
+                                        <include>reindex.service</include>
                                     </includes>
                                 </resource>
                                 <resource>
@@ -175,11 +156,61 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>remove-carriage-returns</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <fixcrlf srcdir="${basedir}/out"
+                                         includes="*.sh"
+                                         eol="lf"
+                                         eof="remove"/>
+                                <fixcrlf srcdir="${basedir}/out"
+                                         includes="*.service"
+                                         eol="lf"
+                                         eof="remove"/>
+                                <fixcrlf srcdir="${basedir}/out/config"
+                                         includes="reindex.yml"
+                                         eol="lf"
+                                         eof="remove"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/out/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <properties>
         <java.version>1.8</java.version>
-        <es.version>7.9.0</es.version>
+        <es.version>7.17.21</es.version>
         <maven.test.skip>true</maven.test.skip>
         <node.version>v16.17.0</node.version>
         <npm.version>8.15.0</npm.version>
