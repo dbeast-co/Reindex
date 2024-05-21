@@ -1,6 +1,6 @@
 {
   "name": "reindex",
-  "version": "2.0",
+  "version": "1.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 6200",
