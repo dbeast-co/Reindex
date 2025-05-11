@@ -90,15 +90,10 @@
               <mat-form-field [floatLabel]="'never'">
                 <input matInput type="text" formControlName="es_host" placeholder="Host"  ylDisableEnter>
               </mat-form-field>
-
-
-
-
               <mat-error class="es_host_source_error" *ngIf="es_source_host?.errors?.pattern">
                 Host format is invalid
               </mat-error>
             </div>
-
             <mat-checkbox #auth formControlName="authentication_enabled" (change)="onUseSourceAuth($event)" [checked]="source_use_authentication_enabled.value">Use
               authentication
             </mat-checkbox>
@@ -459,6 +454,22 @@
                      formControlName="create_first_index_of_rollover_index_name" ylDisableEnter>
             </mat-form-field>
             <mat-error *ngIf="create_first_index_of_rollover_index_nameInput.touched && is_create_first_index_of_rollover.value === true && create_first_index_of_rollover_index_nameInput.value === ''">This field is required</mat-error>
+          </div>
+        </div>
+
+        <div class="form-group is_send_to_data_stream ">
+          <mat-checkbox class="checkbox_inside" #is_send_to_data_streamRef
+                        formControlName="is_send_to_data_stream"
+                        (change)="onCheckSendToDataStream(is_send_to_data_streamRef)">Send to data stream
+
+          </mat-checkbox>
+          <div style="position: relative;min-height: 45px">
+            <mat-form-field [floatLabel]="'never'">
+              <input matInput type="text" placeholder="Index name"
+                     [readonly]="!is_send_to_data_streamRef.checked"
+                     formControlName="send_to_data_stream_stream_name" ylDisableEnter>
+            </mat-form-field>
+            <mat-error *ngIf="send_to_data_stream_stream_nameInput.touched && is_send_to_data_stream.value === true && send_to_data_stream_stream_nameInput.value === ''">This field is required</mat-error>
           </div>
         </div>
 

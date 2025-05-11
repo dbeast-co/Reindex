@@ -1,7 +1,6 @@
 import {
   AfterContentInit,
   AfterViewInit,
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -20,17 +19,28 @@ import {
   ISourceIndexList,
   ISourceTemplateList
 } from '../../models/project.model';
-import {AbstractControl, FormControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators
+} from '@angular/forms';
 import {ProjectFormService} from '../../services/project-form.service';
 import {ApiService} from '../../services/api.service';
-import { MatLegacyCheckbox as MatCheckbox, MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
-import { MatSort } from '@angular/material/sort';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import {
+  MatLegacyCheckbox,
+  MatLegacyCheckbox as MatCheckbox,
+  MatLegacyCheckboxChange as MatCheckboxChange
+} from '@angular/material/legacy-checkbox';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatLegacySelectChange as MatSelectChange} from '@angular/material/legacy-select';
+import {MatSort} from '@angular/material/sort';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ToastrService} from 'ngx-toastr';
-import {map, mergeMap} from 'rxjs/operators';
+import {mergeMap} from 'rxjs/operators';
 import {IReportModel} from '../../models/report.model';
 import {ClickService, IClickEvent} from '../../services/click.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -178,6 +188,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.cdr.markForCheck();
 
   }
+
   getFloatLabelValue(): FloatLabelType {
     return this.floatLabelControl.value || 'auto';
   }
@@ -504,6 +515,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
         is_send_to_pipeline: [project.reindex_settings.is_send_to_pipeline],
         is_send_to_rollover_alias: [project.reindex_settings.is_send_to_rollover_alias],
         is_transfer_index_settings_from_source_index: [project.reindex_settings.is_transfer_index_settings_from_source_index],
+        is_send_to_data_stream: [project.reindex_settings.is_send_to_data_stream],
         is_use_ilm: [project.reindex_settings.is_use_ilm],
         is_use_same_index_name: [project.reindex_settings.is_use_same_index_name],
         is_remove_suffix: [project.reindex_settings.is_remove_suffix],
@@ -512,6 +524,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
         send_to_alias_alias: [project.reindex_settings.send_to_alias_alias],
         send_to_pipeline_pipeline_name: [project.reindex_settings.send_to_pipeline_pipeline_name],
         send_to_rollover_alias_alias: [project.reindex_settings.send_to_rollover_alias_alias],
+
         total_number_of_threads: [project.reindex_settings.total_number_of_threads],
         reindex_algorithms: this.fb.array(this.createReindexAlgorithmGroup(project)),
         reindex_type: [project.reindex_settings.reindex_type]
@@ -696,6 +709,14 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
 
   get create_first_index_of_rollover_index_nameInput() {
     return this.projectForm.get('reindex_settings').get('create_first_index_of_rollover_index_name');
+  }
+
+  get is_send_to_data_stream() {
+    return this.projectForm.get('reindex_settings').get('is_send_to_data_stream');
+  }
+
+  get send_to_data_stream_stream_nameInput() {
+    return this.projectForm.get('reindex_settings').get('send_to_data_stream_stream_name');
   }
 
   get reindexSettings() {
@@ -1520,8 +1541,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
       this.is_send_to_rollover_alias.value && this.send_to_rollover_alias_aliasInput.value !== '' ||
       this.is_create_first_index_of_rollover.value && this.create_first_index_of_rollover_index_nameInput.value !== '' ||
       this.is_remove_suffix.value && this.remove_suffix_suffixInput.value !== '' ||
-      this.is_use_same_index_name.value === true
-
+      this.is_use_same_index_name.value === true ||
+      this.is_send_to_data_stream.value === true && this.send_to_data_stream_stream_nameInput.value
     ) {
       return false;
     } else {
@@ -1718,6 +1739,30 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     }
   }
 
+  onCheckSendToDataStream(is_send_to_data_streamRef: MatLegacyCheckbox) {
+    this.onShowRequiredMessage();
+    this.cdr.markForCheck();
+    const isChecked = is_send_to_data_streamRef.checked;
+    this.emptyButtonStatuses();
+    this.is_send_to_data_stream.patchValue(isChecked);
+    this.is_use_same_index_name.patchValue(false);
+    if (this.is_send_to_data_stream.value === true) {
+      this.addValidatorRequired(this.send_to_data_stream_stream_nameInput);
+
+      this.clearValidatorRequired(this.send_to_alias_aliasInput);
+      this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
+      this.clearValidatorRequired(this.add_prefix_prefixInput);
+      this.clearValidatorRequired(this.add_suffix_suffixInput);
+      this.clearValidatorRequired(this.send_to_rollover_alias_aliasInput);
+    } else {
+      this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
+      this.clearValidatorRequired(this.send_to_alias_aliasInput);
+      this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
+      this.clearValidatorRequired(this.add_prefix_prefixInput);
+      this.clearValidatorRequired(this.add_suffix_suffixInput);
+    }
+  }
+
   onCheckIsSendToPipeLine(is_send_to_pipelineRef: MatCheckbox) {
     this.onShowRequiredMessage();
     this.cdr.markForCheck();
@@ -1888,6 +1933,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.cdr.markForCheck();
     this.isDisableDestinationTestButton = !(username && password);
   }
+
 
 
 }
