@@ -2,14 +2,16 @@ package com.dbeast.reindex.elasticsearch.dao.data_stream;
 
 import com.dbeast.reindex.elasticsearch.dao.IClusterTaskDAO;
 import com.dbeast.reindex.reindex_execution_plan_monitoring.ClusterTaskStatusPOJO;
+import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.elasticsearch.ElasticsearchStatusException;
+import org.elasticsearch.client.Request;
 import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.GetDataStreamRequest;
 import org.elasticsearch.client.indices.GetDataStreamResponse;
-import org.elasticsearch.client.indices.GetIndexRequest;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -52,11 +54,11 @@ public class IsDataStreamExistsDAO implements IClusterTaskDAO {
     protected boolean executeRequest(final GetDataStreamRequest request,
                                      final RestHighLevelClient client) {
         try {
-            GetDataStreamResponse response =  client.indices().getDataStream(request, RequestOptions.DEFAULT);
-            return !response.getDataStreams().isEmpty();
+            Response response = client.getLowLevelClient().performRequest(new Request("GET", "/_data_stream/" + dataStream));
+            return !(response.getStatusLine().getStatusCode() == 200);
         } catch (IOException e) {
             logger.error("Suppressed: " + Arrays.toString(e.getSuppressed()));
-            return false;
+            return true;
         }
     }
 
