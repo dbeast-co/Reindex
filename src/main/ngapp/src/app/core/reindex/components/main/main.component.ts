@@ -522,6 +522,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
         merge_to_one_index_index_name: [project.reindex_settings.merge_to_one_index_index_name],
         number_of_concurrent_processed_indices: [project.reindex_settings.number_of_concurrent_processed_indices],
         send_to_alias_alias: [project.reindex_settings.send_to_alias_alias],
+        send_to_data_stream_stream_name: [project.reindex_settings.send_to_data_stream_stream_name],
         send_to_pipeline_pipeline_name: [project.reindex_settings.send_to_pipeline_pipeline_name],
         send_to_rollover_alias_alias: [project.reindex_settings.send_to_rollover_alias_alias],
 
@@ -1094,7 +1095,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
 
       if (a.indexOf(el) === checkedRowIndex) {
         el.is_checked = row.is_checked;
-        // this.onChangeForm();
+         this.onChangeForm();
       }
     });
 
@@ -1503,6 +1504,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.is_add_prefix.patchValue(false);
     this.is_remove_suffix.patchValue(false);
     this.is_use_same_index_name.patchValue(false);
+    this.is_send_to_data_stream.patchValue(false);
     this.merge_to_one_index_index_nameInput.patchValue('');
     this.send_to_alias_aliasInput.patchValue('');
     this.send_to_pipeline_pipeline_nameInput.patchValue('');
@@ -1511,6 +1513,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.add_suffix_suffixInput.patchValue('');
     this.add_prefix_prefixInput.patchValue('');
     this.remove_suffix_suffixInput.patchValue('');
+    this.send_to_data_stream_stream_nameInput.patchValue('');
   }
 
   emptyButtonStatusesOnUseILM() {
@@ -1521,6 +1524,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.is_is_use_ilm.patchValue(false);
     this.is_add_suffix.patchValue(false);
     this.is_add_prefix.patchValue(false);
+    this.is_send_to_data_stream.patchValue(false);
     this.is_use_same_index_name.patchValue(false);
     this.merge_to_one_index_index_nameInput.patchValue('');
     this.send_to_alias_aliasInput.patchValue('');
@@ -1528,6 +1532,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.send_to_rollover_alias_aliasInput.patchValue('');
     this.add_suffix_suffixInput.patchValue('');
     this.add_prefix_prefixInput.patchValue('');
+    this.send_to_data_stream_stream_nameInput.patchValue('');
   }
 
   checkAllCheckboxesAndInputsForSaveButton(): boolean {
@@ -1566,6 +1571,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.add_suffix_suffixInput.markAsUntouched();
     this.send_to_rollover_alias_aliasInput.markAsUntouched();
     this.create_first_index_of_rollover_index_nameInput.markAsUntouched();
+    this.send_to_data_stream_stream_nameInput.markAsUntouched();
     abstractControl.clearValidators();
     abstractControl.setValidators(null);
     abstractControl.updateValueAndValidity();
@@ -1583,48 +1589,53 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.is_add_suffix.patchValue(isCheckedSuffix);
     this.is_use_same_index_name.patchValue(false);
     this.add_suffix_suffixInput.patchValue(checkSuffixInput);
+    this.add_prefix_prefixInput.setValidators(Validators.required);
     if (this.is_add_prefix.value) {
-      this.addValidatorRequired(this.add_suffix_suffixInput);
       this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
       this.clearValidatorRequired(this.send_to_alias_aliasInput);
       this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
-      this.clearValidatorRequired(this.add_suffix_suffixInput);
       this.clearValidatorRequired(this.send_to_rollover_alias_aliasInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
       this.clearValidatorRequired(this.remove_suffix_suffixInput);
     } else {
+      this.clearValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
       this.clearValidatorRequired(this.send_to_alias_aliasInput);
       this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
-      this.clearValidatorRequired(this.add_prefix_prefixInput);
-      this.clearValidatorRequired(this.add_suffix_suffixInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     }
 
   }
 
   onCheckAddSuffix() {
     this.onShowRequiredMessage();
+    // debugger
     const isCheckedPrefix = this.is_add_prefix.value;
     const isCheckedSuffix = this.is_add_suffix.value;
     const checkPrefixInput = this.add_prefix_prefixInput.value;
     this.emptyButtonStatuses();
     this.is_add_prefix.patchValue(isCheckedPrefix);
     this.is_add_suffix.patchValue(isCheckedSuffix);
-    this.add_prefix_prefixInput.patchValue(checkPrefixInput);
-    this.add_prefix_prefixInput.setValidators(Validators.required);
     this.is_use_same_index_name.patchValue(false);
+    this.add_prefix_prefixInput.patchValue(checkPrefixInput);
+    this.add_suffix_suffixInput.setValidators(Validators.required);
     if (this.is_add_suffix.value) {
-      this.addValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
       this.clearValidatorRequired(this.send_to_alias_aliasInput);
       this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
+      this.clearValidatorRequired(this.send_to_rollover_alias_aliasInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
       this.clearValidatorRequired(this.remove_suffix_suffixInput);
       this.cdr.markForCheck();
 
     } else {
+      this.clearValidatorRequired(this.add_suffix_suffixInput);
       this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
       this.clearValidatorRequired(this.send_to_alias_aliasInput);
       this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
-
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
       this.cdr.markForCheck();
 
     }
@@ -1648,13 +1659,16 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
       this.clearValidatorRequired(this.send_to_alias_aliasInput);
       this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
       this.addValidatorRequired(this.remove_suffix_suffixInput);
+      this.clearValidatorRequired(this.add_suffix_suffixInput);
       this.remove_suffix_suffixInput.markAsUntouched();
-
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
     } else {
       this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
       this.clearValidatorRequired(this.send_to_alias_aliasInput);
       this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
       this.clearValidatorRequired(this.remove_suffix_suffixInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.add_suffix_suffixInput);
     }
   }
 
@@ -1679,7 +1693,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
       this.is_add_prefix.patchValue(false);
       this.is_use_same_index_name.patchValue(false);
       this.clearValidatorRequired(this.remove_suffix_suffixInput);
-
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     } else {
       this.is_send_to_rollover_alias.patchValue(false);
       this.is_create_first_index_of_rollover.patchValue(false);
@@ -1706,12 +1721,16 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
       this.clearValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.add_suffix_suffixInput);
       this.clearValidatorRequired(this.send_to_rollover_alias_aliasInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     } else {
       this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
       this.clearValidatorRequired(this.send_to_alias_aliasInput);
       this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
       this.clearValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.add_suffix_suffixInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     }
   }
 
@@ -1729,6 +1748,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
       this.clearValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.add_suffix_suffixInput);
       this.clearValidatorRequired(this.send_to_rollover_alias_aliasInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     } else {
 
       this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
@@ -1736,6 +1757,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
       this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
       this.clearValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.add_suffix_suffixInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     }
   }
 
@@ -1754,12 +1777,15 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
       this.clearValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.add_suffix_suffixInput);
       this.clearValidatorRequired(this.send_to_rollover_alias_aliasInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     } else {
       this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
       this.clearValidatorRequired(this.send_to_alias_aliasInput);
       this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
       this.clearValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.add_suffix_suffixInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     }
   }
 
@@ -1770,20 +1796,24 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
     this.emptyButtonStatuses();
     this.is_send_to_pipeline_index.patchValue(isChecked);
     this.is_use_same_index_name.patchValue(false);
+    this.is_remove_suffix.patchValue(false);
     if (this.is_send_to_pipeline_index.value) {
       this.addValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
       this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
       this.clearValidatorRequired(this.send_to_alias_aliasInput);
       this.clearValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.add_suffix_suffixInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
       this.clearValidatorRequired(this.send_to_rollover_alias_aliasInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     } else {
       this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
       this.clearValidatorRequired(this.send_to_alias_aliasInput);
       this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
       this.clearValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.add_suffix_suffixInput);
-
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     }
   }
 
@@ -1814,6 +1844,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
       this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
       this.clearValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.add_suffix_suffixInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     } else {
       this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
       this.clearValidatorRequired(this.send_to_alias_aliasInput);
@@ -1821,6 +1853,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
       this.clearValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.add_suffix_suffixInput);
       this.clearValidatorRequired(this.send_to_rollover_alias_aliasInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     }
 
     if (!this.is_send_to_rollover_alias.value && !this.is_create_first_index_of_rollover.value) {
@@ -1847,6 +1881,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
       this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
       this.clearValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.add_suffix_suffixInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     } else {
       this.is_send_to_rollover_alias.patchValue(false);
       this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
@@ -1855,6 +1891,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
       this.clearValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.add_suffix_suffixInput);
       this.clearValidatorRequired(this.create_first_index_of_rollover_index_nameInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     }
 
     if (!this.is_send_to_rollover_alias.value && !this.is_create_first_index_of_rollover.value) {
@@ -1873,12 +1911,15 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit, AfterCon
       this.is_is_use_ilm.patchValue(false);
       this.is_send_to_rollover_alias.patchValue(false);
       this.is_create_first_index_of_rollover.patchValue(false);
+      this.is_remove_suffix.patchValue(false);
       this.clearValidatorRequired(this.merge_to_one_index_index_nameInput);
       this.clearValidatorRequired(this.send_to_alias_aliasInput);
       this.clearValidatorRequired(this.send_to_pipeline_pipeline_nameInput);
       this.clearValidatorRequired(this.add_prefix_prefixInput);
       this.clearValidatorRequired(this.add_suffix_suffixInput);
       this.clearValidatorRequired(this.create_first_index_of_rollover_index_nameInput);
+      this.clearValidatorRequired(this.send_to_data_stream_stream_nameInput);
+      this.clearValidatorRequired(this.remove_suffix_suffixInput);
     }
     this.onShowRequiredMessage();
     this.cdr.markForCheck();

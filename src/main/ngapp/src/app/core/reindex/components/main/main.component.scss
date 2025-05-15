@@ -341,7 +341,7 @@
         }
       .form-group {
         @include flex-space-between;
-        height: 40px;
+        height: 37px;
         color: $whiteColor;
         align-items: flex-start;
 
@@ -357,6 +357,9 @@
           padding-block-start: 8px;
           height: 51px;
         }
+        &.is_send_to_data_stream{
+          height: 27px;
+        }
 
         .mat-checkbox {
           min-width: 250px;
@@ -364,6 +367,7 @@
           &.checkbox_inside {
             padding-left: 35px;
           }
+
         }
 
         .mat-form-field {
