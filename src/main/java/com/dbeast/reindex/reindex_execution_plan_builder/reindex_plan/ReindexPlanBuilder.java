@@ -129,6 +129,8 @@ public class ReindexPlanBuilder {
         String destinationIndex;
         if (project.getReindexSettings().isMergeToOneIndex()) {
             destinationIndex = project.getReindexSettings().getMergeToOneIndexIndexName();
+        } else if (project.getReindexSettings().isSendToDataStream()) {
+            destinationIndex = project.getReindexSettings().getSendToDataStreamStreamName();
         } else if (project.getReindexSettings().isSendToAlias()) {
             destinationIndex = project.getReindexSettings().getSendToAliasAlias();
         } else if (project.getReindexSettings().isUseIlm() && project.getReindexSettings().isSendToRolloverAlias()) {
@@ -150,6 +152,9 @@ public class ReindexPlanBuilder {
             request.setDestPipeline(project.getReindexSettings().getIsSendToPipelinePipelineName());
         }
         request.setDestIndex(destinationIndex);
+        if (project.getReindexSettings().isSendToDataStream()){
+            request.setDestOpType("create");
+        }
         return request;
     }
 

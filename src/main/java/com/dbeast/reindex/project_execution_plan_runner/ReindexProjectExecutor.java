@@ -110,6 +110,8 @@ class ReindexProjectExecutor implements Runnable {
             projectStatus.setEndTime(System.currentTimeMillis());
             dataWarehouse.writeStatusToFile(plan.getProjectId());
         }
+        projectStatus.updateStatus();
+        dataWarehouse.writeStatusToFile(plan.getProjectId());
         try {
             if (sourceClient != null) {
                 sourceClient.close();

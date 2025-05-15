@@ -133,7 +133,7 @@ public class ReindexTaskExecutor implements Runnable {
             do {
                 Thread.sleep(taskRefreshInterval * 1000);
                 try {
-                    lowResponse = lowLevelClient.performRequest(new Request("GET", "_tasks/" + taskId));
+                    lowResponse = lowLevelClient.performRequest(new Request("GET", "/_tasks/" + taskId));
                 } catch (IOException | ElasticsearchException e) {
                     if (numberOfRetries < taskRetries) {
                         logger.warn("There is an error in the Task execution loop in the project: " + projectId + ". " +

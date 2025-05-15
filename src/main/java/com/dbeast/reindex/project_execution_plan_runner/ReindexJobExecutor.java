@@ -55,23 +55,14 @@ public class ReindexJobExecutor implements Runnable {
         logger.info("Start to execute job for index: " + reindexJob.getIndexName());
         reindexJobStatus.setInActiveProcess(true);
         reindexJobStatus.setStartTime(System.currentTimeMillis());
-        if (reindexJobStatus.getTotalDocs() > 0) {
-            //TODO Create index and change index number of replica
-            CompletableFuture<?>[] futures = reindexJob.getReindexTasks().stream()
-                    .filter(task -> !task.isDone())
-                    .map(task -> CompletableFuture.runAsync(new ReindexTaskExecutor(projectId,
-                            task, client, taskRefreshInterval, tasksAPIRetriesNumber), reindexTasksThreadPool))
-                    .toArray(CompletableFuture[]::new);
-            CompletableFuture.allOf(futures).join();
-            if (!reindexJobStatus.getStatus().equals(EProjectStatus.STOPPED)) {
-                reindexJobStatus.updateStatus();
-            }
-        } else {
-            reindexJobStatus.setDone(true);
-            reindexJobStatus.setFailed(false);
-            reindexJobStatus.setExecutionProgress(100);
-            reindexProjectStatus.incrementSucceededTasks();
-            reindexJobStatus.setStatus(EProjectStatus.SUCCEEDED);
+        CompletableFuture<?>[] futures = reindexJob.getReindexTasks().stream()
+                .filter(task -> !task.isDone())
+                .map(task -> CompletableFuture.runAsync(new ReindexTaskExecutor(projectId,
+                        task, client, taskRefreshInterval, tasksAPIRetriesNumber), reindexTasksThreadPool))
+                .toArray(CompletableFuture[]::new);
+        CompletableFuture.allOf(futures).join();
+        if (!reindexJobStatus.getStatus().equals(EProjectStatus.STOPPED)) {
+            reindexJobStatus.updateStatus();
         }
 
         reindexJobStatus.setInActiveProcess(false);

@@ -70,6 +70,9 @@ In windows:
 - Python 3.10
 
 ### Change log
+Version 1.3
+1. Add data stream support
+
 Version 1.1
 1. Update Run scripts
 2. Add Reindex service file for Linux (you can copy it to the systemd folder)

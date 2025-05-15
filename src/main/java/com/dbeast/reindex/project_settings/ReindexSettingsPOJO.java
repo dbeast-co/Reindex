@@ -16,6 +16,10 @@ public class ReindexSettingsPOJO {
     private boolean isMergeToOneIndex;
     @JsonProperty("merge_to_one_index_index_name")
     private String mergeToOneIndexIndexName = "";
+    @JsonProperty("is_send_to_data_stream")
+    private boolean isSendToDataStream = false;
+    @JsonProperty("send_to_data_stream_stream_name")
+    private String sendToDataStreamStreamName = "";
     @JsonProperty("is_send_to_alias")
     private boolean isSendToAlias;
     @JsonProperty("send_to_alias_alias")
@@ -34,7 +38,7 @@ public class ReindexSettingsPOJO {
     private String addIndexSuffixSuffix = "";
     @JsonProperty("is_remove_suffix")
     private boolean isRemoveIndexSuffix;
-//    @JsonInclude(JsonInclude.Include.NON_NULL)
+    //    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("remove_suffix_suffix")
     private String removeIndexSuffixSuffix = "";
     @JsonProperty("is_transfer_index_settings_from_source_index")
@@ -67,7 +71,7 @@ public class ReindexSettingsPOJO {
     private boolean isUseSameIndexName;
 
     public boolean checkIsAtLeastOneDestinationSelected() {
-        return isMergeToOneIndex || isSendToAlias || isAddIndexPrefix || isAddIndexSuffix || isUseIlm || isRemoveIndexSuffix || isUseSameIndexName;
+        return isMergeToOneIndex || isSendToAlias || isSendToPipeline || isAddIndexPrefix || isAddIndexSuffix || isUseIlm || isRemoveIndexSuffix || isSendToDataStream;
     }
 
     public boolean isRemoveIndexSuffix() {
@@ -122,6 +126,23 @@ public class ReindexSettingsPOJO {
 
     public void setMergeToOneIndexIndexName(String mergeToOneIndexIndexName) {
         this.mergeToOneIndexIndexName = mergeToOneIndexIndexName;
+    }
+
+    @JsonProperty("is_send_to_data_stream")
+    public boolean isSendToDataStream() {
+        return isSendToDataStream;
+    }
+
+    public void setSendToDataStream(boolean isSendToDataStream) {
+        this.isSendToDataStream = isSendToDataStream;
+    }
+
+    public String getSendToDataStreamStreamName() {
+        return sendToDataStreamStreamName;
+    }
+
+    public void setSendToDataStreamStreamName(String sendToDataStreamStreamName) {
+        this.sendToDataStreamStreamName = sendToDataStreamStreamName;
     }
 
     @JsonProperty("is_send_to_alias")

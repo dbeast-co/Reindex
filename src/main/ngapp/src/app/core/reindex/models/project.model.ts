@@ -70,6 +70,7 @@ interface IReindexSettings {
   is_send_to_pipeline: boolean;
   is_send_to_rollover_alias: boolean;
   is_transfer_index_settings_from_source_index: boolean;
+  is_send_to_data_stream: boolean;
   is_use_ilm: boolean;
   is_use_same_index_name: boolean;
   is_remove_suffix: boolean;
@@ -80,6 +81,7 @@ interface IReindexSettings {
   send_to_alias_alias: string;
   send_to_pipeline_pipeline_name: string;
   send_to_rollover_alias_alias: string;
+  send_to_data_stream_stream_name: string;
   total_number_of_threads: number;
   useIlm: boolean;
 
