@@ -10,7 +10,8 @@ public enum EValidationTasksSettings {
     IS_CLUSTER_RESPOND("Checking if the cluster is %s", EValidationStatuses.ERROR, "The cluster doesn't respond"),
     IS_PIPELINE_EXISTS("Checking is ingest pipeline '%s' exists", EValidationStatuses.ERROR, "The ingest pipeline doesn't exists"),
     IS_TO_MANY_TASKS("Total tasks number: %s", EValidationStatuses.WARNING, "There are more than 1000 tasks"),
-    IS_INDEX_SUFFIX_EXISTS("Checking is index '%s' contains the suffix", EValidationStatuses.ERROR, "The index doesn't contains required suffix");
+    IS_INDEX_SUFFIX_EXISTS("Checking is index '%s' contains the suffix", EValidationStatuses.ERROR, "The index doesn't contains required suffix"),
+    IS_DATA_STREAM_EXISTS("Checking is data stream '%s' exists", EValidationStatuses.WARNING, "The data stream already exists");
 
 
     private final String taskExplanation;

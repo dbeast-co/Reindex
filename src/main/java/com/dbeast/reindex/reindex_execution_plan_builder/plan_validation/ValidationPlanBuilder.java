@@ -2,6 +2,7 @@ package com.dbeast.reindex.reindex_execution_plan_builder.plan_validation;
 
 import com.dbeast.reindex.constants.EReindexAlgorithms;
 import com.dbeast.reindex.constants.EValidationTasksSettings;
+import com.dbeast.reindex.elasticsearch.dao.data_stream.IsDataStreamExistsDAO;
 import com.dbeast.reindex.project_settings.ProjectPOJO;
 import com.dbeast.reindex.elasticsearch.dao.alias.IsAliasExistsDAO;
 import com.dbeast.reindex.elasticsearch.dao.cluster_health.IsClusterRespond;
@@ -43,7 +44,7 @@ public class ValidationPlanBuilder {
             validationResponse.addValidationResponse(new ValidationResponsePOJO.ValidationResult(EValidationTasksSettings.IS_DESTINATION_SELECTED));
         } else {
             //Check is at least one of the indices selected
-            if (reindexPlan.getReindexJobs().size() == 0) {
+            if (reindexPlan.getReindexJobs().isEmpty()) {
                 validationResponse.addValidationResponse(new ValidationResponsePOJO.ValidationResult(EValidationTasksSettings.IS_INDEX_SELECTED));
             } else {
                 //Check is cluster respond
@@ -58,13 +59,13 @@ public class ValidationPlanBuilder {
                 }
 
                 //Check is the date field have the type date
-                if (currentAlgorithm.size() > 0 && currentAlgorithm.get(0).getReindexAlgorithmName().equals(EReindexAlgorithms.TIME_ORIENTED.getVarForUI())) {
+                if (!currentAlgorithm.isEmpty() && currentAlgorithm.get(0).getReindexAlgorithmName().equals(EReindexAlgorithms.TIME_ORIENTED.getVarForUI())) {
                     String dateField = currentAlgorithm.get(0).getAlgorithmParams().stream()
                             .filter(algorithmParam -> algorithmParam.getLabel().equals("Date field"))
                             .map(ReindexAlgorithmPOJO.AlgorithmParam::getActualValue)
                             .findFirst().orElse("@timestamp").toString();
                     reindexPlan.getReindexJobs().values().stream()
-                            .filter(job -> job.getReindexTasks().size() > 0)
+                            .filter(job -> !job.getReindexTasks().isEmpty())
                             .forEach(job -> generateValidationForTimeSeriesAlgorithmTask(job.getIndexName(), dateField));
                 }
 
@@ -81,7 +82,7 @@ public class ValidationPlanBuilder {
                 //Check is the expected indices exists
                 if (reindexSettings.isAddIndexSuffix() || reindexSettings.isAddIndexPrefix()) {
                     reindexPlan.getReindexJobs().values().stream()
-                            .filter(job -> job.getReindexTasks().size() > 0)
+                            .filter(job -> !job.getReindexTasks().isEmpty())
                             .forEach(job -> generateValidationForIsIndexExistsTask(job.getReindexTasks().get(0).getReindexRequest().getDestination().index()));
                 }
 
@@ -93,13 +94,13 @@ public class ValidationPlanBuilder {
                 //Check is index contains suffix
                 if (reindexSettings.isRemoveIndexSuffix()) {
                     reindexPlan.getReindexJobs().values().stream()
-                            .filter(job -> job.getReindexTasks().size() > 0)
+                            .filter(job -> !job.getReindexTasks().isEmpty())
                             .filter(job -> !job.getIndexName().endsWith(project.getReindexSettings().getRemoveIndexSuffixSuffix()))
                             .forEach(job ->
                                     validationResponse.addValidationResponse(new ValidationResponsePOJO.ValidationResult(job.getIndexName(), EValidationTasksSettings.IS_INDEX_SUFFIX_EXISTS))
                             );
                     reindexPlan.getReindexJobs().values().stream()
-                            .filter(job -> job.getReindexTasks().size() > 0)
+                            .filter(job -> !job.getReindexTasks().isEmpty())
                             .forEach(job -> generateValidationForIsIndexExistsTask(job.getReindexTasks().get(0).getReindexRequest().getDestination().index()));
                 }
                 if (reindexSettings.isUseIlm() && reindexSettings.isSendToRolloverAlias()) {
@@ -108,6 +109,9 @@ public class ValidationPlanBuilder {
                     if (reindexSettings.isCreateFirstIndexOnRollover()) {
                         generateValidationForIsIndexExistsTask(reindexSettings.getCreateFirstIndexOnRolloverIndexName());
                     }
+                }
+                if (reindexSettings.isSendToDataStream()){
+                    generateValidationForIsDataStreamExistsTask(reindexSettings.getSendToDataStreamStreamName());
                 }
                 if (reindexSettings.getReindexType().equals("Remote reindex")) {
                     generateValidationForIsReindexRemoteClusterDefined(reindexPlan.getConnectionSettings().getSource().getEs_host());
@@ -148,6 +152,13 @@ public class ValidationPlanBuilder {
         IsPipelineExistsDAO isPipelineExistsDAO = new IsPipelineExistsDAO(pipeline);
         validationPlan.getValidationTasks().add(new ValidationTaskPOJO(isPipelineExistsDAO, pipeline));
         validationResponse.addValidationResponse(new ValidationResponsePOJO.ValidationResult(pipeline, EValidationTasksSettings.IS_PIPELINE_EXISTS));
+    }
+
+
+    private void generateValidationForIsDataStreamExistsTask(final String dataStreamName) {
+        IsDataStreamExistsDAO isDataStreamExistsDAO = new IsDataStreamExistsDAO(dataStreamName);
+        validationPlan.getValidationTasks().add(new ValidationTaskPOJO(isDataStreamExistsDAO, dataStreamName));
+        validationResponse.addValidationResponse(new ValidationResponsePOJO.ValidationResult(dataStreamName, EValidationTasksSettings.IS_DATA_STREAM_EXISTS));
     }
 
     private void generateValidationForIsClusterRespond() {
