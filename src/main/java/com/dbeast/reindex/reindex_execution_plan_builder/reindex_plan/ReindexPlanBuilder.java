@@ -54,6 +54,11 @@ public class ReindexPlanBuilder {
         List<IReindexAlgorithm> reindexAlgorithms = project.getReindexSettings().getReindexAlgorithms().stream()
                 .filter(ReindexAlgorithmPOJO::isSelected)
                 .collect(Collectors.toList());
+
+        if (reindexAlgorithms.isEmpty()) {
+            return reindexJobs;  // Return empty map if no algorithms selected
+        }
+
         IReindexAlgorithm reindexAlgorithm = reindexAlgorithms.get(0);
         projectStatus.getReindexJobsStatus().forEach(job -> {
             ReindexJobPOJO reindexJob = new ReindexJobPOJO(job.getSourceIndex());
@@ -66,10 +71,16 @@ public class ReindexPlanBuilder {
                                     task.getReprocessParams()
                             ))
                             .collect(Collectors.toList());
-            reindexRequests.forEach(request -> {
-                request.setReindexRequest(generateDestination(request.getReindexRequest(), job.getSourceIndex()));
-                reindexJob.addReindexTask(request);
-            });
+
+            // Only process requests if list is not null and not empty
+            if (reindexRequests != null && !reindexRequests.isEmpty()) {
+                reindexRequests.forEach(request -> {
+                    if (request != null && request.getReindexRequest() != null) {
+                        request.setReindexRequest(generateDestination(request.getReindexRequest(), job.getSourceIndex()));
+                        reindexJob.addReindexTask(request);
+                    }
+                });
+            }
             reindexJobs.put(job.getSourceIndex(), reindexJob);
         });
         return reindexJobs;
@@ -88,7 +99,7 @@ public class ReindexPlanBuilder {
                     .collect(Collectors.toList());
             indicesForReindex.forEach(index -> {
                 ReindexJobPOJO reindexJob = new ReindexJobPOJO(index);
-                List<ReindexTaskPOJO> reindexTasksList = null;
+                List<ReindexTaskPOJO> reindexTasksList = new LinkedList<>();  // Initialize with empty list
                 try {
                     reindexTasksList = reindexAlgorithm.generateRequests(
                             project.getConnectionSettings().getSource(),
@@ -99,10 +110,14 @@ public class ReindexPlanBuilder {
                 } catch (ClusterConnectionException e) {
                     e.printStackTrace();
                 }
-                reindexTasksList.forEach(request -> {
-                    request.setReindexRequest(generateDestination(request.getReindexRequest(), index));
-                    reindexJob.addReindexTask(request);
-                });
+
+                // Only process tasks if list is not null and not empty
+                if (reindexTasksList != null && !reindexTasksList.isEmpty()) {
+                    reindexTasksList.forEach(request -> {
+                        request.setReindexRequest(generateDestination(request.getReindexRequest(), index));
+                        reindexJob.addReindexTask(request);
+                    });
+                }
                 reindexJobs.put(index, reindexJob);
             });
         }

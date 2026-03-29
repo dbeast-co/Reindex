@@ -34,6 +34,41 @@ public class GeneralUtils {
         return dateFormat.format(date);
     }
 
+    /**
+     * Convert a timestamp value to date string, handling both epoch milliseconds and nanoseconds
+     * @param timestampValue The timestamp value (in either epoch millis or nanos)
+     * @param dateFormat The SimpleDateFormat to use for formatting
+     * @param isNanos Whether the timestamp is in nanoseconds (true) or milliseconds (false)
+     * @return The formatted date string
+     */
+    public static String convertTimestampToDateString(final long timestampValue,
+                                                      final SimpleDateFormat dateFormat,
+                                                      final boolean isNanos) {
+        long millis = isNanos ? timestampValue / 1_000_000 : timestampValue;
+        Date date = new Date(millis);
+        return dateFormat.format(date);
+    }
+
+    /**
+     * Convert a timestamp value from either format to milliseconds (for internal calculations)
+     * @param timestampValue The timestamp value (in either epoch millis or nanos)
+     * @param isNanos Whether the timestamp is in nanoseconds (true) or milliseconds (false)
+     * @return The timestamp in milliseconds
+     */
+    public static long convertTimestampToMillis(final long timestampValue, final boolean isNanos) {
+        return isNanos ? timestampValue / 1_000_000 : timestampValue;
+    }
+
+    /**
+     * Convert a timestamp value from milliseconds to the target format
+     * @param timestampMillis The timestamp in milliseconds
+     * @param isNanos Whether to convert to nanoseconds (true) or keep as milliseconds (false)
+     * @return The timestamp in the target format
+     */
+    public static long convertMillisToTimestamp(final long timestampMillis, final boolean isNanos) {
+        return isNanos ? timestampMillis * 1_000_000 : timestampMillis;
+    }
+
     public static boolean createFolder(final String folderAbsolutePath) {
         final Path folder = Paths.get(folderAbsolutePath);
         if (!Files.exists(folder)) {
