@@ -9,9 +9,9 @@ public class ESHostPOJO {
     private String domain;
     private int port;
 
-    public ESHostPOJO(final EsSettings esSettings) {
+    public ESHostPOJO(final EsSettingsPOJO esSettingsPOJO) {
         Pattern pattern = Pattern.compile("(https?)://([^:^/]*):(\\d*)?(.*)?");
-        Matcher matcher = pattern.matcher(esSettings.getEs_host());
+        Matcher matcher = pattern.matcher(esSettingsPOJO.getEs_host());
         try {
             matcher.find();
             this.protocol = matcher.group(1);

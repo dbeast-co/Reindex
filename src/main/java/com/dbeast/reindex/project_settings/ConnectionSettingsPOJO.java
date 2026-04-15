@@ -7,9 +7,9 @@ import java.util.Objects;
 
 public class ConnectionSettingsPOJO implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private EsSettings source = new EsSettings();
+    private EsSettingsPOJO source = new EsSettingsPOJO();
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private EsSettings destination = new EsSettings();
+    private EsSettingsPOJO destination = new EsSettingsPOJO();
 
     public String sourceOrDestinationExists() {
         if (source != null) {
@@ -33,19 +33,19 @@ public class ConnectionSettingsPOJO implements Cloneable {
         }
     }
 
-    public EsSettings getSource() {
+    public EsSettingsPOJO getSource() {
         return source;
     }
 
-    public void setSource(EsSettings source) {
+    public void setSource(EsSettingsPOJO source) {
         this.source = source;
     }
 
-    public EsSettings getDestination() {
+    public EsSettingsPOJO getDestination() {
         return destination;
     }
 
-    public void setDestination(EsSettings destination) {
+    public void setDestination(EsSettingsPOJO destination) {
         this.destination = destination;
     }
 

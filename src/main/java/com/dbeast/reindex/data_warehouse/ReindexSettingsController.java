@@ -1,6 +1,6 @@
 package com.dbeast.reindex.data_warehouse;
 
-import com.dbeast.reindex.project_settings.EsSettings;
+import com.dbeast.reindex.project_settings.EsSettingsPOJO;
 import com.dbeast.reindex.project_settings.IndexFromListPOJO;
 import com.dbeast.reindex.project_settings.ProjectPOJO;
 import com.dbeast.reindex.app_settings.AppSettingsPOJO;
@@ -268,7 +268,7 @@ public class ReindexSettingsController {
         }
     }
 
-    public String getClusterStatus(final EsSettings connectionSettings,
+    public String getClusterStatus(final EsSettingsPOJO connectionSettings,
                                    final String projectId) {
         try {
             return "{\"cluster_status\" : \"" + elasticsearchController.getClusterStatus(connectionSettings, projectId) + "\"}";
@@ -281,13 +281,13 @@ public class ReindexSettingsController {
         }
     }
 
-    public String getIndexParameters(final EsSettings connectionSettings,
+    public String getIndexParameters(final EsSettingsPOJO connectionSettings,
                                      final String index,
                                      final String projectId) throws ClusterConnectionException {
         return elasticsearchController.getIndexParameters(connectionSettings, index, projectId);
     }
 
-    public String getTemplateParameters(final EsSettings connectionSettings,
+    public String getTemplateParameters(final EsSettingsPOJO connectionSettings,
                                         final String template,
                                         final String projectId) throws ClusterConnectionException {
         return elasticsearchController.getTemplateParameters(connectionSettings, template, projectId);

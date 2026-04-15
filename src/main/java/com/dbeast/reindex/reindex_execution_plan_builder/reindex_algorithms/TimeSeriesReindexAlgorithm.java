@@ -6,7 +6,7 @@ import com.dbeast.reindex.elasticsearch.ElasticsearchController;
 import com.dbeast.reindex.elasticsearch.ElasticsearchDbProvider;
 import com.dbeast.reindex.exceptions.ClusterConnectionException;
 import com.dbeast.reindex.project_settings.ESHostPOJO;
-import com.dbeast.reindex.project_settings.EsSettings;
+import com.dbeast.reindex.project_settings.EsSettingsPOJO;
 import com.dbeast.reindex.utils.GeneralUtils;
 import com.dbeast.reindex.reindex_execution_plan_builder.reindex_plan.ReindexTaskPOJO;
 import org.apache.logging.log4j.LogManager;
@@ -72,7 +72,7 @@ public class TimeSeriesReindexAlgorithm extends ReindexAlgorithmPOJO implements 
 
     }
 
-    public ReindexTaskPOJO generateRequestFromReprocessing(final EsSettings source,
+    public ReindexTaskPOJO generateRequestFromReprocessing(final EsSettingsPOJO source,
                                                            final String index,
                                                            final boolean isRemote,
                                                            final Map<String, Object> reprocessingParams) {
@@ -108,7 +108,7 @@ public class TimeSeriesReindexAlgorithm extends ReindexAlgorithmPOJO implements 
     }
 
     @Override
-    public List<ReindexTaskPOJO> generateRequests(final EsSettings source,
+    public List<ReindexTaskPOJO> generateRequests(final EsSettingsPOJO source,
                                                   final String index,
                                                   final boolean isRemote,
                                                   final String projectId) throws ClusterConnectionException {
@@ -174,7 +174,7 @@ public class TimeSeriesReindexAlgorithm extends ReindexAlgorithmPOJO implements 
         return request;
     }
 
-    private ReindexRequest buildRemoteRequest(final EsSettings source,
+    private ReindexRequest buildRemoteRequest(final EsSettingsPOJO source,
                                               final String dateField,
                                               final String startDate,
                                               final String endDate) {

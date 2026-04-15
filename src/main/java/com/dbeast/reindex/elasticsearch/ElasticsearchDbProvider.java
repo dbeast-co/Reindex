@@ -1,14 +1,17 @@
 package com.dbeast.reindex.elasticsearch;
 
+import com.dbeast.reindex.app_settings.AppSettingsPOJO;
+import com.dbeast.reindex.app_settings.ProxyPOJO;
 import com.dbeast.reindex.data_warehouse.DataWarehouse;
 import com.dbeast.reindex.project_settings.ESHostPOJO;
-import com.dbeast.reindex.project_settings.EsSettings;
+import com.dbeast.reindex.project_settings.EsSettingsPOJO;
 import com.dbeast.reindex.exceptions.ClusterConnectionException;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.SSLContexts;
@@ -38,41 +41,73 @@ import static com.dbeast.reindex.Reindex.FILE_SEPARATOR;
 public class ElasticsearchDbProvider {
     private static final Logger logger = LogManager.getLogger();
     private final String projectsFolder;
+    private final AppSettingsPOJO appSettings = DataWarehouse.getInstance().getAppSettings();
+    private final ProxyPOJO proxySettings = new ProxyPOJO(appSettings);
 
     public ElasticsearchDbProvider() {
         projectsFolder = DataWarehouse.getInstance().getAppSettings().getInternals().getProjectsFolder();
     }
 
-    public RestHighLevelClient getHighLevelClient(final EsSettings connectionSettings,
+    public RestHighLevelClient getHighLevelClient(final EsSettingsPOJO connectionSettings,
                                                   final String projectId) throws ClusterConnectionException {
         RestClientBuilder clientBuilder = buildLowLevelRestClient(connectionSettings);
         if (connectionSettings.isSsl_enabled() && connectionSettings.isAuthentication_enabled()) {
-            clientBuilder = addSslToClientBuilder(connectionSettings, clientBuilder, projectId);
+            addSslToClientBuilder(connectionSettings, clientBuilder, projectId);
         } else if (connectionSettings.isAuthentication_enabled()) {
-            clientBuilder = addBasicAuthenticationToClientBuilder(connectionSettings, clientBuilder);
+            addBasicAuthenticationToClientBuilder(connectionSettings, clientBuilder);
+        } else {
+            addProxyOnlyToClientBuilder(clientBuilder, connectionSettings);
         }
         return new RestHighLevelClient(clientBuilder);
     }
 
-    public RestClient getLowLevelClient(final EsSettings connectionSettings,
+
+    public RestHighLevelClient getHighLevelClient(final EsSettingsPOJO connectionSettings) throws ClusterConnectionException {
+        RestClientBuilder clientBuilder = buildLowLevelRestClient(connectionSettings);
+        if (connectionSettings.isSsl_enabled() && connectionSettings.isAuthentication_enabled()) {
+            addSslToClientBuilder(connectionSettings, clientBuilder, connectionSettings.getSsl_file());
+        } else if (connectionSettings.isAuthentication_enabled()) {
+            addBasicAuthenticationToClientBuilder(connectionSettings, clientBuilder);
+        } else {
+            addProxyOnlyToClientBuilder(clientBuilder, connectionSettings);
+        }
+        return new RestHighLevelClient(clientBuilder);
+    }
+
+    private void addProxyOnlyToClientBuilder(final RestClientBuilder clientBuilder, EsSettingsPOJO connectionSettings) {
+        if (proxySettings.isProxyConfigured() && !proxySettings.isHostInNonProxyList(connectionSettings.getEs_host())) {
+            clientBuilder.setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
+                @Override
+                public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
+                    CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+                    applyProxy(httpClientBuilder, proxySettings, credentialsProvider);
+                    return httpClientBuilder;
+                }
+            });
+        }
+    }
+
+
+    public RestClient getLowLevelClient(final EsSettingsPOJO connectionSettings,
                                         final String projectId) throws ClusterConnectionException {
         return getHighLevelClient(connectionSettings, projectId).getLowLevelClient();
     }
 
-    private RestClientBuilder buildLowLevelRestClient(final EsSettings connectionSettings) {
+    private RestClientBuilder buildLowLevelRestClient(final EsSettingsPOJO connectionSettings) {
         ESHostPOJO esHost = new ESHostPOJO(connectionSettings);
+
         return RestClient.builder(new HttpHost(
                 esHost.getDomain(),
                 esHost.getPort(),
                 esHost.getProtocol()));
     }
 
-    private RestClientBuilder addSslToClientBuilder(final EsSettings connectionSettings,
-                                                    final RestClientBuilder clientBuilder,
-                                                    final String projectId) throws ClusterConnectionException {
+    private void addSslToClientBuilder(final EsSettingsPOJO connectionSettings,
+                                       final RestClientBuilder clientBuilder,
+                                       String projectId) throws ClusterConnectionException {
         if (connectionSettings.getSsl_file() != null) {
             try {
-                CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+                final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
                 credentialsProvider.setCredentials(AuthScope.ANY,
                         new UsernamePasswordCredentials(connectionSettings.getUsername(), connectionSettings.getPassword()));
                 Path caCertificatePath = Paths.get(projectsFolder + projectId + FILE_SEPARATOR + connectionSettings.getSsl_file());
@@ -92,25 +127,67 @@ public class ElasticsearchDbProvider {
                     @Override
                     public HttpAsyncClientBuilder customizeHttpClient(
                             HttpAsyncClientBuilder httpClientBuilder) {
-                        return httpClientBuilder.setSSLContext(sslContext)
-                                .setDefaultCredentialsProvider(credentialsProvider)
+
+                        httpClientBuilder.setSSLContext(sslContext)
                                 .setSSLHostnameVerifier((s, sslSession) -> true);
+
+                        // Merge credentials: ES + proxy (if needed)
+                        if (proxySettings.isProxyConfigured() && !proxySettings.isHostInNonProxyList(connectionSettings.getEs_host())) {
+                            applyProxy(httpClientBuilder, proxySettings, credentialsProvider);
+                        } else {
+                            httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+                        }
+
+                        return httpClientBuilder;
                     }
                 });
-                return clientBuilder;
-            } catch (NoSuchAlgorithmException | KeyManagementException | IOException | CertificateException | KeyStoreException e) {
+            } catch (NoSuchAlgorithmException | KeyManagementException | IOException | CertificateException |
+                     KeyStoreException e) {
                 logger.warn("error in the connection to the cluster\n" + e);
-                throw new ClusterConnectionException(e.getMessage());
+                throw new ClusterConnectionException(e.getMessage(), e);
             }
         } else {
-            return addSslToClientBuilder(connectionSettings, clientBuilder);
+            addSslToClientBuilder(connectionSettings, clientBuilder);
         }
     }
 
-    private RestClientBuilder addSslToClientBuilder(final EsSettings connectionSettings,
-                                                    final RestClientBuilder clientBuilder) throws ClusterConnectionException {
+
+    /**
+     * Applies proxy settings to the HTTP client builder, merging proxy credentials
+     * with any existing ES credentials into a single CredentialsProvider.
+     */
+    private void applyProxy(HttpAsyncClientBuilder httpClientBuilder,
+                            ProxyPOJO proxyConfig,
+                            CredentialsProvider existingCredentials) {
+
+        HttpHost proxy = new HttpHost(proxyConfig.getProxyHTTPHost(),
+                proxyConfig.getProxyHTTPPort(),
+                "http");
+        httpClientBuilder.setRoutePlanner(new DefaultProxyRoutePlanner(proxy));
+        logger.info("Proxy route planner configured for {}:{}",
+                proxyConfig.getProxyHTTPHost(),
+                proxyConfig.getProxyHTTPPort());
+
+        // Use existing credentials provider (which may already contain ES auth)
+        // and add proxy credentials to it
+        if (proxyConfig.isProxyHTTPHasAuth()) {
+            existingCredentials.setCredentials(
+                    new AuthScope( proxyConfig.getProxyHTTPHost(),
+                            proxyConfig.getProxyHTTPPort()),
+                    new UsernamePasswordCredentials(proxyConfig.getProxyHTTPUser(),
+                            proxyConfig.getProxyHTTPPassword())
+            );
+            logger.info("Proxy authentication configured for user: {}",
+                    proxyConfig.getProxyHTTPUser());
+        }
+        httpClientBuilder.setDefaultCredentialsProvider(existingCredentials);
+    }
+
+
+    private void addSslToClientBuilder(final EsSettingsPOJO connectionSettings,
+                                       final RestClientBuilder clientBuilder) throws ClusterConnectionException {
         try {
-            CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+            final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
             credentialsProvider.setCredentials(AuthScope.ANY,
                     new UsernamePasswordCredentials(connectionSettings.getUsername(), connectionSettings.getPassword()));
             SSLContext sslContext = SSLContext.getInstance("TLS");
@@ -120,34 +197,45 @@ public class ElasticsearchDbProvider {
                 @Override
                 public HttpAsyncClientBuilder customizeHttpClient(
                         HttpAsyncClientBuilder httpClientBuilder) {
-                    return httpClientBuilder.setSSLContext(sslContext)
-                            .setDefaultCredentialsProvider(credentialsProvider)
-                            //This supposed to disable certificate verification
+
+                    httpClientBuilder.setSSLContext(sslContext)
                             .setSSLHostnameVerifier((s, sslSession) -> true);
+
+                    // Merge credentials: ES + proxy (if needed)
+                    if (proxySettings.isProxyConfigured() && !proxySettings.isHostInNonProxyList(connectionSettings.getEs_host())) {
+                        applyProxy(httpClientBuilder, proxySettings, credentialsProvider);
+                    } else {
+                        httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+                    }
+
+                    return httpClientBuilder;
                 }
             });
-            return clientBuilder;
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             logger.warn("error in the connection to the cluster\n" + e);
-            throw new ClusterConnectionException(e.getMessage());
+            throw new ClusterConnectionException(e.getMessage(), e);
         }
     }
 
-    private RestClientBuilder addBasicAuthenticationToClientBuilder(final EsSettings connectionSettings,
-                                                                    final RestClientBuilder clientBuilder) {
-        CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+    private void addBasicAuthenticationToClientBuilder(final EsSettingsPOJO connectionSettings,
+                                                       final RestClientBuilder clientBuilder) {
+        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY,
                 new UsernamePasswordCredentials(connectionSettings.getUsername(), connectionSettings.getPassword()));
+
         clientBuilder.setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
             @Override
-            public HttpAsyncClientBuilder customizeHttpClient(
-                    HttpAsyncClientBuilder httpClientBuilder) {
-                return httpClientBuilder
-                        .setDefaultCredentialsProvider(credentialsProvider);
+            public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
+                if (proxySettings.isProxyConfigured() && !proxySettings.isHostInNonProxyList(connectionSettings.getEs_host())) {
+                    applyProxy(httpClientBuilder, proxySettings, credentialsProvider);
+                } else {
+                    httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+                }
+                return httpClientBuilder;
             }
         });
-        return clientBuilder;
     }
+
 }
 
 

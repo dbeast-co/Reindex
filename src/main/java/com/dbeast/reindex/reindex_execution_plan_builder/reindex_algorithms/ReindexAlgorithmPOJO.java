@@ -1,7 +1,7 @@
 package com.dbeast.reindex.reindex_execution_plan_builder.reindex_algorithms;
 
 import com.dbeast.reindex.exceptions.ClusterConnectionException;
-import com.dbeast.reindex.project_settings.EsSettings;
+import com.dbeast.reindex.project_settings.EsSettingsPOJO;
 import com.dbeast.reindex.reindex_execution_plan_builder.reindex_plan.ReindexTaskPOJO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -41,7 +41,7 @@ public class ReindexAlgorithmPOJO implements IReindexAlgorithm {
     }
 
     @Override
-    public List<ReindexTaskPOJO> generateRequests(final EsSettings source,
+    public List<ReindexTaskPOJO> generateRequests(final EsSettingsPOJO source,
                                                   final String index,
                                                   final boolean isRemote,
                                                   final String projectId) throws ClusterConnectionException {
@@ -51,7 +51,7 @@ public class ReindexAlgorithmPOJO implements IReindexAlgorithm {
     ;
 
     @Override
-    public ReindexTaskPOJO generateRequestFromReprocessing(final EsSettings source,
+    public ReindexTaskPOJO generateRequestFromReprocessing(final EsSettingsPOJO source,
                                                            final String index,
                                                            final boolean isRemote,
                                                            final Map<String, Object> reprocessingParams) {

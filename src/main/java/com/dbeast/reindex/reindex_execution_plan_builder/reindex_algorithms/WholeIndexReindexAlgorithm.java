@@ -1,7 +1,7 @@
 package com.dbeast.reindex.reindex_execution_plan_builder.reindex_algorithms;
 
 import com.dbeast.reindex.project_settings.ESHostPOJO;
-import com.dbeast.reindex.project_settings.EsSettings;
+import com.dbeast.reindex.project_settings.EsSettingsPOJO;
 import com.dbeast.reindex.reindex_execution_plan_builder.reindex_plan.ReindexTaskPOJO;
 import org.elasticsearch.common.bytes.BytesArray;
 import org.elasticsearch.core.TimeValue;
@@ -32,7 +32,7 @@ public class WholeIndexReindexAlgorithm extends ReindexAlgorithmPOJO implements 
     }
 
     @Override
-    public ReindexTaskPOJO generateRequestFromReprocessing(final EsSettings source,
+    public ReindexTaskPOJO generateRequestFromReprocessing(final EsSettingsPOJO source,
                                                            final String index,
                                                            final boolean isRemote,
                                                            final Map<String, Object> reprocessingParams) {
@@ -42,7 +42,7 @@ public class WholeIndexReindexAlgorithm extends ReindexAlgorithmPOJO implements 
         return requestTask;
     }
 
-    private ReindexRequest buildRemoteRequest(final EsSettings source) {
+    private ReindexRequest buildRemoteRequest(final EsSettingsPOJO source) {
         ReindexRequest request = new ReindexRequest();
         ESHostPOJO esHost = new ESHostPOJO(source);
 
@@ -61,7 +61,7 @@ public class WholeIndexReindexAlgorithm extends ReindexAlgorithmPOJO implements 
     }
 
     @Override
-    public List<ReindexTaskPOJO> generateRequests(final EsSettings source,
+    public List<ReindexTaskPOJO> generateRequests(final EsSettingsPOJO source,
                                                   final String index,
                                                   final boolean isRemote,
                                                   final String projectId) {

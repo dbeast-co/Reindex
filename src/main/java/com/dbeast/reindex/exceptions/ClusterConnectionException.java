@@ -12,4 +12,8 @@ public class ClusterConnectionException extends Exception{
     public ClusterConnectionException(String message) {
         super(message);
     }
+
+    public ClusterConnectionException(String host, Exception exception) {
+        super(String.format("Error! Can't connect to the cluster. Host '%s'. ", host) + "Exception: " + exception.getMessage());
+    }
 }

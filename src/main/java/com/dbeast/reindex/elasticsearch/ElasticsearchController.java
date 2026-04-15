@@ -1,7 +1,7 @@
 package com.dbeast.reindex.elasticsearch;
 
 import com.dbeast.reindex.exceptions.ClusterConnectionException;
-import com.dbeast.reindex.project_settings.EsSettings;
+import com.dbeast.reindex.project_settings.EsSettingsPOJO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.util.EntityUtils;
@@ -98,7 +98,7 @@ public class ElasticsearchController {
         }
     }
 
-    public long getIndexDocsCount(final EsSettings connectionSettings,
+    public long getIndexDocsCount(final EsSettingsPOJO connectionSettings,
                                   final String projectId,
                                   final String index) throws ClusterConnectionException {
         RestHighLevelClient client = elasticsearchClient.getHighLevelClient(connectionSettings, projectId);
@@ -123,7 +123,7 @@ public class ElasticsearchController {
         }
     }
 
-    public String getTemplateParameters(final EsSettings connectionSettings,
+    public String getTemplateParameters(final EsSettingsPOJO connectionSettings,
                                         final String template,
                                         final String projectId) throws ClusterConnectionException {
         RestClient client = elasticsearchClient.getLowLevelClient(connectionSettings, projectId);
@@ -151,7 +151,7 @@ public class ElasticsearchController {
         return null;
     }
 
-    public String getIndexParameters(final EsSettings connectionSettings,
+    public String getIndexParameters(final EsSettingsPOJO connectionSettings,
                                      final String index,
                                      final String projectId) throws ClusterConnectionException {
         RestClient client = elasticsearchClient.getLowLevelClient(connectionSettings, projectId);
@@ -178,17 +178,17 @@ public class ElasticsearchController {
         return null;
     }
 
-    public List<HashMap<String, String>> getIndexList(final EsSettings connectionSettings,
+    public List<HashMap<String, String>> getIndexList(final EsSettingsPOJO connectionSettings,
                                                       final String projectId) throws ClusterConnectionException {
         return getTemplateOrIndexList(connectionSettings, "/_cat/indices?h=index&format=json", projectId);
     }
 
-    public List<HashMap<String, String>> getTemplateList(final EsSettings connectionSettings,
+    public List<HashMap<String, String>> getTemplateList(final EsSettingsPOJO connectionSettings,
                                                          final String projectId) throws ClusterConnectionException {
         return getTemplateOrIndexList(connectionSettings, "/_cat/templates?h=name&format=json", projectId);
     }
 
-    public String getClusterStatus(final EsSettings connectionSettings,
+    public String getClusterStatus(final EsSettingsPOJO connectionSettings,
                                    final String projectId) throws Exception {
         RestHighLevelClient client = elasticsearchClient.getHighLevelClient(connectionSettings, projectId);
         try {
@@ -246,7 +246,7 @@ public class ElasticsearchController {
     }
 
     //TODO add catch exception
-    private List<HashMap<String, String>> getTemplateOrIndexList(final EsSettings connectionSettings,
+    private List<HashMap<String, String>> getTemplateOrIndexList(final EsSettingsPOJO connectionSettings,
                                                                  final String endPoint,
                                                                  final String projectId) throws ClusterConnectionException {
         Response response;

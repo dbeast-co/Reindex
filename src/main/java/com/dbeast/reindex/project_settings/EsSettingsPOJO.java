@@ -4,7 +4,7 @@ import com.dbeast.reindex.constants.EClusterStatus;
 
 import java.util.Objects;
 
-public class EsSettings implements Cloneable {
+public class EsSettingsPOJO implements Cloneable {
 
     private String es_host = "http://localhost:9200";
     private boolean authentication_enabled = false;
@@ -15,9 +15,9 @@ public class EsSettings implements Cloneable {
     private EClusterStatus status = EClusterStatus.UNTESTED;
 
     @Override
-    public EsSettings clone() {
+    public EsSettingsPOJO clone() {
         try {
-            return (EsSettings) super.clone();
+            return (EsSettingsPOJO) super.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
             return this;
@@ -94,8 +94,8 @@ public class EsSettings implements Cloneable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof EsSettings)) return false;
-        EsSettings that = (EsSettings) o;
+        if (!(o instanceof EsSettingsPOJO)) return false;
+        EsSettingsPOJO that = (EsSettingsPOJO) o;
         return isAuthentication_enabled() == that.isAuthentication_enabled() &&
                 isSsl_enabled() == that.isSsl_enabled() &&
                 Objects.equals(getEs_host(), that.getEs_host()) &&

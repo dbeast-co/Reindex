@@ -1,7 +1,7 @@
 package com.dbeast.reindex.rest;
 
 import com.dbeast.reindex.data_warehouse.ReindexSettingsController;
-import com.dbeast.reindex.project_settings.EsSettings;
+import com.dbeast.reindex.project_settings.EsSettingsPOJO;
 import com.dbeast.reindex.project_settings.ProjectPOJO;
 import com.dbeast.reindex.reindex_execution_plan_builder.plan_validation.ValidationResponsePOJO;
 import org.apache.logging.log4j.LogManager;
@@ -83,7 +83,7 @@ public class RESTReindexSettings extends ARest {
                     logger.debug("Got request for the index parameters of the index: " + request.params(":index")
                             + " for project: " + request.params("projectId"));
                 }
-                return reindexSettingsController.getIndexParameters(mapper.readValue(request.body(), EsSettings.class),
+                return reindexSettingsController.getIndexParameters(mapper.readValue(request.body(), EsSettingsPOJO.class),
                         request.params(":index"),
                         request.params(":projectId"));
             });
@@ -92,7 +92,7 @@ public class RESTReindexSettings extends ARest {
                     logger.debug("Got request for the index parameters of the template: " + request.params(":template")
                             + " for project: " + request.params("projectId"));
                 }
-                return reindexSettingsController.getTemplateParameters(mapper.readValue(request.body(), EsSettings.class),
+                return reindexSettingsController.getTemplateParameters(mapper.readValue(request.body(), EsSettingsPOJO.class),
                         request.params(":template"),
                         request.params(":projectId"));
             });
@@ -110,7 +110,7 @@ public class RESTReindexSettings extends ARest {
                     logger.debug("Got request for test Elasticsearch server with id: " + request.params(":id"));
                     logger.debug("Request body: " + request.body());
                 }
-                EsSettings connectionSettings = mapper.readValue(request.body(), EsSettings.class);
+                EsSettingsPOJO connectionSettings = mapper.readValue(request.body(), EsSettingsPOJO.class);
                 String responseBody = reindexSettingsController.getClusterStatus(connectionSettings, request.params(":id"));
                 if (responseBody.contains("error")) {
                     response.status(502);

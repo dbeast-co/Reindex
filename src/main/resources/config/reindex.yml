@@ -1,3 +1,8 @@
 host: localhost
 port: 1234
 tasks_api_retries_number: 3
+http_proxy: null
+https_proxy: null
+no_proxy: null
+proxy_user: null
+proxy_password: null
