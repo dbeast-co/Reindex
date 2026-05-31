@@ -14,18 +14,21 @@ public class ValidationPlanExecutor {
 
     private final ValidationPlanPOJO validationPlan;
     private final RestHighLevelClient destinationClient;
+    private final RestHighLevelClient sourceClient;
     private final ValidationResponsePOJO validationResponse;
 
     public ValidationPlanExecutor(final ValidationPlanPOJO validationPlan) throws ClusterConnectionException {
         this.validationPlan = validationPlan;
         ElasticsearchDbProvider elasticsearchDbProvider = new ElasticsearchDbProvider();
         destinationClient = elasticsearchDbProvider.getHighLevelClient(validationPlan.getConnectionSettings().getDestination(), validationPlan.getProjectId());
+        sourceClient = elasticsearchDbProvider.getHighLevelClient(validationPlan.getConnectionSettings().getSource(), validationPlan.getProjectId());
         validationResponse = validationPlan.getValidationResponse();
     }
 
     public ValidationResponsePOJO executePlan() {
         validationPlan.getValidationTasks().forEach(task -> {
-                    boolean clusterTaskResult = task.getRequestDAO().execute(destinationClient, new ClusterTaskStatusPOJO());
+                    RestHighLevelClient client = task.isUseSourceCluster() ? sourceClient : destinationClient;
+                    boolean clusterTaskResult = task.getRequestDAO().execute(client, new ClusterTaskStatusPOJO());
                     validationResponse.getValidationResults().stream()
                             .filter(validationResult -> validationResult.getValidationParam().equals(task.getValidationParam()))
                             .forEach(validationResult -> validationResult.updateStatus(clusterTaskResult));
@@ -44,7 +47,14 @@ public class ValidationPlanExecutor {
                 destinationClient.close();
             }
         } catch (IOException e) {
-            logger.error("Can't close the client in get documents count. Exception: " + e);
+            logger.error("Can't close destination client in get documents count. Exception: " + e);
+        }
+        try {
+            if (sourceClient != null) {
+                sourceClient.close();
+            }
+        } catch (IOException e) {
+            logger.error("Can't close source client in get documents count. Exception: " + e);
         }
         return validationResponse;
     }
