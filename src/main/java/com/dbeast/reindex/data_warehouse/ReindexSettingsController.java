@@ -24,13 +24,13 @@ import com.dbeast.reindex.reindex_execution_plan_monitoring.ReindexStatusBuilder
 import com.dbeast.reindex.reindex_execution_plan_monitoring.ReindexTaskStatusPOJO;
 import com.dbeast.reindex.reindex_execution_plan_monitoring_for_ui.project_settings_page.ProjectStatusForUIProjectSettingsPagePOJO;
 import com.dbeast.reindex.utils.GeneralUtils;
+import io.javalin.http.Context;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import spark.Request;
 
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletException;
-import javax.servlet.http.Part;
+import jakarta.servlet.MultipartConfigElement;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -243,23 +243,22 @@ public class ReindexSettingsController {
     }
 
     //TODO  update delete old cert
-    public boolean uploadSSLCert(final Request request) {
-        String location = appSettings.getInternals().getProjectsFolder() +
-                request.params(":projectId") + FILE_SEPARATOR;
+    public boolean uploadSSLCert(final Context ctx) {
+        String projectId = ctx.pathParam("projectId");
+        String usage = ctx.pathParam("usage");
+        String location = appSettings.getInternals().getProjectsFolder() + projectId + FILE_SEPARATOR;
         GeneralUtils.createFolder(location);
-        request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(location));
         try {
+            ctx.req().setAttribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(location));
             // "file" is the key of the form data with the file itself being the value
-            Part filePart = request.raw().getPart("file");
+            Part filePart = ctx.req().getPart("file");
 
             // The name of the file user uploaded
             String uploadedFileName = filePart.getSubmittedFileName();
 
             InputStream stream = filePart.getInputStream();
             // Write stream to file under storage folder
-            Files.copy(stream, Paths.get(location + request.params(":usage") + "_" +
-                    uploadedFileName), StandardCopyOption.REPLACE_EXISTING);
-//            projectsMap.get(request.params(":projectId")).getConnectionSettings()
+            Files.copy(stream, Paths.get(location + usage + "_" + uploadedFileName), StandardCopyOption.REPLACE_EXISTING);
             return true;
 
         } catch (ServletException | IOException e) {

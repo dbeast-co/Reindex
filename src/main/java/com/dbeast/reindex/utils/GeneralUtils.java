@@ -4,7 +4,6 @@ import com.dbeast.reindex.project_settings.ProjectPOJO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import spark.utils.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -199,8 +198,8 @@ public class GeneralUtils {
     public String readFileFromResourcesToString(final String fileName) {
         String result = "";
         try {
-            result = IOUtils.toString(classLoader.getResourceAsStream(fileName));
-        } catch (IOException | NullPointerException e) {
+            return readFileLineByLine(Paths.get(classLoader.getResource(fileName).toURI()));
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;

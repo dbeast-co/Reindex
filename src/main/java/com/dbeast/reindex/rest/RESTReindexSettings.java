@@ -6,149 +6,162 @@ import com.dbeast.reindex.project_settings.ProjectPOJO;
 import com.dbeast.reindex.reindex_execution_plan_builder.plan_validation.ValidationResponsePOJO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import spark.Response;
 
-import java.util.HashMap;
-
-import static spark.Spark.*;
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class RESTReindexSettings extends ARest {
     private static final Logger logger = LogManager.getLogger();
 
     private final ReindexSettingsController reindexSettingsController = ReindexSettingsController.getInstance();
 
-    //TODO update response for error
+    @Override
     public void rest() {
         path("/reindex_settings", () -> {
-            get("/new", (request, response) -> {
+            get("/new", ctx -> {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Got request for new project!");
                 }
-                return objectToString(reindexSettingsController.getNewProject());
+                ctx.json(reindexSettingsController.getNewProject());
             });
-            get("/get/:id", (request, response) -> {
+
+            get("/get/{id}", ctx -> {
+                String id = ctx.pathParam("id");
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Got request for project with id: " + request.params(":id"));
+                    logger.debug("Got request for project with id: " + id);
                 }
-                ProjectPOJO result = reindexSettingsController.getProjectById(request.params(":id"));
-                return objectToString(result);
+                ProjectPOJO result = reindexSettingsController.getProjectById(id);
+                ctx.json(result);
             });
-            get("/start/:id", (request, response) -> {
-                logger.info("Got request for run project with id: " + request.params(":id"));
-                return reindexSettingsController.runProject(request.params(":id"));
+
+            get("/start/{id}", ctx -> {
+                String id = ctx.pathParam("id");
+                logger.info("Got request for run project with id: " + id);
+                ctx.json(reindexSettingsController.runProject(id));
             });
-            get("/stop/:id", (request, response) -> {
-                logger.info("Got request for stop project with id: " + request.params(":id"));
-                reindexSettingsController.stopProject(request.params(":id"));
-                return true;
+
+            get("/stop/{id}", ctx -> {
+                String id = ctx.pathParam("id");
+                logger.info("Got request for stop project with id: " + id);
+                reindexSettingsController.stopProject(id);
+                ctx.json(true);
             });
-            get("/list", (request, response) -> {
+
+            get("/list", ctx -> {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Got requests for project list");
                 }
-                return objectToString(reindexSettingsController.getProjectsList());
-            });
-            get("/validate/:projectName", (request, response) -> {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Got request for validate project name: " + request.params("projectName"));
-                }
-                return objectToString(reindexSettingsController.validateIsProjectNameExists(request.params("projectName")));
-            });
-            get("/validate/", (request, response) -> {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Got request for validate project name: " + request.params("projectName"));
-                }
-                return false;
-            });
-            get("/get_status/:projectId", (request, response) -> {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Got request for project monitoring with id: " + request.params(":projectId"));
-                }
-                return objectToString(reindexSettingsController.getProjectStatusForSettingsPageForId(request.params(":projectId")));
-            });
-            get("/prepare_project/:projectId", (request, response) -> {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Got request for prepare project with id: " + request.params(":projectId"));
-                }
-                ValidationResponsePOJO res = reindexSettingsController.prepareProject(request.params(":projectId"));
-                return objectToString(res);
-            });
-            get("/retry_failures/:projectId", (request, response) -> {
-                logger.info("Got request for retry failures of the project with id: " + request.params(":projectId"));
-                return objectToString(reindexSettingsController.retryFailures(request.params(":projectId")));
+                ctx.json(reindexSettingsController.getProjectsList());
             });
 
-            post("/get_index_parameters/:projectId/:index", (request, response) -> {
+            get("/validate/{projectName}", ctx -> {
+                String projectName = ctx.pathParam("projectName");
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Got request for the index parameters of the index: " + request.params(":index")
-                            + " for project: " + request.params("projectId"));
+                    logger.debug("Got request for validate project name: " + projectName);
                 }
-                return reindexSettingsController.getIndexParameters(mapper.readValue(request.body(), EsSettingsPOJO.class),
-                        request.params(":index"),
-                        request.params(":projectId"));
+                ctx.json(reindexSettingsController.validateIsProjectNameExists(projectName));
             });
-            post("/get_template_parameters/:projectId/:template", (request, response) -> {
+
+            get("/validate/", ctx -> {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Got request for the index parameters of the template: " + request.params(":template")
-                            + " for project: " + request.params("projectId"));
+                    logger.debug("Got request for validate project name: empty");
                 }
-                return reindexSettingsController.getTemplateParameters(mapper.readValue(request.body(), EsSettingsPOJO.class),
-                        request.params(":template"),
-                        request.params(":projectId"));
+                ctx.json(false);
             });
-            post("/get_sources", (request, response) -> {
+
+            get("/get_status/{projectId}", ctx -> {
+                String projectId = ctx.pathParam("projectId");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for project monitoring with id: " + projectId);
+                }
+                ctx.json(reindexSettingsController.getProjectStatusForSettingsPageForId(projectId));
+            });
+
+            get("/prepare_project/{projectId}", ctx -> {
+                String projectId = ctx.pathParam("projectId");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for prepare project with id: " + projectId);
+                }
+                ValidationResponsePOJO res = reindexSettingsController.prepareProject(projectId);
+                ctx.json(res);
+            });
+
+            get("/retry_failures/{projectId}", ctx -> {
+                String projectId = ctx.pathParam("projectId");
+                logger.info("Got request for retry failures of the project with id: " + projectId);
+                ctx.json(reindexSettingsController.retryFailures(projectId));
+            });
+
+            post("/get_index_parameters/{projectId}/{index}", ctx -> {
+                String projectId = ctx.pathParam("projectId");
+                String index = ctx.pathParam("index");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for the index parameters of the index: " + index
+                            + " for project: " + projectId);
+                }
+                ctx.result(reindexSettingsController.getIndexParameters(
+                    mapper.readValue(ctx.body(), EsSettingsPOJO.class),
+                    index,
+                    projectId));
+            });
+
+            post("/get_template_parameters/{projectId}/{template}", ctx -> {
+                String projectId = ctx.pathParam("projectId");
+                String template = ctx.pathParam("template");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for the index parameters of the template: " + template
+                            + " for project: " + projectId);
+                }
+                ctx.result(reindexSettingsController.getTemplateParameters(
+                    mapper.readValue(ctx.body(), EsSettingsPOJO.class),
+                    template,
+                    projectId));
+            });
+
+            post("/get_sources", ctx -> {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Got request for get sources from Elasticsearch");
-                    logger.debug("Request body: " + request.body());
+                    logger.debug("Request body: " + ctx.body());
                 }
-                ProjectPOJO project = mapper.readValue(request.body(), ProjectPOJO.class);
+                ProjectPOJO project = mapper.readValue(ctx.body(), ProjectPOJO.class);
                 reindexSettingsController.getSources(project);
-                return objectToString(project);
-            });
-            post("/test_cluster/:id", (request, response) -> {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Got request for test Elasticsearch server with id: " + request.params(":id"));
-                    logger.debug("Request body: " + request.body());
-                }
-                EsSettingsPOJO connectionSettings = mapper.readValue(request.body(), EsSettingsPOJO.class);
-                String responseBody = reindexSettingsController.getClusterStatus(connectionSettings, request.params(":id"));
-                if (responseBody.contains("error")) {
-                    response.status(502);
-                }
-                return responseBody;
-            });
-            post("/save", (request, response) -> {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Got request for save project");
-                    logger.debug("Request body: " + request.body());
-                }
-                ProjectPOJO project = mapper.readValue(request.body(), ProjectPOJO.class);
-                return reindexSettingsController.saveProject(project);
+                ctx.json(project);
             });
 
-            post("/ssl_cert/:usage/:projectId", (request, response) -> {
+            post("/test_cluster/{id}", ctx -> {
+                String id = ctx.pathParam("id");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for test Elasticsearch server with id: " + id);
+                    logger.debug("Request body: " + ctx.body());
+                }
+                EsSettingsPOJO connectionSettings = mapper.readValue(ctx.body(), EsSettingsPOJO.class);
+                String responseBody = reindexSettingsController.getClusterStatus(connectionSettings, id);
+                if (responseBody.contains("error")) {
+                    ctx.status(502);
+                }
+                ctx.result(responseBody);
+            });
+
+            post("/save", ctx -> {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Got request for save project");
+                    logger.debug("Request body: " + ctx.body());
+                }
+                ProjectPOJO project = mapper.readValue(ctx.body(), ProjectPOJO.class);
+                ctx.json(reindexSettingsController.saveProject(project));
+            });
+
+            post("/ssl_cert/{usage}/{projectId}", ctx -> {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Got request for upload SSL certificate");
                 }
-                return reindexSettingsController.uploadSSLCert(request);
+                ctx.json(reindexSettingsController.uploadSSLCert(ctx));
             });
 
-            delete("/delete/:id", (request, response) -> {
-                logger.info("Got request for delete project with Id: " + request.params(":id"));
-                return reindexSettingsController.deleteProjectById(request.params(":id"));
+            delete("/delete/{id}", ctx -> {
+                String id = ctx.pathParam("id");
+                logger.info("Got request for delete project with Id: " + id);
+                ctx.json(reindexSettingsController.deleteProjectById(id));
             });
         });
-    }
-
-    private void setCorsHeaders(Response response) {
-        HashMap<String, String> corsHeaders = new HashMap<>();
-        corsHeaders.put("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-        corsHeaders.put("Access-Control-Allow-Origin", "*");
-        corsHeaders.put("Access-Control-Allow-Headers", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Content-Disposition," +
-                "Accept-Encoding,Accept-Language,Sec-Fetch-Dest,Sec-Fetch-Site,Sec-Fetch-Mode,Connection,Referer,User-Agent,Host" +
-                "origin, content-type, cache-control, accept, options, authorization, x-requested-with");
-        corsHeaders.put("Access-Control-Allow-Credentials", "true");
-        corsHeaders.put("Access-Control-Expose-Headers", "Content-Disposition");
-        corsHeaders.forEach(response::header);
     }
 }

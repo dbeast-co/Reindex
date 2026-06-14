@@ -2,8 +2,7 @@ package com.dbeast.reindex.rest;
 
 import com.dbeast.reindex.data_warehouse.ProjectsMonitoringController;
 
-import static spark.Spark.get;
-import static spark.Spark.path;
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class RESTProjectsMonitoring extends ARest {
     private final ProjectsMonitoringController projectsMonitoringController = new ProjectsMonitoringController();
@@ -11,11 +10,11 @@ public class RESTProjectsMonitoring extends ARest {
     @Override
     public void rest() {
         path("/projects_monitoring", () -> {
-            get("/projects_status", (request, response) -> {
+            get("/projects_status", ctx -> {
                 if (logger.isDebugEnabled()) {
                     logger.info("Got request for projects monitoring");
                 }
-                return objectToString(projectsMonitoringController.getProjectsStatusForUI());
+                ctx.json(projectsMonitoringController.getProjectsStatusForUI());
             });
         });
     }
