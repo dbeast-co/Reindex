@@ -33,79 +33,66 @@ public class MainRest {
         try {
             logger.info("Server Host: " + host + " Port: " + port);
 
+            RESTReindexSettings connectionSettingsPage = new RESTReindexSettings();
+            RESTReindexMonitoring reindexMonitorPage = new RESTReindexMonitoring();
+            RESTProjectsMonitoring projectsMonitoring = new RESTProjectsMonitoring();
+
             app = Javalin.create(config -> {
                 config.staticFiles.add(appSettings.getInternals().getClientFolder(), Location.EXTERNAL);
                 config.http.defaultContentType = "application/json";
-                config.routing.treatMultipleSlashesAsSingleSlash = true;
-            }).exception(Exception.class, (e, ctx) -> {
-                logger.error("Error while running REST server! Exception: " + e);
-                if (e.getCause() != null && e.getCause().getMessage() != null &&
-                    e.getCause().getMessage().contains("Address already in use")) {
-                    System.exit(-1);
-                }
-                ctx.status(500);
-                ctx.result("Internal Server Error");
-            }).error(404, ctx -> {
-                logger.warn("Got incorrect URI request from ip: " + ctx.ip() +
-                        " Requested URI: " + ctx.path() +
-                        " Request body: " + ctx.body());
-                ctx.result("Page: " + ctx.path() + " not found");
-            });
+                config.router.treatMultipleSlashesAsSingleSlash = true;
 
-            initServerSettings();
-            initRestAPIs();
+                config.routes.before(ctx -> {
+                    corsHeaders.forEach(ctx::header);
+                    ctx.contentType("application/json");
+                });
+
+                config.routes.options("/*", ctx -> {
+                    String accessControlRequestHeaders = ctx.header("Access-Control-Request-Headers");
+                    if (accessControlRequestHeaders != null) {
+                        ctx.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+                    }
+                    String accessControlRequestMethod = ctx.header("Access-Control-Request-Method");
+                    if (accessControlRequestMethod != null) {
+                        ctx.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+                    }
+                    ctx.result("OK");
+                });
+
+                config.routes.exception(Exception.class, (e, ctx) -> {
+                    logger.error("Error while running REST server! Exception: " + e);
+                    if (e.getCause() != null && e.getCause().getMessage() != null &&
+                        e.getCause().getMessage().contains("Address already in use")) {
+                        System.exit(-1);
+                    }
+                    ctx.status(500);
+                    ctx.result("Internal Server Error");
+                });
+
+                config.routes.error(404, ctx -> {
+                    logger.warn("Got incorrect URI request from ip: " + ctx.ip() +
+                            " Requested URI: " + ctx.path() +
+                            " Request body: " + ctx.body());
+                    ctx.result("Page: " + ctx.path() + " not found");
+                });
+
+                config.routes.apiBuilder(() -> {
+                    path("/reindexer", () -> {
+                        connectionSettingsPage.rest();
+                        reindexMonitorPage.rest();
+                        projectsMonitoring.rest();
+
+                        get("/get_url", ctx -> {
+                            logger.info("Got request for application URL");
+                            ctx.json(Map.of("serverBaseUrl", "http://" + appSettings.getApp().getHost() + ":" + appSettings.getApp().getPort()));
+                        });
+                    });
+                });
+            });
 
             app.start(host, port);
         } catch (Exception e) {
             throw new Exception("The problem in server running! Exception: " + e);
         }
     }
-
-    /**
-     * Initialize all REST APIs
-     */
-    private void initRestAPIs() {
-        RESTReindexSettings connectionSettingsPage = new RESTReindexSettings();
-        RESTReindexMonitoring reindexMonitorPage = new RESTReindexMonitoring();
-        RESTProjectsMonitoring projectsMonitoring = new RESTProjectsMonitoring();
-
-        app.routes(() -> {
-            path("/reindexer", () -> {
-                connectionSettingsPage.rest();
-                reindexMonitorPage.rest();
-                projectsMonitoring.rest();
-
-                get("/get_url", ctx -> {
-                    logger.info("Got request for application URL");
-                    ctx.json(Map.of("serverBaseUrl", "http://" + appSettings.getApp().getHost() + ":" + appSettings.getApp().getPort()));
-                });
-            });
-        });
-    }
-
-    /**
-     * Initialize REST server settings
-     */
-    private void initServerSettings() {
-        // CORS headers
-        app.before(ctx -> {
-            corsHeaders.forEach(ctx::header);
-            ctx.contentType("application/json");
-        });
-
-        // CORS options
-        app.options("/*", ctx -> {
-            String accessControlRequestHeaders = ctx.header("Access-Control-Request-Headers");
-            if (accessControlRequestHeaders != null) {
-                ctx.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
-            }
-            String accessControlRequestMethod = ctx.header("Access-Control-Request-Method");
-            if (accessControlRequestMethod != null) {
-                ctx.header("Access-Control-Allow-Methods", accessControlRequestMethod);
-            }
-            ctx.result("OK");
-        });
-    }
-
 }
-
