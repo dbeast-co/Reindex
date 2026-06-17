@@ -113,6 +113,11 @@ public class ValidationPlanBuilder {
                 if (reindexSettings.isSendToDataStream()){
                     generateValidationForIsDataStreamExistsTask(reindexSettings.getSendToDataStreamStreamName());
                 }
+                if (reindexSettings.isUseSameIndexName()) {
+                    reindexPlan.getReindexJobs().values().stream()
+                            .filter(job -> !job.getReindexTasks().isEmpty())
+                            .forEach(job -> generateValidationForIsIndexExistsTask(job.getIndexName()));
+                }
                 if (reindexSettings.getReindexType().equals("Remote reindex")) {
                     generateValidationForIsReindexRemoteClusterDefined(reindexPlan.getConnectionSettings().getSource().getEs_host());
                 }
@@ -126,7 +131,7 @@ public class ValidationPlanBuilder {
     private void generateValidationForTimeSeriesAlgorithmTask(final String index, final String dateField) {
         IsDateFieldExistsAndHaveDateTypeDAO isDateFieldExistsAndHaveDateType = new IsDateFieldExistsAndHaveDateTypeDAO(index, dateField);
         validationPlan.getValidationTasks().add(new ValidationTaskPOJO(isDateFieldExistsAndHaveDateType,
-                dateField + " exists for index: " + index));
+                dateField + " exists for index: " + index, true));
         validationResponse.addValidationResponse(new ValidationResponsePOJO.ValidationResult(dateField + " exists for index: " + index,
                 EValidationTasksSettings.IS_DATE_FIELD_EXISTS));
     }

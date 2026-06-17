@@ -71,7 +71,7 @@ public class ReindexSettingsPOJO {
     private boolean isUseSameIndexName;
 
     public boolean checkIsAtLeastOneDestinationSelected() {
-        return isMergeToOneIndex || isSendToAlias || isSendToPipeline || isAddIndexPrefix || isAddIndexSuffix || isUseIlm || isRemoveIndexSuffix || isSendToDataStream;
+        return isMergeToOneIndex || isSendToAlias || isSendToPipeline || isAddIndexPrefix || isAddIndexSuffix || isUseIlm || isRemoveIndexSuffix || isSendToDataStream || isUseSameIndexName;
     }
 
     public boolean isRemoveIndexSuffix() {
